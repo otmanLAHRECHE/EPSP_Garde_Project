@@ -65,7 +65,7 @@
       <property name="font">
        <font>
         <family>MS Reference Sans Serif</family>
-        <pointsize>25</pointsize>
+        <pointsize>28</pointsize>
         <weight>75</weight>
         <italic>false</italic>
         <bold>true</bold>
@@ -107,7 +107,7 @@
        <number>40</number>
       </property>
       <property name="topMargin">
-       <number>40</number>
+       <number>10</number>
       </property>
       <property name="rightMargin">
        <number>40</number>
@@ -116,13 +116,24 @@
        <number>40</number>
       </property>
       <property name="horizontalSpacing">
-       <number>8</number>
+       <number>20</number>
       </property>
       <property name="verticalSpacing">
-       <number>10</number>
+       <number>50</number>
       </property>
       <item row="4" column="0">
        <widget class="QPushButton" name="pushButton_5">
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Service de pharmacie</string>
         </property>
@@ -130,6 +141,17 @@
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="pushButton_3">
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Service de dentiste</string>
         </property>
@@ -137,6 +159,17 @@
       </item>
       <item row="1" column="0">
        <widget class="QPushButton" name="pushButton_2">
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Service de radiographie</string>
         </property>
@@ -144,6 +177,17 @@
       </item>
       <item row="3" column="0">
        <widget class="QPushButton" name="pushButton_4">
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Service de laboratoire</string>
         </property>
@@ -151,6 +195,23 @@
       </item>
       <item row="0" column="0">
        <widget class="QPushButton" name="pushButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Service des urgences</string>
         </property>
