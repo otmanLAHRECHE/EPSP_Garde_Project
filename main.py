@@ -6,6 +6,15 @@ from PyQt5.QtWidgets import *
 import sys
 
 
+
+class Login_dialog(QtWidgets.QDialog):
+    def __init__(self):
+        super(Login_dialog, self).__init__()
+        uic.loadUi('ui/login_dialog.ui', self)
+        self.username = self.findChild(QtWidgets.QLineEdit, "lineEdit")
+        self.password = self.findChild(QtWidgets.QLineEdit, "lineEdit_2")
+
+
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainUi, self).__init__()
@@ -21,12 +30,14 @@ class MainUi(QtWidgets.QMainWindow):
         self.radio = self.findChild(QtWidgets.QPushButton, "pushButton_2")
         self.labo = self.findChild(QtWidgets.QPushButton, "pushButton_4")
         self.pharm = self.findChild(QtWidgets.QPushButton, "pushButton_5")
+        self.resp = self.findChild(QtWidgets.QLabel, "label_3")
+
         self.grid.addWidget(self.urgence, 1, 1)
         self.grid.addWidget(self.dentist, 1, 2)
         self.grid.addWidget(self.radio, 1, 3)
         self.grid.addWidget(self.labo, 2, 1)
         self.grid.addWidget(self.pharm, 2, 2)
-
+        self.resp.setText("")
 
 
         self.urgence.clicked.connect(self.urg)
@@ -40,7 +51,15 @@ class MainUi(QtWidgets.QMainWindow):
         self.show()
 
     def urg(self):
+        dialog = Login_dialog()
+
+        if dialog.exec() == QtWidgets.QDialog.Accepted:
+            if dialog.username.text() == "urgence" and dialog.password.text() == "urgence":
+                self.resp.setText("authentifié")
+            else:
+                self.resp.setText("nom utilisateur ou mods de pass erroné")
         print("urgence")
+
 
     def rad(self):
         print("radio")
