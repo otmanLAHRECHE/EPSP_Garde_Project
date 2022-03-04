@@ -9,10 +9,8 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         uic.loadUi('ui/urgence.ui', self)
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
-        self.tab_gardes = QWidget()
-        self.tab_medcines = QWidget()
+        self.tab_gardes = self.findChild(QWidget, "tab")
+        self.tab_medcines = self.findChild(QWidget, "tab_2")
 
-        self.tab.addTab(self.tab_gardes, "Listes de Garde")
-        self.tab.addTab(self.tab_medcines, "Medcines")
 
 

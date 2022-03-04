@@ -56,6 +56,7 @@ class MainUi(QtWidgets.QMainWindow):
             if dialog.username.text() == "urgence" and dialog.password.text() == "urgence":
                 self.resp.setText("authentifié")
                 self.urgencepage.show()
+                self.close()
 
             else:
                 self.resp.setText("nom utilisateur ou mods de pass erroné")
