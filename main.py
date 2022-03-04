@@ -5,6 +5,7 @@ from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import *
 import sys
 
+from urgence import UrgenceMainUi
 
 
 class Login_dialog(QtWidgets.QDialog):
@@ -19,6 +20,8 @@ class MainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainUi, self).__init__()
         uic.loadUi('ui/main.ui', self)
+
+        self.urgencepage = UrgenceMainUi()
         self.epsp = self.findChild(QtWidgets.QLabel, "label")
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
 
@@ -39,7 +42,6 @@ class MainUi(QtWidgets.QMainWindow):
         self.grid.addWidget(self.pharm, 2, 2)
         self.resp.setText("")
 
-
         self.urgence.clicked.connect(self.urg)
         self.dentist.clicked.connect(self.den)
         self.radio.clicked.connect(self.rad)
@@ -47,19 +49,17 @@ class MainUi(QtWidgets.QMainWindow):
         self.pharm.clicked.connect(self.pha)
 
 
-
-        self.show()
-
     def urg(self):
         dialog = Login_dialog()
 
         if dialog.exec() == QtWidgets.QDialog.Accepted:
             if dialog.username.text() == "urgence" and dialog.password.text() == "urgence":
                 self.resp.setText("authentifié")
+                self.urgencepage.show()
+
             else:
                 self.resp.setText("nom utilisateur ou mods de pass erroné")
         print("urgence")
-
 
     def rad(self):
         print("radio")
@@ -74,6 +74,12 @@ class MainUi(QtWidgets.QMainWindow):
         print("pharm")
 
 
-app = QApplication(sys.argv)
-window = MainUi()
-app.exec_()
+def main():
+    app = QApplication(sys.argv)
+    window = MainUi()
+    window.show()
+    app.exec_()
+
+
+if __name__ == '__main__':
+    main()

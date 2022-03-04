@@ -15,9 +15,4 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.tab.addTab(self.tab_gardes, "Listes de Garde")
         self.tab.addTab(self.tab_medcines, "Medcines")
 
-        self.show()
 
-
-app = QApplication(sys.argv)
-window = UrgenceMainUi()
-app.exec_()
