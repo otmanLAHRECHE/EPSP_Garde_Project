@@ -110,7 +110,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Mods de pass:</string>
+    <string>Mots de passe:</string>
    </property>
   </widget>
  </widget>

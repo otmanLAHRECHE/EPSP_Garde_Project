@@ -200,9 +200,9 @@
      <widget class="QPushButton" name="pushButton_2">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>334</x>
         <y>530</y>
-        <width>75</width>
+        <width>91</width>
         <height>23</height>
        </rect>
       </property>
@@ -213,9 +213,9 @@
      <widget class="QPushButton" name="pushButton_3">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>230</x>
         <y>530</y>
-        <width>75</width>
+        <width>91</width>
         <height>23</height>
        </rect>
       </property>
@@ -223,13 +223,13 @@
        <string>Metre a jour</string>
       </property>
      </widget>
-     <widget class="QWidget" name="widget_2" native="true">
+     <widget class="QTableWidget" name="tableWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>40</y>
+        <y>50</y>
         <width>411</width>
-        <height>481</height>
+        <height>471</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -238,16 +238,21 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <widget class="QTableView" name="tableView">
-       <property name="geometry">
-        <rect>
-         <x>5</x>
-         <y>11</y>
-         <width>401</width>
-         <height>461</height>
-        </rect>
+      <column>
+       <property name="text">
+        <string>Id</string>
        </property>
-      </widget>
+      </column>
+      <column>
+       <property name="text">
+        <string>Nom et prenom</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Service</string>
+       </property>
+      </column>
      </widget>
     </widget>
    </widget>
