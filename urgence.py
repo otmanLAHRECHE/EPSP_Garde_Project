@@ -18,7 +18,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         self.tab_gardes = self.findChild(QWidget, "tab")
         self.tab_medcines = self.findChild(QWidget, "tab_2")
-        self.tablelayout = self.findChild(QWidget, "widget_2")
         self.medcinname = self.findChild(QLineEdit, "lineEdit")
 
         self.add = self.findChild(QPushButton, "pushButton")
@@ -65,8 +64,9 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         results = cur.fetchall()
         for row in results:
             print(row)
-            self.table.setItem(tablerow, 0, QtWidgets.QTableWidgetItem(row[0]))
-            self.table.setItem(tablerow, 1, QtWidgets.QTableWidgetItem(row[1]))
-            self.table.setItem(tablerow, 2, QtWidgets.QTableWidgetItem(row[2]))
+            print(tablerow)
+            self.table.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
+            self.table.setItem(tablerow, 1, QTableWidgetItem(row[1]))
+            self.table.setItem(tablerow, 2, QTableWidgetItem(row[2]))
             tablerow += 1
         connection.close()
