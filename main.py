@@ -49,6 +49,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.pharm.clicked.connect(self.pha)
 
 
+
     def urg(self):
         dialog = Login_dialog()
 
