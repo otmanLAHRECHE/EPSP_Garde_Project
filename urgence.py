@@ -33,6 +33,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.loadUsers()
 
         self.add.clicked.connect(self.add_toDb)
+        self.delete.clicked.connect(self.deleteUser)
 
     def alert_no_name(self):
         alert = QMessageBox()
@@ -54,6 +55,10 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             connection.close()
             self.loadUsers()
 
+    def deleteUser(self):
+        row = self.table.currentRow()
+        print(row)
+
     def loadUsers(self):
         print("load users")
         connection = sqlite3.connect('database/sqlite.db')
@@ -63,8 +68,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         cur.execute(sql_q, ('medecin urgence',))
         results = cur.fetchall()
         for row in results:
-            print(row)
-            print(tablerow)
             self.table.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
             self.table.setItem(tablerow, 1, QTableWidgetItem(row[1]))
             self.table.setItem(tablerow, 2, QTableWidgetItem(row[2]))
