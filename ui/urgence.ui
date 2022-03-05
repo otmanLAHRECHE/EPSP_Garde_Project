@@ -53,6 +53,9 @@
       <height>600</height>
      </size>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
+    </property>
     <property name="currentIndex">
      <number>1</number>
     </property>
@@ -116,6 +119,9 @@
         <width>6</width>
         <height>551</height>
        </rect>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -191,39 +197,6 @@
         <normaloff>../asstes/images/plus.png</normaloff>../asstes/images/plus.png</iconset>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>411</width>
-        <height>471</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>409</width>
-         <height>469</height>
-        </rect>
-       </property>
-       <widget class="QWidget" name="widget_2" native="true">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>401</width>
-          <height>471</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-     </widget>
      <widget class="QPushButton" name="pushButton_2">
       <property name="geometry">
        <rect>
@@ -248,6 +221,16 @@
       </property>
       <property name="text">
        <string>Metre a jour</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="widget_2" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>411</width>
+        <height>471</height>
+       </rect>
       </property>
      </widget>
     </widget>
