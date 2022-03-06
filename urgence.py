@@ -5,6 +5,8 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
 
+from dialogs import Update_worker_dialog
+
 
 class UrgenceMainUi(QtWidgets.QMainWindow):
     def __init__(self):
@@ -34,6 +36,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         self.add.clicked.connect(self.add_toDb)
         self.delete.clicked.connect(self.deleteUser)
+        self.update.clicked.connect(self.updateUser)
 
     def alert_(self, message):
         alert = QMessageBox()
@@ -77,15 +80,23 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         row = self.table.currentRow()
         print(row)
         if row > -1:
-            id = self.table.item(row, 0).text()
-            connection = sqlite3.connect('database/sqlite.db')
-            cur = connection.cursor()
-            sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
-            cur.execute(sql_q, (id,))
-            connection.commit()
-            connection.close()
-            self.table.removeRow(row)
-            self.loadUsers()
+            dialog = Update_worker_dialog()
+            print("dialog")
+            if dialog.exec() == QtWidgets.QDialog.Accepted:
+                if dialog.worker.text() == "":
+                    message = "enter un valide nom"
+                    self.alert_(message)
+                else:
+                    id = self.table.item(row, 0).text()
+                    connection = sqlite3.connect('database/sqlite.db')
+                    cur = connection.cursor()
+                    sql_q = 'UPDATE health_worker SET full_name= ? WHERE worker_id= ?'
+                    cur.execute(sql_q, (dialog.worker.text(), id))
+                    connection.commit()
+                    connection.close()
+                    self.table.removeRow(row)
+                    self.loadUsers()
+
         else:
             message = 'Selectioner un medecin'
             self.alert_(message)
