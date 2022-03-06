@@ -5,15 +5,9 @@ from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import *
 import sys
 
+from dialogs import Login_dialog
 from urgence import UrgenceMainUi
 
-
-class Login_dialog(QtWidgets.QDialog):
-    def __init__(self):
-        super(Login_dialog, self).__init__()
-        uic.loadUi('ui/login_dialog.ui', self)
-        self.username = self.findChild(QtWidgets.QLineEdit, "lineEdit")
-        self.password = self.findChild(QtWidgets.QLineEdit, "lineEdit_2")
 
 
 class MainUi(QtWidgets.QMainWindow):

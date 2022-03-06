@@ -35,29 +35,60 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.add.clicked.connect(self.add_toDb)
         self.delete.clicked.connect(self.deleteUser)
 
-    def alert_no_name(self):
+    def alert_(self, message):
         alert = QMessageBox()
         alert.setWindowTitle("alert")
-        alert.setText('Le champ de nom est vide!')
+        alert.setText(message)
         alert.exec_()
 
     def add_toDb(self):
         if self.medcinname.text() == "":
-            self.alert_no_name()
+            message = 'Le champ de nom est vide!'
+            self.alert_(message)
         else:
             connection = sqlite3.connect('database/sqlite.db')
-            print("connection")
             cur = connection.cursor()
             sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
             med = (self.medcinname.text(), 'medecin urgence')
             cur.execute(sql_q, med)
             connection.commit()
             connection.close()
+            self.medcinname.setText("")
             self.loadUsers()
 
     def deleteUser(self):
         row = self.table.currentRow()
         print(row)
+        if row > -1:
+            id = self.table.item(row, 0).text()
+            connection = sqlite3.connect('database/sqlite.db')
+            cur = connection.cursor()
+            sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
+            cur.execute(sql_q, (id,))
+            connection.commit()
+            connection.close()
+            self.table.removeRow(row)
+            self.loadUsers()
+        else:
+            message = 'Selectioner un medecin'
+            self.alert_(message)
+
+    def updateUser(self):
+        row = self.table.currentRow()
+        print(row)
+        if row > -1:
+            id = self.table.item(row, 0).text()
+            connection = sqlite3.connect('database/sqlite.db')
+            cur = connection.cursor()
+            sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
+            cur.execute(sql_q, (id,))
+            connection.commit()
+            connection.close()
+            self.table.removeRow(row)
+            self.loadUsers()
+        else:
+            message = 'Selectioner un medecin'
+            self.alert_(message)
 
     def loadUsers(self):
         print("load users")

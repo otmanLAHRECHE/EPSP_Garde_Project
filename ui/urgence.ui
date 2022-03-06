@@ -389,6 +389,11 @@
       </row>
       <row>
        <property name="text">
+        <string>29</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
         <string>30</string>
        </property>
       </row>
