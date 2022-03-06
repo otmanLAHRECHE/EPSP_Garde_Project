@@ -45,6 +45,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.table_gardes.setColumnWidth(4, 220)
         self.table_gardes.setCellWidget(0, 4, Buttons())
 
+        self.loadGuardMonths()
         self.loadUsers()
 
         self.add.clicked.connect(self.add_toDb)
@@ -65,7 +66,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             connection = sqlite3.connect('database/sqlite.db')
             cur = connection.cursor()
             sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
-            med = (self.medcinname.text(), 'medecin urgence')
+            med = (self.medcinname.text(), 'urgence')
             cur.execute(sql_q, med)
             connection.commit()
             connection.close()
@@ -121,7 +122,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         cur = connection.cursor()
         sql_q = 'SELECT * FROM health_worker where service=?'
         tablerow = 0
-        cur.execute(sql_q, ('medecin urgence',))
+        cur.execute(sql_q, ('urgence',))
         results = cur.fetchall()
         for row in results:
             print(row)
@@ -132,4 +133,23 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.table.setItem(tablerow, 0, QTableWidgetItem(""))
         self.table.setItem(tablerow, 1, QTableWidgetItem(""))
         self.table.setItem(tablerow, 2, QTableWidgetItem(""))
+        connection.close()
+
+    def loadGuardMonths(self):
+        print("load guards")
+        connection = sqlite3.connect('database/sqlite.db')
+        cur = connection.cursor()
+        sql_q = 'SELECT * FROM guard_mounth where service=?'
+        tablerow = 0
+        cur.execute(sql_q, ('urgence',))
+        results = cur.fetchall()
+        for row in results:
+            print(row)
+            self.table_gardes.insertRow(row)
+            self.table_gardes.setRowHeight(row, 80)
+            self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
+            self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(str(row[1])))
+            self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(str(row[2])))
+            self.table_gardes.setItem(tablerow, 3, QTableWidgetItem(row[3]))
+            tablerow += 1
         connection.close()
