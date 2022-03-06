@@ -70,7 +70,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             cur.execute(sql_q, (id,))
             connection.commit()
             connection.close()
-            self.table.removeRow(row)
             self.loadUsers()
         else:
             message = 'Selectioner un medecin'
@@ -94,7 +93,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
                     cur.execute(sql_q, (dialog.worker.text(), id))
                     connection.commit()
                     connection.close()
-                    self.table.removeRow(row)
                     self.loadUsers()
 
         else:
