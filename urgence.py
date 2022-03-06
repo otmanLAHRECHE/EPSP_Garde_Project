@@ -70,6 +70,9 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             cur.execute(sql_q, (id,))
             connection.commit()
             connection.close()
+            self.table.setItem(row, 0, QTableWidgetItem(""))
+            self.table.setItem(row, 1, QTableWidgetItem(""))
+            self.table.setItem(row, 2, QTableWidgetItem(""))
             self.loadUsers()
         else:
             message = 'Selectioner un medecin'
@@ -108,8 +111,12 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         cur.execute(sql_q, ('medecin urgence',))
         results = cur.fetchall()
         for row in results:
+            print(row)
             self.table.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
             self.table.setItem(tablerow, 1, QTableWidgetItem(row[1]))
             self.table.setItem(tablerow, 2, QTableWidgetItem(row[2]))
             tablerow += 1
+        self.table.setItem(tablerow, 0, QTableWidgetItem(""))
+        self.table.setItem(tablerow, 1, QTableWidgetItem(""))
+        self.table.setItem(tablerow, 2, QTableWidgetItem(""))
         connection.close()
