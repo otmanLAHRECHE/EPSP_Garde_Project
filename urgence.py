@@ -5,7 +5,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
 
-from dialogs import Update_worker_dialog
+from dialogs import Update_worker_dialog, Add_new_month
 from widgets import Buttons
 
 
@@ -72,6 +72,23 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             connection.close()
             self.medcinname.setText("")
             self.loadUsers()
+
+    def add_grd(self):
+        dialog = Add_new_month()
+        if dialog.exec() == QtWidgets.QDialog.Accepted:
+            if dialog.year == "":
+                message = "Entrer un valid année"
+                self.alert_(message)
+            else:
+                connection = sqlite3.connect('database/sqlite.db')
+                cur = connection.cursor()
+                sql_q = "INSERT INTO gard_mounth (m,y,service) values (?,?,?)"
+                med = (self.medcinname.text(), dialog.year.text(), 'urgence')
+                cur.execute(sql_q, med)
+                connection.commit()
+                connection.close()
+                self.medcinname.setText("")
+                self.loadUsers()
 
     def deleteUser(self):
         row = self.table.currentRow()
