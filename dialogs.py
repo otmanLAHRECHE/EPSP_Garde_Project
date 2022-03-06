@@ -11,6 +11,6 @@ class Login_dialog(QtWidgets.QDialog):
 
 class Update_worker_dialog(QtWidgets.QDialog):
     def __init__(self):
-        super(Login_dialog, self).__init__()
+        super(Update_worker_dialog, self).__init__()
         uic.loadUi('ui/update_worker_name.ui', self)
         self.worker = self.findChild(QtWidgets.QLineEdit, "lineEdit")
