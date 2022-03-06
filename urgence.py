@@ -22,6 +22,8 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.tab_gardes = self.findChild(QWidget, "tab")
         self.tab_medcines = self.findChild(QWidget, "tab_2")
         self.medcinname = self.findChild(QLineEdit, "lineEdit")
+        self.add_garde = self.findChild(QPushButton, "pushButton_4")
+        self.add_garde.setIcon(QIcon("asstes/images/plus.png"))
 
         self.add = self.findChild(QPushButton, "pushButton")
         self.add.setIcon(QIcon("asstes/images/plus.png"))
@@ -41,8 +43,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.table_gardes.setColumnWidth(2, 150)
         self.table_gardes.setColumnWidth(3, 180)
         self.table_gardes.setColumnWidth(4, 220)
-
-
         self.table_gardes.setCellWidget(0, 4, Buttons())
 
         self.loadUsers()
