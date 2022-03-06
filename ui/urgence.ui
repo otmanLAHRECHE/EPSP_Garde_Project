@@ -171,7 +171,37 @@
       </row>
       <row>
        <property name="text">
+        <string>14</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
         <string>15</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>17</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>18</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>19</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>20</string>
        </property>
       </row>
       <column>
@@ -191,26 +221,26 @@
       </column>
       <column>
        <property name="text">
-        <string>New Column</string>
+        <string>Service</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string/>
+        <string>Operation</string>
        </property>
       </column>
      </widget>
      <widget class="QPushButton" name="pushButton_4">
       <property name="geometry">
        <rect>
-        <x>620</x>
+        <x>560</x>
         <y>520</y>
-        <width>151</width>
+        <width>211</width>
         <height>31</height>
        </rect>
       </property>
       <property name="text">
-       <string>Ajouter nouvelle liste</string>
+       <string>Ajouter nouvelle garde planing</string>
       </property>
      </widget>
     </widget>

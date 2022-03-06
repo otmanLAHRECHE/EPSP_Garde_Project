@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 from dialogs import Update_worker_dialog
+from widgets import Buttons
 
 
 class UrgenceMainUi(QtWidgets.QMainWindow):
@@ -32,6 +33,18 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.table.setColumnWidth(0, 80)
         self.table.setColumnWidth(1, 200)
         self.table.setColumnWidth(2, 110)
+
+        self.table_gardes = self.findChild(QTableWidget, "tableWidget_2")
+
+        self.table_gardes.setColumnWidth(0, 80)
+        self.table_gardes.setColumnWidth(1, 100)
+        self.table_gardes.setColumnWidth(2, 150)
+        self.table_gardes.setColumnWidth(3, 180)
+        self.table_gardes.setColumnWidth(4, 220)
+
+
+        self.table_gardes.setCellWidget(0, 4, Buttons())
+
         self.loadUsers()
 
         self.add.clicked.connect(self.add_toDb)
