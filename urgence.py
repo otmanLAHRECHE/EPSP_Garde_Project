@@ -35,7 +35,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.table.setColumnWidth(0, 80)
         self.table.setColumnWidth(1, 200)
         self.table.setColumnWidth(2, 110)
-        self.guardCRUD = Buttons()
 
         self.table_gardes = self.findChild(QTableWidget, "tableWidget_2")
 
@@ -51,7 +50,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.delete.clicked.connect(self.deleteUser)
         self.update.clicked.connect(self.updateUser)
         self.add_garde.clicked.connect(self.add_grd)
-
 
     def alert_(self, message):
         alert = QMessageBox()
@@ -220,6 +218,26 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(m))
             self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(str(row[2])))
             self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(row[3]))
-            self.table_gardes.setCellWidget(tablerow, 3, self.guardCRUD)
+            buttons = Buttons()
+            self.table_gardes.setCellWidget(tablerow, 3, buttons)
+            buttons.print_garde.clicked.connect(self.print_g)
+            buttons.edit_garde.clicked.connect(self.edit_g)
+            buttons.delete_garde.clicked.connect(self.delete_g)
+
             tablerow += 1
         connection.close()
+
+    def edit_g(self):
+        clickme = qApp.focusWidget()
+        index = self.table_gardes.indexAt(clickme.parent().pos())
+        print(index.row())
+
+    def delete_g(self):
+        clickme = qApp.focusWidget()
+        index = self.table_gardes.indexAt(clickme.parent().pos())
+        print(index.row())
+
+    def print_g(self):
+        clickme = qApp.focusWidget()
+        index = self.table_gardes.indexAt(clickme.parent().pos())
+        print(index.row())
