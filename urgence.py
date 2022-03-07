@@ -35,14 +35,14 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.table.setColumnWidth(0, 80)
         self.table.setColumnWidth(1, 200)
         self.table.setColumnWidth(2, 110)
+        self.guardCRUD = Buttons()
 
         self.table_gardes = self.findChild(QTableWidget, "tableWidget_2")
 
-        self.table_gardes.setColumnWidth(0, 80)
-        self.table_gardes.setColumnWidth(1, 100)
-        self.table_gardes.setColumnWidth(2, 150)
-        self.table_gardes.setColumnWidth(3, 180)
-        self.table_gardes.setColumnWidth(4, 220)
+        self.table_gardes.setColumnWidth(0, 150)
+        self.table_gardes.setColumnWidth(1, 150)
+        self.table_gardes.setColumnWidth(2, 180)
+        self.table_gardes.setColumnWidth(3, 220)
 
         self.loadGuardMonths()
         self.loadUsers()
@@ -51,6 +51,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.delete.clicked.connect(self.deleteUser)
         self.update.clicked.connect(self.updateUser)
         self.add_garde.clicked.connect(self.add_grd)
+
 
     def alert_(self, message):
         alert = QMessageBox()
@@ -190,10 +191,35 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         for row in results:
             print(row)
             self.table_gardes.setRowHeight(tablerow, 70)
-            self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
-            self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(str(row[1])))
-            self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(str(row[2])))
-            self.table_gardes.setItem(tablerow, 3, QTableWidgetItem(row[3]))
-            self.table_gardes.setCellWidget(tablerow, 4, Buttons())
+            m = ""
+            if row[1] == 1:
+                m = "janvier"
+            elif row[1] == 2:
+                m = "février"
+            elif row[1] == 3:
+                m = "mars"
+            elif row[1] == 4:
+                m = "avril"
+            elif row[1] == 5:
+                m = "mai"
+            elif row[1] == 6:
+                m = "juin"
+            elif row[1] == 7:
+                m = "juillet"
+            elif row[1] == 8:
+                m = "août"
+            elif row[1] == 9:
+                m = "septembre"
+            elif row[1] == 10:
+                m = "octobre"
+            elif row[1] == 11:
+                m = "novembre"
+            elif row[1] == 12:
+                m = "décembre"
+
+            self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(m))
+            self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(str(row[2])))
+            self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(row[3]))
+            self.table_gardes.setCellWidget(tablerow, 3, self.guardCRUD)
             tablerow += 1
         connection.close()
