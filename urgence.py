@@ -43,7 +43,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.table_gardes.setColumnWidth(2, 150)
         self.table_gardes.setColumnWidth(3, 180)
         self.table_gardes.setColumnWidth(4, 220)
-        self.table_gardes.setCellWidget(0, 4, Buttons())
 
         self.loadGuardMonths()
         self.loadUsers()
@@ -51,6 +50,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.add.clicked.connect(self.add_toDb)
         self.delete.clicked.connect(self.deleteUser)
         self.update.clicked.connect(self.updateUser)
+        self.add_garde.clicked.connect(self.add_grd)
 
     def alert_(self, message):
         alert = QMessageBox()
@@ -76,19 +76,46 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
     def add_grd(self):
         dialog = Add_new_month()
         if dialog.exec() == QtWidgets.QDialog.Accepted:
-            if dialog.year == "":
-                message = "Entrer un valid année"
+            if dialog.year.text() == "":
+                message = "Entrer une valid année"
                 self.alert_(message)
             else:
                 connection = sqlite3.connect('database/sqlite.db')
                 cur = connection.cursor()
-                sql_q = "INSERT INTO gard_mounth (m,y,service) values (?,?,?)"
-                med = (self.medcinname.text(), dialog.year.text(), 'urgence')
-                cur.execute(sql_q, med)
+                sql_q = "INSERT INTO guard_mounth (m,y,service) values (?,?,?)"
+                m = 0
+                if dialog.month.currentIndex() == 0:
+                    m = 1
+                elif dialog.month.currentIndex() == 1:
+                    m = 2
+                elif dialog.month.currentIndex() == 2:
+                    m = 3
+                elif dialog.month.currentIndex() == 3:
+                    m = 4
+                elif dialog.month.currentIndex() == 4:
+                    m = 5
+                elif dialog.month.currentIndex() == 5:
+                    m = 6
+                elif dialog.month.currentIndex() == 6:
+                    m = 7
+                elif dialog.month.currentIndex() == 7:
+                    m = 8
+                elif dialog.month.currentIndex() == 8:
+                    m = 9
+                elif dialog.month.currentIndex() == 9:
+                    m = 10
+                elif dialog.month.currentIndex() == 10:
+                    m = 11
+                elif dialog.month.currentIndex() == 11:
+                    m = 12
+
+                guard_m = (m, int(dialog.year.text()), 'urgence')
+                print(guard_m)
+
+                cur.execute(sql_q, guard_m)
                 connection.commit()
                 connection.close()
-                self.medcinname.setText("")
-                self.loadUsers()
+                self.loadGuardMonths()
 
     def deleteUser(self):
         row = self.table.currentRow()
@@ -162,11 +189,11 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         results = cur.fetchall()
         for row in results:
             print(row)
-            self.table_gardes.insertRow(row)
-            self.table_gardes.setRowHeight(row, 80)
+            self.table_gardes.setRowHeight(tablerow, 70)
             self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
             self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(str(row[1])))
             self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(str(row[2])))
             self.table_gardes.setItem(tablerow, 3, QTableWidgetItem(row[3]))
+            self.table_gardes.setCellWidget(tablerow, 4, Buttons())
             tablerow += 1
         connection.close()
