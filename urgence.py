@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 from dialogs import Update_worker_dialog, Add_new_month
+from urgence_guard import UrgenceGuardUi
 from widgets import Buttons
 
 
@@ -15,6 +16,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         uic.loadUi('ui/urgence.ui', self)
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
+        self.urgence_guard_page = ""
 
         self.tab.setTabText(0, "Listes de garde")
         self.tab.setTabText(1, "Medecins")
@@ -52,6 +54,8 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.delete.clicked.connect(self.deleteUser)
         self.update.clicked.connect(self.updateUser)
         self.add_garde.clicked.connect(self.add_grd)
+
+
 
     def alert_(self, message):
         alert = QMessageBox()
@@ -238,7 +242,12 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
     def edit_g(self):
         clickme = qApp.focusWidget()
         index = self.table_gardes.indexAt(clickme.parent().pos())
-        print(index.row())
+        row = index.row()
+        m = self.table_gardes.item(row, 1).text()
+        y = self.table_gardes.item(row, 2).text()
+        self.urgence_guard_page = UrgenceGuardUi(m, y)
+        self.urgence_guard.show()
+        self.close()
 
     def delete_g(self):
         clickme = qApp.focusWidget()

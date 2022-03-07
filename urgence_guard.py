@@ -34,4 +34,4 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             m = "novembre"
         elif self.month == 12:
             m = "décembre"
-        self.ttl.setText("Planing de garde urgence mois "+m+" de l année "+year)
+        self.ttl.setText("Planing de garde urgence mois " + m + " de l année " + year + ":")

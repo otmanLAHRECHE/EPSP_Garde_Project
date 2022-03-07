@@ -15,7 +15,7 @@ class MainUi(QtWidgets.QMainWindow):
         super(MainUi, self).__init__()
         uic.loadUi('ui/main.ui', self)
 
-        self.urgencepage = UrgenceMainUi()
+        self.urgencepage =""
         self.epsp = self.findChild(QtWidgets.QLabel, "label")
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
 
@@ -50,6 +50,7 @@ class MainUi(QtWidgets.QMainWindow):
         if dialog.exec() == QtWidgets.QDialog.Accepted:
             if dialog.username.text() == "urgence" and dialog.password.text() == "urgence":
                 self.resp.setText("authentifié")
+                self.urgencepage = UrgenceMainUi()
                 self.urgencepage.show()
                 self.close()
 
