@@ -40,8 +40,10 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         self.table_gardes.setColumnWidth(0, 150)
         self.table_gardes.setColumnWidth(1, 150)
-        self.table_gardes.setColumnWidth(2, 180)
-        self.table_gardes.setColumnWidth(3, 220)
+        self.table_gardes.setColumnWidth(2, 150)
+        self.table_gardes.setColumnWidth(3, 180)
+        self.table_gardes.setColumnWidth(4, 220)
+        self.table_gardes.hideColumn(0)
 
         self.loadGuardMonths()
         self.loadUsers()
@@ -215,16 +217,22 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             elif row[1] == 12:
                 m = "décembre"
 
-            self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(m))
-            self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(str(row[2])))
-            self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(row[3]))
+            self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
+            self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(m))
+            self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(str(row[2])))
+            self.table_gardes.setItem(tablerow, 3, QTableWidgetItem(row[3]))
             buttons = Buttons()
-            self.table_gardes.setCellWidget(tablerow, 3, buttons)
+            self.table_gardes.setCellWidget(tablerow, 4, buttons)
             buttons.print_garde.clicked.connect(self.print_g)
             buttons.edit_garde.clicked.connect(self.edit_g)
             buttons.delete_garde.clicked.connect(self.delete_g)
 
             tablerow += 1
+        self.table_gardes.setItem(tablerow, 0, QTableWidgetItem(""))
+        self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(""))
+        self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(""))
+        self.table_gardes.setItem(tablerow, 3, QTableWidgetItem(""))
+        self.table_gardes.removeCellWidget(tablerow, 4)
         connection.close()
 
     def edit_g(self):
@@ -235,7 +243,25 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
     def delete_g(self):
         clickme = qApp.focusWidget()
         index = self.table_gardes.indexAt(clickme.parent().pos())
-        print(index.row())
+        row = index.row()
+        if row > -1:
+            id = self.table_gardes.item(row, 0).text()
+            print(id)
+            connection = sqlite3.connect('database/sqlite.db')
+            cur = connection.cursor()
+            sql_q = 'DELETE FROM guard_mounth WHERE guard_mounth_id=?'
+            cur.execute(sql_q, (id,))
+            connection.commit()
+            connection.close()
+            self.table.setItem(row, 0, QTableWidgetItem(""))
+            self.table.setItem(row, 1, QTableWidgetItem(""))
+            self.table.setItem(row, 2, QTableWidgetItem(""))
+            self.table.setItem(row, 3, QTableWidgetItem(""))
+            self.table.setItem(row, 4, QTableWidgetItem(""))
+            self.loadGuardMonths()
+        else:
+            message = 'Selectioner un medecin'
+            self.alert_(message)
 
     def print_g(self):
         clickme = qApp.focusWidget()

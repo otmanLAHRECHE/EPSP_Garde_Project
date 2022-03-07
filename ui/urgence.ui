@@ -201,10 +201,15 @@
       </row>
       <column>
        <property name="text">
-        <string>Mois</string>
+        <string>Id</string>
        </property>
        <property name="textAlignment">
-        <set>AlignCenter</set>
+        <set>AlignLeading|AlignVCenter</set>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Mois</string>
        </property>
       </column>
       <column>
@@ -212,7 +217,7 @@
         <string>Anné</string>
        </property>
        <property name="textAlignment">
-        <set>AlignCenter</set>
+        <set>AlignLeading|AlignVCenter</set>
        </property>
       </column>
       <column>
@@ -220,7 +225,7 @@
         <string>Service</string>
        </property>
        <property name="textAlignment">
-        <set>AlignCenter</set>
+        <set>AlignLeading|AlignVCenter</set>
        </property>
       </column>
       <column>
