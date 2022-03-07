@@ -2,14 +2,18 @@ from PyQt5 import QtWidgets, uic
 
 
 class UrgenceGuardUi(QtWidgets.QMainWindow):
-    def __init__(self, month, year):
+    def __init__(self):
         super(UrgenceGuardUi, self).__init__()
         uic.loadUi('ui/guard_urgence.ui', self)
 
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
-        self.month = month
+
+        """self.month = month
         self.year = year
+        print(month + "   " + year)"""
         m = ""
+
+        """
         if self.month == 1:
             m = "janvier"
         elif self.month == 2:
@@ -34,4 +38,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             m = "novembre"
         elif self.month == 12:
             m = "décembre"
-        self.ttl.setText("Planing de garde urgence mois " + m + " de l année " + year + ":")
+            """
+        # self.ttl.setText("Planing de garde urgence mois " + m + " de l année " + self.year + ":")
+

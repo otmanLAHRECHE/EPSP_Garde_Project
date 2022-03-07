@@ -15,7 +15,7 @@ class MainUi(QtWidgets.QMainWindow):
         super(MainUi, self).__init__()
         uic.loadUi('ui/main.ui', self)
 
-        self.urgencepage =""
+        self.urgencepage = ""
         self.epsp = self.findChild(QtWidgets.QLabel, "label")
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
 

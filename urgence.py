@@ -1,6 +1,6 @@
 import sqlite3
 
-from PyQt5 import uic, QtWidgets, QtSql, QtCore
+from PyQt5 import uic, QtWidgets
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
@@ -245,7 +245,35 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         row = index.row()
         m = self.table_gardes.item(row, 1).text()
         y = self.table_gardes.item(row, 2).text()
-        self.urgence_guard_page = UrgenceGuardUi(m, y)
+        if m == "janvier":
+            m = 1
+        elif m == "février":
+            m = 2
+        elif m == "mars":
+            m = 3
+        elif m == "avril":
+            m = 4
+        elif m == "mai":
+            m = 5
+        elif m == "juin":
+            m = 6
+        elif m == "juillet":
+            m = 7
+        elif m == "août":
+            m = 8
+        elif m == "septembre":
+            m = 9
+        elif m == "octobre":
+            m = 10
+        elif m == "novembre":
+            m = 11
+        elif m == "décembre":
+            m = 12
+        print("parent")
+
+        y = int(y)
+        self.urgence_guard_page = UrgenceGuardUi()
+        print('chilf finish')
         self.urgence_guard.show()
         self.close()
 
