@@ -7,15 +7,15 @@ import sys
 
 from dialogs import Login_dialog
 from urgence import UrgenceMainUi
-
+from urgence_guard import UrgenceGuardUi
 
 
 class MainUi(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, parent=None):
         super(MainUi, self).__init__()
         uic.loadUi('ui/main.ui', self)
 
-        self.urgencepage = ""
+
         self.epsp = self.findChild(QtWidgets.QLabel, "label")
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
 
@@ -60,6 +60,9 @@ class MainUi(QtWidgets.QMainWindow):
 
     def rad(self):
         print("radio")
+        self.urgencepage = UrgenceGuardUi()
+        self.urgencepage.show()
+        self.close()
 
     def den(self):
         print("dentist")

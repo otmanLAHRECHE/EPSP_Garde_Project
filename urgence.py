@@ -16,7 +16,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         uic.loadUi('ui/urgence.ui', self)
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
-        self.urgence_guard_page = ""
 
         self.tab.setTabText(0, "Listes de garde")
         self.tab.setTabText(1, "Medecins")
@@ -54,8 +53,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.delete.clicked.connect(self.deleteUser)
         self.update.clicked.connect(self.updateUser)
         self.add_garde.clicked.connect(self.add_grd)
-
-
 
     def alert_(self, message):
         alert = QMessageBox()
@@ -272,9 +269,9 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         print("parent")
 
         y = int(y)
-        self.urgence_guard_page = UrgenceGuardUi()
-        print('chilf finish')
-        self.urgence_guard.show()
+
+        self.urgence_guard_page = UrgenceGuardUi(m, y)
+        self.urgence_guard_page.show()
         self.close()
 
     def delete_g(self):
