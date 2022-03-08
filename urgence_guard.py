@@ -4,7 +4,7 @@ import sqlite3
 from PyQt5 import QtWidgets, uic
 from calendar import monthrange
 
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, qApp
 
 from widgets import Chose_worker
 
@@ -16,6 +16,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
+        self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
         self.table.setColumnWidth(2, 220)
         self.table.setColumnWidth(3, 220)
 
@@ -55,6 +56,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.load_guards()
 
         print(self.medcins)
+        self.save.clicked.connect(self.save_)
 
     def load_guards(self):
         print("load guard list")
@@ -99,14 +101,13 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
 
-            med_name_light = chose_light.chose.currentText()
-
             """
             self.table_gardes.setItem(row, 2, QTableWidgetItem(str(row[2])))
             self.table_gardes.setItem(row, 3, QTableWidgetItem(row[3]))
             buttons = Buttons()
             self.table_gardes.setCellWidget(tablerow, 4, buttons)
             """
+
     def load_med(self):
         print("load medecins")
         connection = sqlite3.connect('database/sqlite.db')
@@ -117,4 +118,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.medcins = cur.fetchall()
         connection.close()
 
-
+    def save_(self):
+        check = self.table.cellWidget(0, 2)
+        print(check.chose.currentText())
