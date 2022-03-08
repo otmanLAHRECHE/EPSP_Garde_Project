@@ -98,6 +98,11 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             self.table.setItem(row, 1, QTableWidgetItem(str(day) + "/" + str(self.month) + "/" + str(self.year)))
             chose_light = Chose_worker(self.medcins)
             chose_night = Chose_worker(self.medcins)
+
+            if not results_light:
+                print(True)
+
+
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
 
