@@ -98,6 +98,9 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             chose_night = Chose_worker(self.medcins)
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
+
+            med_name_light = chose_light.chose.currentText()
+
             """
             self.table_gardes.setItem(row, 2, QTableWidgetItem(str(row[2])))
             self.table_gardes.setItem(row, 3, QTableWidgetItem(row[3]))
@@ -113,3 +116,5 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         cur.execute(sql_q, ('urgence',))
         self.medcins = cur.fetchall()
         connection.close()
+
+
