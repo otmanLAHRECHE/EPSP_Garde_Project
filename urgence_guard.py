@@ -6,6 +6,8 @@ from calendar import monthrange
 
 from PyQt5.QtWidgets import QTableWidgetItem
 
+from widgets import Chose_worker
+
 
 class UrgenceGuardUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
@@ -49,18 +51,18 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             m = "décembre"
 
         self.ttl.setText("Planing de garde urgence mois " + str(m) + "/" + str(self.year) + ":")
+        self.load_med()
         self.load_guards()
+
+        print(self.medcins)
 
     def load_guards(self):
         print("load guard list")
-        """
+
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
-        sql_q = 'SELECT * FROM guard where service=?'
-        tablerow = 0
-        cur.execute(sql_q, ('urgence',))
-        results = cur.fetchall()
-        """
+
+
         for row in range(self.num_days):
             print(row)
             day = row + 1
@@ -81,11 +83,30 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             elif x.strftime("%A") == "Friday":
                 m = "Vendredi"
 
+            sql_q = 'SELECT full_name FROM guard where service=?'
+            tablerow = 0
+            cur.execute(sql_q, ('urgence',))
+            results = cur.fetchall()
+
+            self.table.setRowHeight(row, 50)
             self.table.setItem(row, 0, QTableWidgetItem(m))
             self.table.setItem(row, 1, QTableWidgetItem(str(day) + "/" + str(self.month) + "/" + str(self.year)))
+            chose_light = Chose_worker()
+            chose_night = Chose_worker()
+            self.table.setCellWidget(row, 2, chose_light)
+            self.table.setCellWidget(row, 3, chose_night)
             """
             self.table_gardes.setItem(row, 2, QTableWidgetItem(str(row[2])))
             self.table_gardes.setItem(row, 3, QTableWidgetItem(row[3]))
             buttons = Buttons()
             self.table_gardes.setCellWidget(tablerow, 4, buttons)
             """
+    def load_med(self):
+        print("load medecins")
+        connection = sqlite3.connect('database/sqlite.db')
+        cur = connection.cursor()
+        sql_q = 'SELECT full_name FROM health_worker where service=?'
+        tablerow = 0
+        cur.execute(sql_q, ('urgence',))
+        self.medcins = cur.fetchall()
+        connection.close()

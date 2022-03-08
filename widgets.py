@@ -21,3 +21,15 @@ class Buttons(QWidget):
         button_layout.addWidget(self.delete_garde)
 
         self.setLayout(button_layout)
+
+
+class Chose_worker(QWidget):
+    def __init__(self):
+        super(Chose_worker, self).__init__()
+
+        widget = QtWidgets.QHBoxLayout()
+        self.chose = QtWidgets.QComboBox()
+        self.chose.addItem("hamdi")
+        widget.addWidget(self.chose)
+
+        self.setLayout(widget)
