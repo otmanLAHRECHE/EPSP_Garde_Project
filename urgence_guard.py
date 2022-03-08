@@ -61,13 +61,10 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
     def load_guards(self):
         print("load guard list")
 
-        """
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
-        """
 
         for row in range(self.num_days):
-            print(row)
             day = row + 1
             x = datetime.datetime(self.year, self.month, day)
             m = ""
@@ -86,12 +83,15 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             elif x.strftime("%A") == "Friday":
                 m = "Vendredi"
 
-            """
-            sql_q = 'SELECT full_name FROM guard where service=?'
-            tablerow = 0
-            cur.execute(sql_q, ('urgence',))
-            results = cur.fetchall()
-            """
+            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
+            results_light = cur.fetchall()
+            print(results_light)
+
+            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
+            results_night = cur.fetchall()
+            print(results_night)
 
             self.table.setRowHeight(row, 50)
             self.table.setItem(row, 0, QTableWidgetItem(m))
