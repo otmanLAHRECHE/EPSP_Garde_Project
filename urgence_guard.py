@@ -102,7 +102,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             if not results_light:
                 print(True)
 
-
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
 
