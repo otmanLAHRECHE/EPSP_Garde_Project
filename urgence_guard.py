@@ -29,7 +29,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.year = year
         self.num_days = monthrange(self.year, self.month)[1]
         self.num_days = self.num_days - 1
-        print(self.num_days)
 
         if self.month == 1:
             m = "janvier"
@@ -91,12 +90,10 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-            print(results_light)
 
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
-            print(results_night)
 
             self.table.setRowHeight(row, 50)
             self.table.setItem(row, 0, QTableWidgetItem(m))
@@ -107,12 +104,10 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             if results_light:
                 print(results_light)
                 rl = results_light[0]
-                print(rl)
                 chose_light.chose.setCurrentText(str(rl[0]))
             if results_night:
                 print(results_night)
                 rn = results_night[0]
-                print(rn)
                 chose_night.chose.setCurrentText(str(rn[0]))
 
             self.table.setCellWidget(row, 2, chose_light)
@@ -121,7 +116,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         connection.close()
 
     def load_med(self):
-        print("load medecins")
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
@@ -138,7 +132,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-            print(results_light)
             check = self.table.cellWidget(row, 2)
             med_name = check.chose.currentText()
 
@@ -146,10 +139,8 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             med_name_2 = check_2.chose.currentText()
 
             if results_light:
-                print(results_light)
 
                 rl = results_light[0]
-                print(rl)
 
                 if str(rl[0]) == med_name:
                     print("do nothing")
@@ -172,7 +163,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
                     cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
 
             elif med_name != "":
-                print(med_name)
                 id_new = get_workerId_by_name(med_name, "urgence")[0]
                 id_new = id_new[0]
                 sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
@@ -186,10 +176,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             print(results_night)
 
             if results_night:
-                print(results_night)
-
                 rn = results_night[0]
-                print(rn)
 
                 if str(rn[0]) == med_name_2:
                     print("do nothing")
@@ -226,7 +213,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.close()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        print("exit button clicked")
         message = "Votre liste de garde na pas sauvgarder, es-tu sûr de quiter"
         dialog = CustomDialog(message)
         if not self.want_to_close:

@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 from dialogs import Update_worker_dialog, Add_new_month
+from tools import get_workers_count
 from urgence_guard import UrgenceGuardUi
 from widgets import Buttons
 
@@ -122,7 +123,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
     def deleteUser(self):
         row = self.table.currentRow()
-        print(row)
         if row > -1:
             id = self.table.item(row, 0).text()
             connection = sqlite3.connect('database/sqlite.db')
@@ -141,7 +141,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
     def updateUser(self):
         row = self.table.currentRow()
-        print(row)
         if row > -1:
             dialog = Update_worker_dialog()
             print("dialog")
@@ -172,7 +171,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         cur.execute(sql_q, ('urgence',))
         results = cur.fetchall()
         for row in results:
-            print(row)
             self.table.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
             self.table.setItem(tablerow, 1, QTableWidgetItem(row[1]))
             self.table.setItem(tablerow, 2, QTableWidgetItem(row[2]))
@@ -191,7 +189,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         cur.execute(sql_q, ('urgence',))
         results = cur.fetchall()
         for row in results:
-            print(row)
             self.table_gardes.setRowHeight(tablerow, 70)
             m = ""
             if row[1] == 1:
@@ -267,7 +264,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             m = 11
         elif m == "décembre":
             m = 12
-        print("parent")
 
         y = int(y)
 
@@ -281,7 +277,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         row = index.row()
         if row > -1:
             id = self.table_gardes.item(row, 0).text()
-            print(id)
             connection = sqlite3.connect('database/sqlite.db')
             cur = connection.cursor()
             sql_q = 'DELETE FROM guard_mounth WHERE guard_mounth_id=?'
