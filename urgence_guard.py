@@ -104,22 +104,19 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
             if results_light:
                 print(results_light)
-                print(rl)
                 rl = results_light[0]
+                print(rl)
                 chose_light.chose.setCurrentText(str(rl[0]))
             if results_night:
                 print(results_night)
-                print(rn)
                 rn = results_night[0]
+                print(rn)
                 chose_night.chose.setCurrentText(str(rl[0]))
-
 
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
 
         connection.close()
-
-
 
     def load_med(self):
         print("load medecins")
@@ -153,13 +150,13 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
                 if str(rl[0]) == med_name:
                     print("do nothing")
-                elif str(rl[0]) != med_name  and med_name != "":
+                elif str(rl[0]) != med_name and med_name != "":
                     id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
                     id_new = get_workerId_by_name(med_name, "urgence")[0]
                     id1 = id1[0]
                     id_new = id_new[0]
                     sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year,'light', id1))
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
 
                     sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
                     cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
@@ -177,7 +174,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
                 id_new = id_new[0]
                 sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
                 cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
-
 
             # guard shift night :
 
@@ -207,20 +203,24 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
                 elif str(rn[0]) != med_name_2 and med_name_2 == "":
 
-                    id1 = get_workerId_by_name(str(rn[0]), "urgence")
+                    id1 = get_workerId_by_name(str(rn[0]), "urgence")[0]
+                    id1 = id1[0]
                     sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
                     cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
 
             elif med_name_2 != "":
-                id_new = get_workerId_by_name(med_name_2, "urgence")
+                id_new = get_workerId_by_name(med_name_2, "urgence")[0]
+                id_new = id_new[0]
                 sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
                 cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
 
             connection.commit()
             print("connection commit")
 
-
         connection.close()
+        self.next_page = urgence.UrgenceMainUi()
+        self.next_page.show()
+        self.close()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         print("exit button clicked")
