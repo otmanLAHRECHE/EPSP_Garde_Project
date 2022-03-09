@@ -28,7 +28,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.month = month
         self.year = year
         self.num_days = monthrange(self.year, self.month)[1]
-        self.num_days = self.num_days - 1
 
         if self.month == 1:
             m = "janvier"
