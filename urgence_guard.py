@@ -1,7 +1,7 @@
 import datetime
 import sqlite3
 
-from PyQt5 import QtWidgets, uic, QtGui
+from PyQt5 import QtWidgets, uic, QtGui, Qt, QtCore
 from calendar import monthrange
 
 from PyQt5.QtWidgets import QTableWidgetItem, qApp
@@ -16,6 +16,8 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(UrgenceGuardUi, self).__init__()
         uic.loadUi('ui/guard_urgence.ui', self)
+
+        self.want_to_close = False
 
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
@@ -111,7 +113,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
                 print(results_night)
                 rn = results_night[0]
                 print(rn)
-                chose_night.chose.setCurrentText(str(rl[0]))
+                chose_night.chose.setCurrentText(str(rn[0]))
 
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
@@ -128,6 +130,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         connection.close()
 
     def save_(self):
+        self.want_to_close = True
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
         for row in range(self.num_days):
@@ -155,7 +158,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
                     id_new = get_workerId_by_name(med_name, "urgence")[0]
                     id1 = id1[0]
                     id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
                     cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
 
                     sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
@@ -165,7 +168,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
                     id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
                     id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
                     cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
 
             elif med_name != "":
@@ -195,7 +198,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
                     id_new = get_workerId_by_name(med_name_2, "urgence")[0]
                     id1 = id1[0]
                     id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
                     cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
 
                     sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
@@ -205,7 +208,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
                     id1 = get_workerId_by_name(str(rn[0]), "urgence")[0]
                     id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
                     cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
 
             elif med_name_2 != "":
@@ -226,9 +229,12 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         print("exit button clicked")
         message = "Votre liste de garde na pas sauvgarder, es-tu sûr de quiter"
         dialog = CustomDialog(message)
-        if dialog.exec():
-            self.next_page = urgence.UrgenceMainUi()
-            self.next_page.show()
-            self.close()
+        if not self.want_to_close:
+            if dialog.exec():
+                self.next_page = urgence.UrgenceMainUi()
+                self.next_page.show()
+                self.close()
+            else:
+                a0.ignore()
         else:
-            a0.ignore()
+            self.close()

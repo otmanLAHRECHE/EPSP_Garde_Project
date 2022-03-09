@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QWidget
 
 
+
 class Buttons(QWidget):
     def __init__(self):
         super(Buttons, self).__init__()

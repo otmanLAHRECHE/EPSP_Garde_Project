@@ -76,6 +76,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             self.loadUsers()
 
     def add_grd(self):
+
         dialog = Add_new_month()
         if dialog.exec() == QtWidgets.QDialog.Accepted:
             if dialog.year.text() == "":
