@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 from dialogs import Update_worker_dialog, Add_new_month
-from tools import get_workers_count
+from tools import get_workers_count, get_guard_months_count
 from urgence_guard import UrgenceGuardUi
 from widgets import Buttons
 
@@ -62,8 +62,13 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         alert.exec_()
 
     def add_toDb(self):
+        med_count = get_workers_count("urgence")[0]
         if self.medcinname.text() == "":
             message = 'Le champ de nom est vide!'
+            self.alert_(message)
+
+        elif med_count[0] > 25:
+            message = 'Maximum nombre des medecin, supremer des des medecin'
             self.alert_(message)
         else:
             connection = sqlite3.connect('database/sqlite.db')
@@ -78,10 +83,15 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
     def add_grd(self):
 
+        guards_months_count = get_guard_months_count("urgence")[0]
+
         dialog = Add_new_month()
         if dialog.exec() == QtWidgets.QDialog.Accepted:
             if dialog.year.text() == "":
                 message = "Entrer une valid année"
+                self.alert_(message)
+            elif guards_months_count[0] > 13:
+                message = "Maximum liste des garde, suprimrer des listes"
                 self.alert_(message)
             else:
                 connection = sqlite3.connect('database/sqlite.db')
