@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, qApp
 
 from dialogs import CustomDialog
 import urgence
+from tools import get_workerId_by_name
 from widgets import Chose_worker
 
 
@@ -112,15 +113,13 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
                 rn = results_night[0]
                 chose_night.chose.setCurrentText(str(rl[0]))
 
+
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
 
-            """
-            self.table_gardes.setItem(row, 2, QTableWidgetItem(str(row[2])))
-            self.table_gardes.setItem(row, 3, QTableWidgetItem(row[3]))
-            buttons = Buttons()
-            self.table_gardes.setCellWidget(tablerow, 4, buttons)
-            """
+        connection.close()
+
+
 
     def load_med(self):
         print("load medecins")
@@ -132,8 +131,96 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         connection.close()
 
     def save_(self):
-        check = self.table.cellWidget(0, 2)
-        print(check.chose.currentText())
+        connection = sqlite3.connect('database/sqlite.db')
+        cur = connection.cursor()
+        for row in range(self.num_days):
+            day = row + 1
+            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
+            results_light = cur.fetchall()
+            print(results_light)
+            check = self.table.cellWidget(row, 2)
+            med_name = check.chose.currentText()
+
+            check_2 = self.table.cellWidget(row, 3)
+            med_name_2 = check_2.chose.currentText()
+
+            if results_light:
+                print(results_light)
+
+                rl = results_light[0]
+                print(rl)
+
+                if str(rl[0]) == med_name:
+                    print("do nothing")
+                elif str(rl[0]) != med_name  and med_name != "":
+                    id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
+                    id_new = get_workerId_by_name(med_name, "urgence")[0]
+                    id1 = id1[0]
+                    id_new = id_new[0]
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    cur.execute(sql_q_light, (day, self.month, self.year,'light', id1))
+
+                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
+
+                elif str(rl[0]) != med_name and med_name == "":
+
+                    id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
+                    id1 = id1[0]
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
+
+            elif med_name != "":
+                print(med_name)
+                id_new = get_workerId_by_name(med_name, "urgence")[0]
+                id_new = id_new[0]
+                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
+
+
+            # guard shift night :
+
+            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
+            results_night = cur.fetchall()
+            print(results_night)
+
+            if results_night:
+                print(results_night)
+
+                rn = results_night[0]
+                print(rn)
+
+                if str(rn[0]) == med_name_2:
+                    print("do nothing")
+                elif str(rn[0]) != med_name_2 and med_name_2 != "":
+                    id1 = get_workerId_by_name(str(rn[0]), "urgence")[0]
+                    id_new = get_workerId_by_name(med_name_2, "urgence")[0]
+                    id1 = id1[0]
+                    id_new = id_new[0]
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
+
+                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
+
+                elif str(rn[0]) != med_name_2 and med_name_2 == "":
+
+                    id1 = get_workerId_by_name(str(rn[0]), "urgence")
+                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.guardien_id =?'
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
+
+            elif med_name_2 != "":
+                id_new = get_workerId_by_name(med_name_2, "urgence")
+                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
+
+            connection.commit()
+            print("connection commit")
+
+
+        connection.close()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         print("exit button clicked")
