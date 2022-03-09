@@ -1,11 +1,13 @@
 import datetime
 import sqlite3
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtGui
 from calendar import monthrange
 
 from PyQt5.QtWidgets import QTableWidgetItem, qApp
 
+from dialogs import CustomDialog
+import urgence
 from widgets import Chose_worker
 
 
@@ -99,8 +101,16 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             chose_light = Chose_worker(self.medcins)
             chose_night = Chose_worker(self.medcins)
 
-            if not results_light:
-                print(True)
+            if results_light:
+                print(results_light)
+                print(rl)
+                rl = results_light[0]
+                chose_light.chose.setCurrentText(str(rl[0]))
+            if results_night:
+                print(results_night)
+                print(rn)
+                rn = results_night[0]
+                chose_night.chose.setCurrentText(str(rl[0]))
 
             self.table.setCellWidget(row, 2, chose_light)
             self.table.setCellWidget(row, 3, chose_night)
@@ -117,7 +127,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
-        tablerow = 0
         cur.execute(sql_q, ('urgence',))
         self.medcins = cur.fetchall()
         connection.close()
@@ -125,3 +134,14 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
     def save_(self):
         check = self.table.cellWidget(0, 2)
         print(check.chose.currentText())
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        print("exit button clicked")
+        message = "Votre liste de garde na pas sauvgarder, es-tu sûr de quiter"
+        dialog = CustomDialog(message)
+        if dialog.exec():
+            self.next_page = urgence.UrgenceMainUi()
+            self.next_page.show()
+            self.close()
+        else:
+            a0.ignore()

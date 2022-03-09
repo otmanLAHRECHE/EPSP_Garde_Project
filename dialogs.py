@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout, QLabel
 
 
 class Login_dialog(QtWidgets.QDialog):
@@ -25,3 +26,22 @@ class Add_new_month(QtWidgets.QDialog):
         self.setWindowTitle("ajouter nouveau planing")
         self.month = self.findChild(QtWidgets.QComboBox, "comboBox")
         self.year = self.findChild(QtWidgets.QLineEdit, "lineEdit")
+
+
+class CustomDialog(QtWidgets.QDialog):
+    def __init__(self, msg, parent=None):
+        super().__init__(parent)
+
+        self.setWindowTitle("Alert")
+
+        QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        self.layout = QVBoxLayout()
+        message = QLabel(msg)
+        self.layout.addWidget(message)
+        self.layout.addWidget(self.buttonBox)
+        self.setLayout(self.layout)
