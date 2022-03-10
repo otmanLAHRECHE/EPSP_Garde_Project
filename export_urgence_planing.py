@@ -50,10 +50,12 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le planing de garde service d urgence " + m + "/" +str(self.year))
+        self.ttl.setText("Exporté le planing de garde service d urgence " + m + "/" + str(self.year))
 
         self.thr = ThreadGuard(self.num_days, self.month, self.year)
-
+        self.thr._signal.connect(self.signal_accept)
+        self.thr._signal_result.connect(self.signal_accept)
+        self.thr.start()
 
     def export_pdf(self):
         print(self.data)
