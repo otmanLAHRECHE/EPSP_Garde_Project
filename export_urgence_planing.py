@@ -19,9 +19,10 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
 
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.progress = self.findChild(QtWidgets.QProgressBar, "progressBar")
+        self.progress.setValue(0)
         self.status = self.findChild(QtWidgets.QLabel, "label_2")
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton")
-        self.setEnabled(False)
+        self.export.setEnabled(False)
         self.status.setText("Preparation des données")
         self.num_days = monthrange(self.year, self.month)[1]
 
@@ -71,8 +72,10 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         elif type(progress) == list:
             self.progress.setValue(100)
             self.data = progress
+            print(self.data)
             self.status.setText("complete, click sur exporter")
             self.export.setEnabled(True)
+            self.thr.__del__()
 
 
 

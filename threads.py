@@ -83,4 +83,4 @@ class ThreadGuard(QThread):
 
         connection.close()
         print(self.data)
-        self._signal_result(self.data)
+        self._signal_result.emit(self.data)
