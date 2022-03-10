@@ -6,6 +6,8 @@ import urgence
 
 from PyQt5 import QtWidgets, uic
 
+from threads import ThreadGuard
+
 
 class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
@@ -20,7 +22,7 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         self.status = self.findChild(QtWidgets.QLabel, "label_2")
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton")
         self.setEnabled(False)
-        self.data = [("Jours", "Date", "De 08h:00 à 20h:00", "De 20h:00 à 08h:00")]
+        self.status.setText("Preparation des données")
         self.num_days = monthrange(self.year, self.month)[1]
 
         if self.month == 1:
@@ -50,64 +52,8 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
 
         self.ttl.setText("Exporté le planing de garde service d urgence " + m + "/" +str(self.year))
 
-        connection = sqlite3.connect('database/sqlite.db')
-        cur = connection.cursor()
+        self.thr = ThreadGuard(self.num_days, self.month, self.year)
 
-        for row in range(self.num_days):
-
-            prog = row * 100 / self.num_days
-            day = row + 1
-            x = datetime.datetime(self.year, self.month, day)
-            m = ""
-            if x.strftime("%A") == "Saturday":
-                m = "Samedi"
-            elif x.strftime("%A") == "Sunday":
-                m = "Dimanche"
-            elif x.strftime("%A") == "Monday":
-                m = "Lundi"
-            elif x.strftime("%A") == "Tuesday":
-                m = "Mardi"
-            elif x.strftime("%A") == "Wednesday":
-                m = "Mercredi"
-            elif x.strftime("%A") == "Thursday":
-                m = "Jeudi"
-            elif x.strftime("%A") == "Friday":
-                m = "Vendredi"
-
-            if self.month / 10 > 1:
-                date_day = str(day) + "/" + str(self.month) + "/" + str(self.year)
-            else:
-                date_day = str(day) + "/" + str(0) + str(self.month) + "/" + str(self.year)
-
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
-            results_light = cur.fetchall()
-
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
-            results_night = cur.fetchall()
-
-            light = "Dr/ "
-            night = "Dr/ "
-
-            if results_light:
-                rl = results_light[0]
-                light = light + str(rl[0])
-
-            if results_night:
-                rn = results_night[0]
-                night = night + str(rn[0])
-
-            data_day = (m, date_day, light, night)
-
-            self.data.append(data_day)
-
-            time.sleep(1)
-            self.progress.setValue(int(prog))
-
-        connection.close()
-        print(self.data)
-        self.export.setEnabled(True)
 
     def export_pdf(self):
         print(self.data)
@@ -117,6 +63,15 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         self.next_page.show()
         self.close()
         """
+    def signal_accept(self, progress):
+        if type(progress) == int:
+            self.progress.setValue(progress)
+        elif type(progress) == list:
+            self.progress.setValue(100)
+            self.data = progress
+            self.status.setText("complete, click sur exporter")
+            self.export.setEnabled(True)
+
 
 
 
