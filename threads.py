@@ -1,8 +1,10 @@
 import datetime
+import os
 import sqlite3
 import time
 
 from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtWidgets import QFileDialog
 
 
 class ThreadGuard(QThread):
@@ -17,6 +19,7 @@ class ThreadGuard(QThread):
         self.data = [("Jours", "Date", "De 08h:00 à 20h:00", "De 20h:00 à 08h:00")]
 
     def __del__(self):
+        self.terminate()
         self.wait()
 
     def run(self):
@@ -44,13 +47,13 @@ class ThreadGuard(QThread):
             elif x.strftime("%A") == "Friday":
                 m = "Vendredi"
 
-            if self.month / 10 > 1:
-                if day / 10 > 1:
+            if self.month / 10 >= 1:
+                if day / 10 >= 1:
                     date_day = str(day) + "/" + str(self.month) + "/" + str(self.year)
                 else:
                     date_day = str(0) + str(day) + "/" + str(self.month) + "/" + str(self.year)
             else:
-                if day / 10 > 1:
+                if day / 10 >= 1:
                     date_day = str(day) + "/" + str(0) + str(self.month) + "/" + str(self.year)
                 else:
                     date_day = str(0) + str(day) + "/" + str(0) + str(self.month) + "/" + str(self.year)
@@ -78,9 +81,11 @@ class ThreadGuard(QThread):
 
             self.data.append(data_day)
 
-            time.sleep(1)
+            time.sleep(0.3)
             self._signal.emit(int(prog))
 
         connection.close()
         print(self.data)
         self._signal_result.emit(self.data)
+
+

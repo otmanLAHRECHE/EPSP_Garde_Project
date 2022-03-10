@@ -2,11 +2,15 @@ import datetime
 import sqlite3
 import time
 from calendar import monthrange
+
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
+
 import urgence
 
 from PyQt5 import QtWidgets, uic
 
 from threads import ThreadGuard
+from tools import create_garde_page
 
 
 class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
@@ -23,6 +27,7 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         self.status = self.findChild(QtWidgets.QLabel, "label_2")
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton")
         self.export.setEnabled(False)
+        self.export.clicked.connect(self.export_pdf)
         self.status.setText("Preparation des données")
         self.num_days = monthrange(self.year, self.month)[1]
 
@@ -60,6 +65,15 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
 
     def export_pdf(self):
         print(self.data)
+        filePath, _ = QFileDialog.getSaveFileName(self, "Save garde", "",
+                                                  "PDF(*.pdf);;All Files(*.*) ")
+
+        # if file path is blank return back
+        if filePath == "":
+            message = "destination untrouvable"
+            self.alert_(message)
+        else:
+            create_garde_page("Urgence", "guard urgence", self.month, self.year, self.data, filePath)
 
         """
         self.next_page = urgence.UrgenceMainUi()
@@ -76,6 +90,13 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
             self.status.setText("complete, click sur exporter")
             self.export.setEnabled(True)
             self.thr.__del__()
+
+    def alert_(self, message):
+        alert = QMessageBox()
+        alert.setWindowTitle("alert")
+        alert.setText(message)
+        alert.exec_()
+
 
 
 

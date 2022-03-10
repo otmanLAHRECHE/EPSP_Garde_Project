@@ -301,7 +301,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             self.table.setItem(row, 4, QTableWidgetItem(""))
             self.loadGuardMonths()
 
-
     def print_g(self):
         clickme = qApp.focusWidget()
         index = self.table_gardes.indexAt(clickme.parent().pos())
@@ -338,4 +337,3 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         self.next_page = ExportUrgencePlaningUi(m, y)
         self.close()
         self.next_page.show()
-

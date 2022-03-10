@@ -44,41 +44,7 @@ def get_consultation_months_count(service):
     connection.close()
     return results
 
-def create_garde_page(service, grd_cons, month, year):
-    data = (
-        ("Jours", "Date", "De 08h:00 à 20h:00", "De 20h:00 à 08h:00"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
-        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
-        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
-        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
-        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
-        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
-        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
-        ("samedi", "20/03/2022", "hamdi", "San Juan"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-        ("dimanche", "21/03/2022", "said", "Orlando"),
-    )
+def create_garde_page(service, grd_cons, month, year, data, path):
     pdf = EpspPdf()
     pdf.alias_nb_pages()
     pdf.add_page()
@@ -142,4 +108,4 @@ def create_garde_page(service, grd_cons, month, year):
     pdf.cell(0, 10, "Chef service", 0, 0, "L")
     pdf.cell(0, 10, "D.S.S", 0, 0, "R")
 
-    pdf.output("tuto2.pdf")
+    pdf.output(path)
