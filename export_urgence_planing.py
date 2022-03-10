@@ -55,7 +55,7 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
 
         for row in range(self.num_days):
 
-            prog = row * 100 / range(self.num_days)
+            prog = row * 100 / self.num_days
             day = row + 1
             x = datetime.datetime(self.year, self.month, day)
             m = ""
@@ -100,11 +100,12 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
 
             data_day = (m, date_day, light, night)
 
-            self.data[day] = data_day
+            self.data.append(data_day)
 
             time.sleep(1)
-            self.progress.setValue(prog)
+            self.progress.setValue(int(prog))
 
+        connection.close()
         print(self.data)
         self.export.setEnabled(True)
 
