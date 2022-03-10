@@ -61,7 +61,7 @@ class MainUi(QtWidgets.QMainWindow):
 
     def rad(self):
         print("radio")
-        create_garde_page()
+        create_garde_page("Urgence", "guard urgence", 3, 2022)
 
     def den(self):
         print("dentist")

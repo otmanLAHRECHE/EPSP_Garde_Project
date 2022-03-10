@@ -44,23 +44,98 @@ def get_consultation_months_count(service):
     connection.close()
     return results
 
-def create_garde_page():
+def create_garde_page(service, grd_cons, month, year):
+    data = (
+        ("Jours", "Date", "De 08h:00 à 20h:00", "De 20h:00 à 08h:00"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
+        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
+        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
+        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
+        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
+        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("lundi", "22/03/2022", "abderahman", "Los Angeles"),
+        ("mardi", "23/03/2022", "hafach", "Saint-Mahturin-sur-Loire"),
+        ("samedi", "20/03/2022", "hamdi", "San Juan"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+        ("dimanche", "21/03/2022", "said", "Orlando"),
+    )
     pdf = EpspPdf()
     pdf.alias_nb_pages()
     pdf.add_page()
     pdf.set_font("helvetica", size=10)
-    pdf.cell(0, 10, "Service de:...............", 0, 0)
-    pdf.ln(15)
-
-    pdf.set_font("helvetica", "B", size=17)
-    pdf.cell(0, 10, "Planing de...........", 0, 0, "C")
-    pdf.ln(8)
-    pdf.set_font("helvetica", size=12)
-    pdf.cell(0, 10, "Mois de..................", 0, 0, "C")
-
+    pdf.cell(0, 10, "Service de: "+service, 0, 0)
     pdf.ln(10)
 
-    pdf.set_font("Times", size=12)
-    for i in range(1, 20):
-        pdf.cell(0, 10, f"Printing line number {i}", 0, 1)
+    pdf.set_font("helvetica", "B", size=17)
+    pdf.cell(0, 10, "Planing de "+grd_cons, 0, 0, "C")
+    pdf.ln(8)
+    m = ""
+    if month == 1:
+        m = "janvier"
+    elif month == 2:
+        m = "février"
+    elif month == 3:
+        m = "mars"
+    elif month == 4:
+        m = "avril"
+    elif month == 5:
+        m = "mai"
+    elif month == 6:
+        m = "juin"
+    elif month == 7:
+        m = "juillet"
+    elif month == 8:
+        m = "août"
+    elif month == 9:
+        m = "septembre"
+    elif month == 10:
+        m = "octobre"
+    elif month == 11:
+        m = "novembre"
+    elif month == 12:
+        m = "décembre"
+    pdf.set_font("helvetica", size=12)
+    pdf.cell(0, 10, "Mois de "+m+"/"+str(year), 0, 0, "C")
+
+    pdf.ln(8)
+
+    pdf.set_font("Times", size=10)
+    line_height = pdf.font_size * 2
+    col_width = pdf.epw / 4  # distribute content evenly
+    for row in data:
+        for datum in row:
+            if datum == "Jours" or datum == "Date" or datum == "De 08h:00 à 20h:00" or datum == "De 20h:00 à 08h:00":
+                pdf.set_font("Times", "B", size=10)
+                pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size)
+            else:
+                pdf.set_font("Times", size=10)
+                pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size)
+        pdf.ln(line_height)
+
+    pdf.ln(1)
+    pdf.set_right_margin(30)
+    pdf.set_left_margin(30)
+    pdf.cell(0, 10, "Chef service", 0, 0, "L")
+    pdf.cell(0, 10, "D.S.S", 0, 0, "R")
+
     pdf.output("tuto2.pdf")
