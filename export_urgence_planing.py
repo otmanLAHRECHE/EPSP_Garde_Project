@@ -43,6 +43,8 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
+        self.ttl.setText("Exporté le planing de garde service d urgence " + str(self.month)+"/"+str(self.year))
+
 
 
 

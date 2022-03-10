@@ -63,7 +63,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Sauvgarder</string>
+     <string>Export PDF</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="progressBar">
