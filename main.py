@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 from dialogs import Login_dialog
+from tools import create_garde_page
 from urgence import UrgenceMainUi
 from urgence_guard import UrgenceGuardUi
 
@@ -60,9 +61,7 @@ class MainUi(QtWidgets.QMainWindow):
 
     def rad(self):
         print("radio")
-        self.urgencepage = UrgenceGuardUi()
-        self.urgencepage.show()
-        self.close()
+        create_garde_page()
 
     def den(self):
         print("dentist")
