@@ -111,6 +111,12 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
     def export_pdf(self):
         print(self.data)
 
+        """
+        self.next_page = urgence.UrgenceMainUi()
+        self.next_page.show()
+        self.close()
+        """
+
 
 
 

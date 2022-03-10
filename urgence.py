@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 from dialogs import Update_worker_dialog, Add_new_month
+from export_urgence_planing import ExportUrgencePlaningUi
 from tools import get_workers_count, get_guard_months_count
 from urgence_guard import UrgenceGuardUi
 from widgets import Buttons
@@ -299,11 +300,41 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             self.table.setItem(row, 3, QTableWidgetItem(""))
             self.table.setItem(row, 4, QTableWidgetItem(""))
             self.loadGuardMonths()
-        else:
-            message = 'Selectioner un medecin'
-            self.alert_(message)
+
 
     def print_g(self):
         clickme = qApp.focusWidget()
         index = self.table_gardes.indexAt(clickme.parent().pos())
-        print(index.row())
+        row = index.row()
+        m = self.table_gardes.item(row, 1).text()
+        y = self.table_gardes.item(row, 2).text()
+        if m == "janvier":
+            m = 1
+        elif m == "février":
+            m = 2
+        elif m == "mars":
+            m = 3
+        elif m == "avril":
+            m = 4
+        elif m == "mai":
+            m = 5
+        elif m == "juin":
+            m = 6
+        elif m == "juillet":
+            m = 7
+        elif m == "août":
+            m = 8
+        elif m == "septembre":
+            m = 9
+        elif m == "octobre":
+            m = 10
+        elif m == "novembre":
+            m = 11
+        elif m == "décembre":
+            m = 12
+
+        y = int(y)
+
+        self.next_page = ExportUrgencePlaningUi(m, y)
+        self.next_page.show()
+        self.close()
