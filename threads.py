@@ -188,9 +188,52 @@ class Thread_create_urgence_guard(QThread):
                 cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
 
             connection.commit()
-            print("connection commit")
             time.sleep(0.2)
             self._signal_status.emit(int(prog))
 
         connection.close()
         self._signal.emit(True)
+
+class Thread_load_guards_urgences(QThread):
+    _signal_status = pyqtSignal(int)
+    _signal = pyqtSignal(list)
+    _signal_finish = pyqtSignal(bool)
+
+    def __init__(self, num_days, month, year):
+        super(Thread_create_urgence_guard, self).__init__()
+        self.num_days = num_days
+        self.month = month
+        self.year = year
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        connection = sqlite3.connect('database/sqlite.db')
+        cur = connection.cursor()
+
+        for row in range(self.num_days):
+            day = row + 1
+            prog = row * 100 / self.num_days
+
+
+            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
+            results_light = cur.fetchall()
+
+            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
+            results_night = cur.fetchall()
+
+            list =[]
+            list.append(row)
+            list.append(results_light)
+            list.append(results_night)
+
+            self._signal.emit(list)
+            time.sleep(0.2)
+            self._signal_status(int(prog))
+
+        connection.close()
+        self._signal_finish.emit(True)

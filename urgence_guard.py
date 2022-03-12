@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, qApp
 
 from dialogs import CustomDialog, Saving_progress_dialog
 import urgence
-from threads import Thread_create_urgence_guard
+from threads import Thread_create_urgence_guard, Thread_load_guards_urgences
 from tools import get_workerId_by_name
 from widgets import Chose_worker
 
@@ -64,56 +64,15 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
     def load_guards(self):
         print("load guard list")
+        self.dialog = Saving_progress_dialog()
+        self.dialog.label.setText("loading guard")
+        self.dialog.show()
 
-        connection = sqlite3.connect('database/sqlite.db')
-        cur = connection.cursor()
-
-        for row in range(self.num_days):
-            day = row + 1
-            x = datetime.datetime(self.year, self.month, day)
-            m = ""
-            if x.strftime("%A") == "Saturday":
-                m = "Samedi"
-            elif x.strftime("%A") == "Sunday":
-                m = "Dimanche"
-            elif x.strftime("%A") == "Monday":
-                m = "Lundi"
-            elif x.strftime("%A") == "Tuesday":
-                m = "Mardi"
-            elif x.strftime("%A") == "Wednesday":
-                m = "Mercredi"
-            elif x.strftime("%A") == "Thursday":
-                m = "Jeudi"
-            elif x.strftime("%A") == "Friday":
-                m = "Vendredi"
-
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
-            results_light = cur.fetchall()
-
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
-            results_night = cur.fetchall()
-
-            self.table.setRowHeight(row, 50)
-            self.table.setItem(row, 0, QTableWidgetItem(m))
-            self.table.setItem(row, 1, QTableWidgetItem(str(day) + "/" + str(self.month) + "/" + str(self.year)))
-            chose_light = Chose_worker(self.medcins)
-            chose_night = Chose_worker(self.medcins)
-
-            if results_light:
-                print(results_light)
-                rl = results_light[0]
-                chose_light.chose.setCurrentText(str(rl[0]))
-            if results_night:
-                print(results_night)
-                rn = results_night[0]
-                chose_night.chose.setCurrentText(str(rn[0]))
-
-            self.table.setCellWidget(row, 2, chose_light)
-            self.table.setCellWidget(row, 3, chose_night)
-
-        connection.close()
+        self.thr2 = Thread_load_guards_urgences(self.num_days, self.month, self.year)
+        self.thr2._signal.connect(self.signal_accepted_load)
+        self.thr2._signal_status.connect(self.signal_accepted_load)
+        self.thr2._signal_finish.connect(self.signal_accepted_load)
+        self.thr2.start()
 
     def load_med(self):
         connection = sqlite3.connect('database/sqlite.db')
@@ -131,8 +90,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.thr._signal.connect(self.signal_accepted)
         self.thr._signal_status.connect(self.signal_accepted)
         self.thr.start()
-
-
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         message = "Votre liste de garde na pas sauvgarder, es-tu sûr de quiter"
@@ -158,3 +115,53 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             self.next_page = urgence.UrgenceMainUi()
             self.next_page.show()
             self.close()
+
+    def signal_accepted_load(self, progress):
+        if type(progress) == int:
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == list:
+
+            row = progress[0]
+            results_light = progress[1]
+            results_night = progress[2]
+
+            day = row + 1
+            x = datetime.datetime(self.year, self.month, day)
+            m = ""
+            if x.strftime("%A") == "Saturday":
+                m = "Samedi"
+            elif x.strftime("%A") == "Sunday":
+                m = "Dimanche"
+            elif x.strftime("%A") == "Monday":
+                m = "Lundi"
+            elif x.strftime("%A") == "Tuesday":
+                m = "Mardi"
+            elif x.strftime("%A") == "Wednesday":
+                m = "Mercredi"
+            elif x.strftime("%A") == "Thursday":
+                m = "Jeudi"
+            elif x.strftime("%A") == "Friday":
+                m = "Vendredi"
+
+            self.table.setRowHeight(row, 50)
+            self.table.setItem(row, 0, QTableWidgetItem(m))
+            self.table.setItem(row, 1, QTableWidgetItem(str(day) + "/" + str(self.month) + "/" + str(self.year)))
+            chose_light = Chose_worker(self.medcins)
+            chose_night = Chose_worker(self.medcins)
+
+            if results_light:
+                print(results_light)
+                rl = results_light[0]
+                chose_light.chose.setCurrentText(str(rl[0]))
+            if results_night:
+                print(results_night)
+                rn = results_night[0]
+                chose_night.chose.setCurrentText(str(rn[0]))
+
+            self.table.setCellWidget(row, 2, chose_light)
+            self.table.setCellWidget(row, 3, chose_night)
+
+        elif type(progress) == bool:
+            self.dialog.progress.setValue(100)
+            self.dialog.label.setText("complete")
+            self.dialog.close()
