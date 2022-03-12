@@ -17,6 +17,7 @@ class MainUi(QtWidgets.QMainWindow):
         uic.loadUi('ui/main.ui', self)
 
 
+
         self.epsp = self.findChild(QtWidgets.QLabel, "label")
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
 

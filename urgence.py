@@ -19,6 +19,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
+
         self.tab.setTabText(0, "Listes de garde")
         self.tab.setTabText(1, "Medecins")
         self.medcinname = self.findChild(QLineEdit, "lineEdit")
