@@ -45,3 +45,13 @@ class CustomDialog(QtWidgets.QDialog):
         self.layout.addWidget(message)
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
+
+
+class Saving_progress_dialog(QtWidgets.QDialog):
+    def __init__(self):
+        super(Saving_progress_dialog, self).__init__()
+        uic.loadUi('ui/saving_dialog.ui', self)
+
+        self.label = self.findChild(QtWidgets.QLabel, "label")
+        self.progress = self.findChild(QtWidgets.QProgressBar, "progressBar")
+        self.progress.setValue(0)

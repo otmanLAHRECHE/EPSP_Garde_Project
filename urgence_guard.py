@@ -6,8 +6,9 @@ from calendar import monthrange
 
 from PyQt5.QtWidgets import QTableWidgetItem, qApp
 
-from dialogs import CustomDialog
+from dialogs import CustomDialog, Saving_progress_dialog
 import urgence
+from threads import Thread_create_urgence_guard
 from tools import get_workerId_by_name
 from widgets import Chose_worker
 
@@ -124,92 +125,14 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
 
     def save_(self):
         self.want_to_close = True
-        connection = sqlite3.connect('database/sqlite.db')
-        cur = connection.cursor()
-        for row in range(self.num_days):
-            day = row + 1
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
-            results_light = cur.fetchall()
-            check = self.table.cellWidget(row, 2)
-            med_name = check.chose.currentText()
+        self.dialog = Saving_progress_dialog()
+        self.dialog.show()
+        self.thr = Thread_create_urgence_guard(self.num_days, self.month, self.year, self.table)
+        self.thr._signal.connect(self.signal_accepted)
+        self.thr._signal_status.connect(self.signal_accepted)
+        self.thr.start()
 
-            check_2 = self.table.cellWidget(row, 3)
-            med_name_2 = check_2.chose.currentText()
 
-            if results_light:
-
-                rl = results_light[0]
-
-                if str(rl[0]) == med_name:
-                    print("do nothing")
-                elif str(rl[0]) != med_name and med_name != "":
-                    id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
-                    id_new = get_workerId_by_name(med_name, "urgence")[0]
-                    id1 = id1[0]
-                    id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
-
-                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
-
-                elif str(rl[0]) != med_name and med_name == "":
-
-                    id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
-                    id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
-
-            elif med_name != "":
-                id_new = get_workerId_by_name(med_name, "urgence")[0]
-                id_new = id_new[0]
-                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
-
-            # guard shift night :
-
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
-            results_night = cur.fetchall()
-            print(results_night)
-
-            if results_night:
-                rn = results_night[0]
-
-                if str(rn[0]) == med_name_2:
-                    print("do nothing")
-                elif str(rn[0]) != med_name_2 and med_name_2 != "":
-                    id1 = get_workerId_by_name(str(rn[0]), "urgence")[0]
-                    id_new = get_workerId_by_name(med_name_2, "urgence")[0]
-                    id1 = id1[0]
-                    id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
-
-                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
-
-                elif str(rn[0]) != med_name_2 and med_name_2 == "":
-
-                    id1 = get_workerId_by_name(str(rn[0]), "urgence")[0]
-                    id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
-
-            elif med_name_2 != "":
-                id_new = get_workerId_by_name(med_name_2, "urgence")[0]
-                id_new = id_new[0]
-                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
-
-            connection.commit()
-            print("connection commit")
-
-        connection.close()
-        self.next_page = urgence.UrgenceMainUi()
-        self.next_page.show()
-        self.close()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         message = "Votre liste de garde na pas sauvgarder, es-tu sûr de quiter"
@@ -222,4 +145,16 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             else:
                 a0.ignore()
         else:
+            self.close()
+
+    def signal_accepted(self, progress):
+        if type(progress) == int:
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == bool:
+            self.dialog.progress.setValue(100)
+            self.dialog.label.setText("complete")
+            print(progress)
+            self.dialog.close()
+            self.next_page = urgence.UrgenceMainUi()
+            self.next_page.show()
             self.close()

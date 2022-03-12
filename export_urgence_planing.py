@@ -92,7 +92,6 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
             print(self.data)
             self.status.setText("complete, click sur exporter")
             self.export.setEnabled(True)
-            self.thr.__del__()
 
     def alert_(self, message):
         alert = QMessageBox()
