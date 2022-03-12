@@ -28,7 +28,7 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
         self.month = month
         self.year = year
         self.num_days = monthrange(self.year, self.month)[1]
-        self.days_of_week = "Dimanche" + "Lundi" + "Mardi" + "Mercredi" + "Jeudi"
+        self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
 
         if self.month == 1:
             m = "janvier"

@@ -1,10 +1,14 @@
+import datetime
 import sqlite3
 from calendar import monthrange
 
-from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5 import QtWidgets, uic, QtCore, QtGui
+from PyQt5.QtWidgets import QTableWidgetItem
 
-from dialogs import Saving_progress_dialog
-from threads import Thread_load_consultation_dentiste
+import dentiste
+from dialogs import Saving_progress_dialog, CustomDialog
+from threads import Thread_load_consultation_dentiste, Thread_create_dentiste_consultation
+from widgets import Chose_worker
 
 
 class DentisteConsultationUi(QtWidgets.QMainWindow):
@@ -23,7 +27,7 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
         self.month = month
         self.year = year
         self.num_days = monthrange(self.year, self.month)[1]
-        self.days_of_week = "Dimanche" + "Lundi" + "Mardi" + "Mercredi" + "Jeudi"
+        self.days_of_week_end = "Samedi" + "  " + "Vendredi"
 
         if self.month == 1:
             m = "janvier"
@@ -62,7 +66,6 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
         self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.dialog.show()
 
-
         self.thr2 = Thread_load_consultation_dentiste(self.num_days, self.month, self.year)
         self.thr2._signal.connect(self.signal_accepted_load)
         self.thr2._signal_status.connect(self.signal_accepted_load)
@@ -81,13 +84,13 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
         self.want_to_close = True
         self.dialog = Saving_progress_dialog()
         self.dialog.show()
-        self.thr = Thread_create_dentiste_guard(self.num_days, self.month, self.year, self.table)
+        self.thr = Thread_create_dentiste_consultation(self.num_days, self.month, self.year, self.table)
         self.thr._signal.connect(self.signal_accepted)
         self.thr._signal_status.connect(self.signal_accepted)
         self.thr.start()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        message = "Votre liste de garde na pas sauvgarder, es-tu sûr de quiter"
+        message = "Votre liste de consultation na pas sauvgarder, es-tu sûr de quiter"
         dialog = CustomDialog(message)
         if not self.want_to_close:
             if dialog.exec():
@@ -153,12 +156,11 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
                 rn = results_night[0]
                 chose_night.chose.setCurrentText(str(rn[0]))
 
-            if m in self.days_of_week:
+            if m in self.days_of_week_end:
                 print("nothing")
             else:
                 self.table.setCellWidget(row, 2, chose_light)
-
-            self.table.setCellWidget(row, 3, chose_night)
+                self.table.setCellWidget(row, 3, chose_night)
 
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
