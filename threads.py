@@ -193,4 +193,4 @@ class Thread_create_urgence_guard(QThread):
             self._signal_status.emit(int(prog))
 
         connection.close()
-        self._signal(True)
+        self._signal.emit(True)
