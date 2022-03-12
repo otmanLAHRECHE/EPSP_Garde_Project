@@ -28,6 +28,7 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
         self.month = month
         self.year = year
         self.num_days = monthrange(self.year, self.month)[1]
+        self.days_of_week = "Dimanche" + "Lundi" + "Mardi" + "Mercredi" + "Jeudi"
 
         if self.month == 1:
             m = "janvier"
@@ -159,7 +160,11 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
                 rn = results_night[0]
                 chose_night.chose.setCurrentText(str(rn[0]))
 
-            self.table.setCellWidget(row, 2, chose_light)
+            if m in self.days_of_week:
+                print("nothing")
+            else:
+                self.table.setCellWidget(row, 2, chose_light)
+
             self.table.setCellWidget(row, 3, chose_night)
 
         elif type(progress) == bool:

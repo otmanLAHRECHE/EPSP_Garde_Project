@@ -4,7 +4,6 @@ import sqlite3
 import time
 
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QFileDialog
 
 from tools import get_workerId_by_name
 
