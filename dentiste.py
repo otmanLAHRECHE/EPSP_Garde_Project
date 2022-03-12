@@ -4,6 +4,8 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+from dentiste_consultation import DentisteConsultationUi
+from dentiste_guard import DentisteGuardUi
 from dialogs import Add_new_month, Update_worker_dialog
 from export_urgence_planing import ExportUrgencePlaningUi
 from tools import get_workers_count, get_guard_months_count, get_consultation_months_count
@@ -292,7 +294,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.dentiste_guard_page = UrgenceGuardUi(m, y)
+        self.dentiste_guard_page = DentisteGuardUi(m, y)
         self.dentiste_guard_page.show()
         self.close()
 
@@ -442,9 +444,9 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             self.table_consultation.setItem(tablerow, 3, QTableWidgetItem(row[3]))
             buttons = Buttons()
             self.table_consultation.setCellWidget(tablerow, 4, buttons)
-            buttons.print_garde.clicked.connect(self.print_g)
-            buttons.edit_garde.clicked.connect(self.edit_g)
-            buttons.delete_garde.clicked.connect(self.delete_g)
+            buttons.print_garde.clicked.connect(self.print_cns)
+            buttons.edit_garde.clicked.connect(self.edit_cns)
+            buttons.delete_garde.clicked.connect(self.delete_cns)
 
             tablerow += 1
         self.table_consultation.setItem(tablerow, 0, QTableWidgetItem(""))
@@ -454,7 +456,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
         self.table_consultation.removeCellWidget(tablerow, 4)
         connection.close()
 
-    def edit_g(self):
+    def edit_cns(self):
         clickme = qApp.focusWidget()
         index = self.table_consultation.indexAt(clickme.parent().pos())
         row = index.row()
@@ -487,11 +489,11 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.dentiste_consultation_page = UrgenceGuardUi(m, y)
+        self.dentiste_consultation_page = DentisteConsultationUi(m, y)
         self.dentiste_consultation_page.show()
         self.close()
 
-    def delete_g(self):
+    def delete_cns(self):
         clickme = qApp.focusWidget()
         index = self.table_gardes.indexAt(clickme.parent().pos())
         row = index.row()
@@ -499,7 +501,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             id = self.table_gardes.item(row, 0).text()
             connection = sqlite3.connect('database/sqlite.db')
             cur = connection.cursor()
-            sql_q = 'DELETE FROM guard_mounth WHERE guard_mounth_id=?'
+            sql_q = 'DELETE FROM consultation_mounth WHERE consultation_mounth_id=?'
             cur.execute(sql_q, (id,))
             connection.commit()
             connection.close()
@@ -510,7 +512,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             self.table.setItem(row, 4, QTableWidgetItem(""))
             self.loadGuardMonths()
 
-    def print_g(self):
+    def print_cns(self):
         clickme = qApp.focusWidget()
         index = self.table_gardes.indexAt(clickme.parent().pos())
         row = index.row()
