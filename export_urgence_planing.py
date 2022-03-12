@@ -76,8 +76,8 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
             create_garde_page("Urgence", "guard urgence", self.month, self.year, self.data, filePath)
             self.next_page = urgence.UrgenceMainUi()
             self.next_page.show()
+            print(self.thr.isFinished())
             self.close()
-            del(self.thr)
         """
         self.next_page = urgence.UrgenceMainUi()
         self.next_page.show()

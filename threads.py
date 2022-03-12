@@ -89,3 +89,17 @@ class ThreadGuard(QThread):
         self._signal_result.emit(self.data)
 
 
+class Thread_create_urgence_guard(QThread):
+    _signal_status = pyqtSignal(int)
+    _signal = pyqtSignal(bool)
+
+    def __init__(self, num_days, month, year):
+        super(ThreadGuard, self).__init__()
+        self.num_days = num_days
+        self.month = month
+        self.year = year
+        self.data = [("Jours", "Date", "De 08h:00 à 20h:00", "De 20h:00 à 08h:00")]
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
