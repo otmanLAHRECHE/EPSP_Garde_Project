@@ -65,8 +65,10 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
     def load_guards(self):
         print("load guard list")
         self.dialog = Saving_progress_dialog()
-        self.dialog.label.setText("loading guard")
+        self.dialog.label.setText("loading gardes")
+        self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.dialog.show()
+
 
         self.thr2 = Thread_load_guards_urgences(self.num_days, self.month, self.year)
         self.thr2._signal.connect(self.signal_accepted_load)
