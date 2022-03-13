@@ -4,6 +4,8 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+import export_infermier_guard
+import infirmier_guard
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
 from widgets import Buttons
@@ -270,7 +272,7 @@ class InfermierMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.urgence_guard_page = radiologie_guard.RadiologieGuardUi(m, y)
+        self.urgence_guard_page = infirmier_guard.InfirmierGuardUi(m, y)
         self.urgence_guard_page.show()
         self.close()
 
@@ -326,6 +328,6 @@ class InfermierMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.next_page = export_radio_guard.ExportRadioGuard(m, y)
+        self.next_page = export_infermier_guard.ExportInfirmierGuard(m, y)
         self.close()
         self.next_page.show()
