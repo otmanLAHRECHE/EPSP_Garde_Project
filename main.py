@@ -5,7 +5,8 @@ from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import *
 import sys
 
-from dentiste import DentisteMainUi
+
+from dentiste_chose import DentisteChoseUi
 from dialogs import Login_dialog
 from radiologie import RadiologieMainUi
 from tools import create_garde_page
@@ -80,7 +81,7 @@ class MainUi(QtWidgets.QMainWindow):
         if dialog.exec() == QtWidgets.QDialog.Accepted:
             if dialog.username.text() == "dentiste" and dialog.password.text() == "dentiste":
                 self.resp.setText("authentifié")
-                self.urgencepage = DentisteMainUi()
+                self.urgencepage = DentisteChoseUi()
                 self.urgencepage.show()
                 self.close()
 
