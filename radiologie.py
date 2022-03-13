@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+import radiologie_guard
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
 from widgets import Buttons
@@ -15,7 +16,6 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
         uic.loadUi('ui/urgence.ui', self)
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
-
 
         self.tab.setTabText(0, "Listes de garde")
         self.tab.setTabText(1, "Agents de radio")
@@ -60,7 +60,7 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
 
     def add_toDb(self):
         med_count = get_workers_count("radio")[0]
-        if self.medcinname.text() == "" :
+        if self.medcinname.text() == "":
             message = 'Le champ de nom est vide! ou groupe na pas etre choisir'
             self.alert_(message)
 
@@ -274,11 +274,9 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.urgence_guard_page = urgence_guard.UrgenceGuardUi(m, y)
+        self.urgence_guard_page = radiologie_guard.RadiologieGuardUi()
         self.urgence_guard_page.show()
         self.close()
-        """
 
     def delete_g(self):
         clickme = qApp.focusWidget()
