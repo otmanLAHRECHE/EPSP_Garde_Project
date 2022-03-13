@@ -289,7 +289,7 @@ class Thread_create_dentiste_guard(QThread):
     _signal = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year, table):
-        super(Thread_create_urgence_guard, self).__init__()
+        super(Thread_create_dentiste_guard, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -499,7 +499,7 @@ class Thread_create_dentiste_consultation(QThread):
                     cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
 
             elif med_name != "":
-                id_new = get_workerId_by_name(med_name, "urgence")[0]
+                id_new = get_workerId_by_name(med_name, "dentiste")[0]
                 id_new = id_new[0]
                 sql_q_light = 'INSERT INTO consultation (d,m,y,periode,consultent_id) values (?,?,?,?,?)'
                 cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
@@ -556,7 +556,7 @@ class ThreadGuardDentiste(QThread):
         self.num_days = num_days
         self.month = month
         self.year = year
-        self.data = [("Jours", "Date", "De 08h:00 à 16h:00", "De 16h:00 à 08h:00")]
+        self.data = [("Jours", "Date", "De 08h:00 à 20h:00", "De 20h:00 à 08h:00")]
 
     def __del__(self):
         self.terminate()
@@ -578,19 +578,19 @@ class ThreadGuardDentiste(QThread):
                 m = "Samedi"
             elif x.strftime("%A") == "Sunday":
                 m = "Dimanche"
-                light = ""
+                light = " "
             elif x.strftime("%A") == "Monday":
                 m = "Lundi"
-                light = ""
+                light = " "
             elif x.strftime("%A") == "Tuesday":
                 m = "Mardi"
-                light = ""
+                light = " "
             elif x.strftime("%A") == "Wednesday":
                 m = "Mercredi"
-                light = ""
+                light = " "
             elif x.strftime("%A") == "Thursday":
                 m = "Jeudi"
-                light = ""
+                light = " "
             elif x.strftime("%A") == "Friday":
                 m = "Vendredi"
 
