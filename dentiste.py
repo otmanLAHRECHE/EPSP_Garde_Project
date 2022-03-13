@@ -23,7 +23,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         self.tab.setTabText(0, "Listes des gardes")
         self.tab.setTabText(1, "Liste des consultations")
-        self.tab.setTabText(1, "Liste des dentistes")
+        self.tab.setTabText(2, "Liste des dentistes")
 
         self.dentistename = self.findChild(QLineEdit, "lineEdit")
         self.add_garde = self.findChild(QPushButton, "pushButton_4")
@@ -371,7 +371,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             else:
                 connection = sqlite3.connect('database/sqlite.db')
                 cur = connection.cursor()
-                sql_q = "INSERT INTO consultation_mounth (m,y,service) values (?,?,?)"
+                sql_q = "INSERT INTO consultaion_mounth (m,y,service) values (?,?,?)"
                 m = 0
                 if dialog.month.currentIndex() == 0:
                     m = 1
