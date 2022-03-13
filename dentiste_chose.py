@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, uic
 
 import dentiste
+import infirmier
 
 
 class DentisteChoseUi(QtWidgets.QMainWindow):
@@ -22,5 +23,7 @@ class DentisteChoseUi(QtWidgets.QMainWindow):
         self.close()
 
     def infirmier_click(self):
-        print("inf")
+        self.next_page = infirmier.InfermierMainUi()
+        self.next_page.show()
+        self.close()
 

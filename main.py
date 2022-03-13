@@ -9,6 +9,8 @@ import sys
 from dentiste_chose import DentisteChoseUi
 from dialogs import Login_dialog
 from radiologie import RadiologieMainUi
+from laboratoire import LaboratoireMainUi
+from pharmacie import PharmacieMainUi
 from tools import create_garde_page
 from urgence import UrgenceMainUi
 
@@ -89,10 +91,30 @@ class MainUi(QtWidgets.QMainWindow):
                 self.resp.setText("nom utilisateur ou mods de pass erroné")
 
     def lab(self):
-        print("lab")
+        dialog = Login_dialog()
+
+        if dialog.exec() == QtWidgets.QDialog.Accepted:
+            if dialog.username.text() == "labo" and dialog.password.text() == "labo":
+                self.resp.setText("authentifié")
+                self.urgencepage = LaboratoireMainUi()
+                self.urgencepage.show()
+                self.close()
+
+            else:
+                self.resp.setText("nom utilisateur ou mods de pass erroné")
 
     def pha(self):
-        print("pharm")
+        dialog = Login_dialog()
+
+        if dialog.exec() == QtWidgets.QDialog.Accepted:
+            if dialog.username.text() == "pharm" and dialog.password.text() == "pharm":
+                self.resp.setText("authentifié")
+                self.urgencepage = PharmacieMainUi()
+                self.urgencepage.show()
+                self.close()
+
+            else:
+                self.resp.setText("nom utilisateur ou mods de pass erroné")
 
 
 def main():
