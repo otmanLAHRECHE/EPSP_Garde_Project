@@ -78,7 +78,7 @@ class InfirmierGuardUi(QtWidgets.QMainWindow):
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
-        cur.execute(sql_q, ('radio',))
+        cur.execute(sql_q, ('dentiste_inf',))
         self.medcins = cur.fetchall()
         connection.close()
 

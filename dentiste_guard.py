@@ -80,7 +80,7 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
-        cur.execute(sql_q, ('urgence',))
+        cur.execute(sql_q, ('dentiste',))
         self.medcins = cur.fetchall()
         connection.close()
 

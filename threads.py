@@ -959,7 +959,7 @@ class Thread_create_infirmier_guard(QThread):
     _signal = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year, table):
-        super(Thread_create_radio_guard, self).__init__()
+        super(Thread_create_infirmier_guard, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1070,7 +1070,7 @@ class Thread_load_guards_infirmier(QThread):
     _signal_finish = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year):
-        super(Thread_load_guards_radio, self).__init__()
+        super(Thread_load_guards_infirmier, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1114,7 +1114,7 @@ class ThreadGuardInfirmier(QThread):
     _signal_result = pyqtSignal(list)
 
     def __init__(self, num_days, month, year):
-        super(ThreadGuardRadio, self).__init__()
+        super(ThreadGuardInfirmier, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1196,7 +1196,7 @@ class Thread_create_laboratoire_guard(QThread):
     _signal = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year, table):
-        super(Thread_create_radio_guard, self).__init__()
+        super(Thread_create_laboratoire_guard, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1306,7 +1306,7 @@ class Thread_load_guards_laboratoire(QThread):
     _signal_finish = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year):
-        super(Thread_load_guards_radio, self).__init__()
+        super(Thread_load_guards_laboratoire, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1350,7 +1350,7 @@ class ThreadGuardLaboratoire(QThread):
     _signal_result = pyqtSignal(list)
 
     def __init__(self, num_days, month, year):
-        super(ThreadGuardRadio, self).__init__()
+        super(ThreadGuardLaboratoire, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1432,7 +1432,7 @@ class Thread_create_pharmacie_guard(QThread):
     _signal = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year, table):
-        super(Thread_create_radio_guard, self).__init__()
+        super(Thread_create_pharmacie_guard, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1543,7 +1543,7 @@ class Thread_load_guards_pharmacie(QThread):
     _signal_finish = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year):
-        super(Thread_load_guards_radio, self).__init__()
+        super(Thread_load_guards_pharmacie, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -1587,7 +1587,7 @@ class ThreadGuardPharmacie(QThread):
     _signal_result = pyqtSignal(list)
 
     def __init__(self, num_days, month, year):
-        super(ThreadGuardRadio, self).__init__()
+        super(ThreadGuardPharmacie, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
