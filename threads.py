@@ -714,7 +714,7 @@ class Thread_create_radio_guard(QThread):
     _signal = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year, table):
-        super(Thread_create_urgence_guard, self).__init__()
+        super(Thread_create_radio_guard, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -819,7 +819,7 @@ class Thread_load_guards_radio(QThread):
     _signal_finish = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year):
-        super(Thread_load_guards_urgences, self).__init__()
+        super(Thread_load_guards_radio, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -863,7 +863,7 @@ class ThreadGuardRadio(QThread):
     _signal_result = pyqtSignal(list)
 
     def __init__(self, num_days, month, year):
-        super(ThreadGuardDentiste, self).__init__()
+        super(ThreadGuardRadio, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
