@@ -3,14 +3,14 @@ from calendar import monthrange
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
-import infirmier
-from threads import ThreadGuardInfirmier
+import radiologie
+from threads import ThreadGuardLaboratoire
 from tools import create_garde_page
 
 
-class ExportInfirmierGuard(QtWidgets.QMainWindow):
+class ExportLaboGuard(QtWidgets.QMainWindow):
     def __init__(self, month, year):
-        super(ExportInfirmierGuard, self).__init__()
+        super(ExportLaboGuard, self).__init__()
         uic.loadUi('ui/export_planing.ui', self)
 
         self.month = month
@@ -51,9 +51,9 @@ class ExportInfirmierGuard(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le planing de garde des infirmierrs " + m + "/" + str(self.year))
+        self.ttl.setText("Exporté le planing de garde service de laboratoire " + m + "/" + str(self.year))
 
-        self.thr = ThreadGuardInfirmier(self.num_days, self.month, self.year)
+        self.thr = ThreadGuardLaboratoire(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
         self.thr.start()
@@ -68,8 +68,8 @@ class ExportInfirmierGuard(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("DENTISTES", "GARDE (INFIRMIER)", self.month, self.year, self.data, filePath)
-            self.next_page = infirmier.InfermierMainUi()
+            create_garde_page("LABORATOIRE", "GARDE LABORATOIRE", self.month, self.year, self.data, filePath)
+            self.next_page = radiologie.RadiologieMainUi()
             self.next_page.show()
             print(self.thr.isFinished())
             self.close()
