@@ -294,6 +294,7 @@ class Thread_create_dentiste_guard(QThread):
         self.month = month
         self.year = year
         self.table = table
+        self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
 
     def __del__(self):
         self.terminate()
@@ -308,8 +309,12 @@ class Thread_create_dentiste_guard(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('dentiste', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-            check = self.table.cellWidget(row, 2)
-            med_name = check.chose.currentText()
+            if self.table.item(row, 0).text() in self.days_of_week:
+                print("do nothing ")
+                med_name = ""
+            else:
+                check = self.table.cellWidget(row, 2)
+                med_name = check.chose.currentText()
 
             check_2 = self.table.cellWidget(row, 3)
             med_name_2 = check_2.chose.currentText()
@@ -443,6 +448,7 @@ class Thread_create_dentiste_consultation(QThread):
         self.month = month
         self.year = year
         self.table = table
+        self.days_of_week_end = "Samedi" + "  " + "Vendredi"
 
     def __del__(self):
         self.terminate()
@@ -457,11 +463,16 @@ class Thread_create_dentiste_consultation(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN consultation ON health_worker.worker_id = consultation.consultent_id where service=? and consultation.periode =? and consultation.d =? and consultation.m =? and consultation.y =?'
             cur.execute(sql_q, ('dentiste', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-            check = self.table.cellWidget(row, 2)
-            med_name = check.chose.currentText()
 
-            check_2 = self.table.cellWidget(row, 3)
-            med_name_2 = check_2.chose.currentText()
+            if self.table.item(row, 0).text() in self.days_of_week_end:
+                med_name = ""
+                med_name_2 = ""
+            else:
+                check = self.table.cellWidget(row, 2)
+                med_name = check.chose.currentText()
+
+                check_2 = self.table.cellWidget(row, 3)
+                med_name_2 = check_2.chose.currentText()
 
             if results_light:
 
@@ -733,6 +744,9 @@ class Thread_create_radio_guard(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('radio', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
+
+
+
             check = self.table.cellWidget(row, 2)
             med_name = check.chose.currentText()
 
@@ -950,6 +964,7 @@ class Thread_create_infirmier_guard(QThread):
         self.month = month
         self.year = year
         self.table = table
+        self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
 
     def __del__(self):
         self.terminate()
@@ -964,8 +979,13 @@ class Thread_create_infirmier_guard(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('dentiste_inf', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-            check = self.table.cellWidget(row, 2)
-            med_name = check.chose.currentText()
+
+            if self.table.item(row, 0).text() in self.days_of_week:
+                print("do nothing ")
+                med_name = ""
+            else:
+                check = self.table.cellWidget(row, 2)
+                med_name = check.chose.currentText()
 
             check_2 = self.table.cellWidget(row, 3)
             med_name_2 = check_2.chose.currentText()
@@ -1181,6 +1201,7 @@ class Thread_create_laboratoire_guard(QThread):
         self.month = month
         self.year = year
         self.table = table
+        self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
 
     def __del__(self):
         self.terminate()
@@ -1195,8 +1216,12 @@ class Thread_create_laboratoire_guard(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('labo', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-            check = self.table.cellWidget(row, 2)
-            med_name = check.chose.currentText()
+            if self.table.item(row, 0).text() in self.days_of_week:
+                print("do nothing ")
+                med_name = ""
+            else:
+                check = self.table.cellWidget(row, 2)
+                med_name = check.chose.currentText()
 
             check_2 = self.table.cellWidget(row, 3)
             med_name_2 = check_2.chose.currentText()
@@ -1412,6 +1437,7 @@ class Thread_create_pharmacie_guard(QThread):
         self.month = month
         self.year = year
         self.table = table
+        self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
 
     def __del__(self):
         self.terminate()
@@ -1426,8 +1452,13 @@ class Thread_create_pharmacie_guard(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('pharm', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-            check = self.table.cellWidget(row, 2)
-            med_name = check.chose.currentText()
+
+            if self.table.item(row, 0).text() in self.days_of_week:
+                print("do nothing ")
+                med_name = ""
+            else:
+                check = self.table.cellWidget(row, 2)
+                med_name = check.chose.currentText()
 
             check_2 = self.table.cellWidget(row, 3)
             med_name_2 = check_2.chose.currentText()
