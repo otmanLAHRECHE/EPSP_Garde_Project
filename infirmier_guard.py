@@ -17,6 +17,7 @@ class InfirmierGuardUi(QtWidgets.QMainWindow):
         uic.loadUi('ui/guard_infirmier.ui', self)
 
         self.want_to_close = False
+        self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
 
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
@@ -157,7 +158,11 @@ class InfirmierGuardUi(QtWidgets.QMainWindow):
                 rn = results_night[0]
                 chose_night.chose.setCurrentText(str(rn[0]))
 
-            self.table.setCellWidget(row, 2, chose_light)
+            if m in self.days_of_week:
+                print("nothing")
+            else:
+                self.table.setCellWidget(row, 2, chose_light)
+
             self.table.setCellWidget(row, 3, chose_night)
 
         elif type(progress) == bool:
