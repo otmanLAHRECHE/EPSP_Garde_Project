@@ -68,7 +68,7 @@ class ExportDentisteGuardUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("CHIRURGIE DENTAIRE", "GARDE DENTISTE", self.month, self.year, self.data, filePath)
+            create_garde_page("CHIRURGIE DENTAIRE", "GARDE DES DENTISTES", self.month, self.year, self.data, filePath)
             self.next_page = dentiste.DentisteMainUi()
             self.next_page.show()
             self.close()
