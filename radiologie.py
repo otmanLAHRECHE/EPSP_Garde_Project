@@ -14,7 +14,7 @@ from widgets import Buttons
 class RadiologieMainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(RadiologieMainUi, self).__init__()
-        uic.loadUi('ui/urgence.ui', self)
+        uic.loadUi('ui/radiologie.ui', self)
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
