@@ -3,14 +3,14 @@ from calendar import monthrange
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
-import dentiste
-from threads import ThreadConsultationDentiste
+import radiologie
+from threads import ThreadGuard, ThreadGuardRadio
 from tools import create_garde_page
 
 
-class ExportDentisteConsultationUi(QtWidgets.QMainWindow):
+class ExportRadioGuard(QtWidgets.QMainWindow):
     def __init__(self, month, year):
-        super(ExportDentisteConsultationUi, self).__init__()
+        super(ExportRadioGuard, self).__init__()
         uic.loadUi('ui/export_planing.ui', self)
 
         self.month = month
@@ -51,26 +51,27 @@ class ExportDentisteConsultationUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le planing de garde service dentiste " + m + "/" + str(self.year))
+        self.ttl.setText("Exporté le planing de garde service de radiologie " + m + "/" + str(self.year))
 
-        self.thr = ThreadConsultationDentiste(self.num_days, self.month, self.year)
+        self.thr = ThreadGuardRadio(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
         self.thr.start()
 
     def export_pdf(self):
         print(self.data)
-        filePath, _ = QFileDialog.getSaveFileName(self, "Save consultation", "",
+        filePath, _ = QFileDialog.getSaveFileName(self, "Save garde", "",
                                                   "PDF(*.pdf);;All Files(*.*) ")
 
-
+        # if file path is blank return back
         if filePath == "":
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("CHIRURGIE DENTAIRE", "CONSULTATION", self.month, self.year, self.data, filePath)
-            self.next_page = dentiste.DentisteMainUi()
+            create_garde_page("RADIOLOGIE", "GARDE RADIOLOGIE", self.month, self.year, self.data, filePath)
+            self.next_page = radiologie.RadiologieMainUi()
             self.next_page.show()
+            print(self.thr.isFinished())
             self.close()
 
     def signal_accept(self, progress):
