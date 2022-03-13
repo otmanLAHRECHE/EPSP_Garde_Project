@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QTableWidget, QMess
 from dentiste_consultation import DentisteConsultationUi
 from dentiste_guard import DentisteGuardUi
 from dialogs import Add_new_month, Update_worker_dialog
+from export_dentiste_consultation import ExportDentisteConsultationUi
+from export_dentiste_guard import ExportDentisteGuardUi
 from export_urgence_planing import ExportUrgencePlaningUi
 from tools import get_workers_count, get_guard_months_count, get_consultation_months_count
 from urgence_guard import UrgenceGuardUi
@@ -350,7 +352,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.next_page = ExportUrgencePlaningUi(m, y)
+        self.next_page = ExportDentisteGuardUi(m, y)
         self.close()
         self.next_page.show()
 
@@ -545,7 +547,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.next_page = ExportUrgencePlaningUi(m, y)
+        self.next_page = ExportDentisteConsultationUi(m, y)
         self.close()
         self.next_page.show()
 
