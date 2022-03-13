@@ -1,21 +1,16 @@
-import datetime
-import sqlite3
-import time
 from calendar import monthrange
 
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
-import urgence
-
-from PyQt5 import QtWidgets, uic
-
-from threads import ThreadGuard
+import dentiste
+from threads import ThreadGuardDentiste
 from tools import create_garde_page
 
 
-class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
+class ExportDentisteGuardUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
-        super(ExportUrgencePlaningUi, self).__init__()
+        super(ExportDentisteGuardUi, self).__init__()
         uic.loadUi('ui/export_planing.ui', self)
 
         self.month = month
@@ -56,9 +51,9 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le planing de garde service d urgence " + m + "/" + str(self.year))
+        self.ttl.setText("Exporté le planing de garde service dentiste " + m + "/" + str(self.year))
 
-        self.thr = ThreadGuard(self.num_days, self.month, self.year)
+        self.thr = ThreadGuardDentiste(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
         self.thr.start()
@@ -73,16 +68,11 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("URGENCE", "GARDE URGENCE", self.month, self.year, self.data, filePath)
-            self.next_page = urgence.UrgenceMainUi()
+            create_garde_page("CHIRURGIE DENTAIRE", "GARDE DENTISTE", self.month, self.year, self.data, filePath)
+            self.next_page = dentiste.DentisteMainUi()
             self.next_page.show()
-            print(self.thr.isFinished())
             self.close()
-        """
-        self.next_page = urgence.UrgenceMainUi()
-        self.next_page.show()
-        self.close()
-        """
+
     def signal_accept(self, progress):
         if type(progress) == int:
             self.progress.setValue(progress)
@@ -98,12 +88,3 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         alert.setWindowTitle("alert")
         alert.setText(message)
         alert.exec_()
-
-
-
-
-
-
-
-
-
