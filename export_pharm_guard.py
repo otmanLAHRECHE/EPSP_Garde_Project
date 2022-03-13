@@ -3,6 +3,7 @@ from calendar import monthrange
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
+import pharmacie
 import radiologie
 from threads import ThreadGuardPharmacie
 from tools import create_garde_page
@@ -69,9 +70,8 @@ class ExportPharmGuard(QtWidgets.QMainWindow):
             self.alert_(message)
         else:
             create_garde_page("PHARMACIE", "GARDE PHARMACIE", self.month, self.year, self.data, filePath)
-            self.next_page = radiologie.RadiologieMainUi()
+            self.next_page = pharmacie.PharmacieMainUi()
             self.next_page.show()
-            print(self.thr.isFinished())
             self.close()
 
     def signal_accept(self, progress):

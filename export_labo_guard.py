@@ -3,6 +3,7 @@ from calendar import monthrange
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
+import laboratoire
 import radiologie
 from threads import ThreadGuardLaboratoire
 from tools import create_garde_page
@@ -69,7 +70,7 @@ class ExportLaboGuard(QtWidgets.QMainWindow):
             self.alert_(message)
         else:
             create_garde_page("LABORATOIRE", "GARDE LABORATOIRE", self.month, self.year, self.data, filePath)
-            self.next_page = radiologie.RadiologieMainUi()
+            self.next_page = laboratoire.LaboratoireMainUi()
             self.next_page.show()
             print(self.thr.isFinished())
             self.close()
