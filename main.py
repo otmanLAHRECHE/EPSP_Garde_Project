@@ -7,9 +7,9 @@ import sys
 
 from dentiste import DentisteMainUi
 from dialogs import Login_dialog
+from radiologie import RadiologieMainUi
 from tools import create_garde_page
 from urgence import UrgenceMainUi
-from urgence_guard import UrgenceGuardUi
 
 
 class MainUi(QtWidgets.QMainWindow):
@@ -62,7 +62,17 @@ class MainUi(QtWidgets.QMainWindow):
         print("urgence")
 
     def rad(self):
-        print("radio")
+        dialog = Login_dialog()
+
+        if dialog.exec() == QtWidgets.QDialog.Accepted:
+            if dialog.username.text() == "radio" and dialog.password.text() == "radio":
+                self.resp.setText("authentifié")
+                self.urgencepage = RadiologieMainUi()
+                self.urgencepage.show()
+                self.close()
+
+            else:
+                self.resp.setText("nom utilisateur ou mods de pass erroné")
 
     def den(self):
         dialog = Login_dialog()
