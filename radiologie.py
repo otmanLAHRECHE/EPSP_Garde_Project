@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+import export_radio_guard
 import radiologie_guard
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
@@ -274,7 +275,7 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.urgence_guard_page = radiologie_guard.RadiologieGuardUi()
+        self.urgence_guard_page = radiologie_guard.RadiologieGuardUi(m, y)
         self.urgence_guard_page.show()
         self.close()
 
@@ -330,8 +331,6 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.next_page = export_urgence_planing.ExportUrgencePlaningUi(m, y)
+        self.next_page = export_radio_guard.ExportRadioGuard(m, y)
         self.close()
         self.next_page.show()
-        """
