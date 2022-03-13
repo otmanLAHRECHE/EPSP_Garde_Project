@@ -4,17 +4,15 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
-import export_radio_guard
-import radiologie_guard
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
 from widgets import Buttons
 
 
-class RadiologieMainUi(QtWidgets.QMainWindow):
+class InfermierMainUi(QtWidgets.QMainWindow):
     def __init__(self):
-        super(RadiologieMainUi, self).__init__()
-        uic.loadUi('ui/radiologie.ui', self)
+        super(InfermierMainUi, self).__init__()
+        uic.loadUi('ui/infirmier.ui', self)
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
@@ -59,19 +57,19 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
         alert.exec_()
 
     def add_toDb(self):
-        med_count = get_workers_count("radio")[0]
+        med_count = get_workers_count("dentiste_inf")[0]
         if self.medcinname.text() == "":
-            message = 'Le champ de nom est vide'
+            message = 'Le champ de nom est vide!'
             self.alert_(message)
 
         elif med_count[0] > 25:
-            message = 'Maximum nombre des agents, supremer un agent'
+            message = 'Maximum nombre des infirmiers, supremer un infirmier'
             self.alert_(message)
         else:
             connection = sqlite3.connect('database/sqlite.db')
             cur = connection.cursor()
             sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
-            med = (self.medcinname.text(), 'radio')
+            med = (self.medcinname.text(), 'dentiste_inf')
             cur.execute(sql_q, med)
             connection.commit()
             connection.close()
@@ -80,7 +78,7 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
 
     def add_grd(self):
 
-        guards_months_count = get_guard_months_count("radio")[0]
+        guards_months_count = get_guard_months_count("dentiste_inf")[0]
 
         dialog = Add_new_month()
         if dialog.exec() == QtWidgets.QDialog.Accepted:
@@ -120,7 +118,7 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
                 elif dialog.month.currentIndex() == 11:
                     m = 12
 
-                guard_m = (m, int(dialog.year.text()), 'radio')
+                guard_m = (m, int(dialog.year.text()), 'dentiste_inf')
                 print(guard_m)
 
                 cur.execute(sql_q, guard_m)
@@ -166,16 +164,15 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
                     self.loadUsers()
 
         else:
-            message = 'Selectioner un agent'
+            message = 'Selectioner un infirmier'
             self.alert_(message)
 
     def loadUsers(self):
-        print("load users")
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
         sql_q = 'SELECT * FROM health_worker where service=?'
         tablerow = 0
-        cur.execute(sql_q, ('radio',))
+        cur.execute(sql_q, ('dentiste_inf',))
         results = cur.fetchall()
         for row in results:
             self.table.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
@@ -188,12 +185,11 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
         connection.close()
 
     def loadGuardMonths(self):
-        print("load guards")
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
         sql_q = 'SELECT * FROM guard_mounth where service=?'
         tablerow = 0
-        cur.execute(sql_q, ('radio',))
+        cur.execute(sql_q, ('dentiste_inf',))
         results = cur.fetchall()
         for row in results:
             self.table_gardes.setRowHeight(tablerow, 70)
