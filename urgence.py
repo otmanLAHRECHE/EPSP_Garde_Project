@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 import sys
 
 from dialogs import Update_worker_dialog, Add_new_month
-from export_urgence_planing import ExportUrgencePlaningUi
+import export_urgence_planing
 from tools import get_workers_count, get_guard_months_count
 from urgence_guard import UrgenceGuardUi
 from widgets import Buttons
@@ -332,6 +332,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.next_page = ExportUrgencePlaningUi(m, y)
+        self.next_page = export_urgence_planing.ExportUrgencePlaningUi(m, y)
         self.close()
         self.next_page.show()

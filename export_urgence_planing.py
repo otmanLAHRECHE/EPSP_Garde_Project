@@ -78,11 +78,7 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
             self.next_page.show()
             print(self.thr.isFinished())
             self.close()
-        """
-        self.next_page = urgence.UrgenceMainUi()
-        self.next_page.show()
-        self.close()
-        """
+
     def signal_accept(self, progress):
         if type(progress) == int:
             self.progress.setValue(progress)
