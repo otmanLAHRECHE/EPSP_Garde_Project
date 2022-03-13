@@ -8,7 +8,7 @@ import sys
 from dialogs import Update_worker_dialog, Add_new_month
 import export_urgence_planing
 from tools import get_workers_count, get_guard_months_count
-from urgence_guard import UrgenceGuardUi
+import urgence_guard
 from widgets import Buttons
 
 
@@ -276,7 +276,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        self.urgence_guard_page = UrgenceGuardUi(m, y)
+        self.urgence_guard_page = urgence_guard.UrgenceGuardUi(m, y)
         self.urgence_guard_page.show()
         self.close()
 

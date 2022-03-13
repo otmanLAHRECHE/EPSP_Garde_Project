@@ -65,6 +65,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
         self.table_consultation.hideColumn(0)
 
         self.loadGuardMonths()
+        self.loadConsultationMonths()
         self.loadUsers()
 
         self.add.clicked.connect(self.add_toDb)
@@ -92,7 +93,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             connection = sqlite3.connect('database/sqlite.db')
             cur = connection.cursor()
             sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
-            med = (self.medcinname.text(), 'dentiste')
+            med = (self.dentistename.text(), 'dentiste')
             cur.execute(sql_q, med)
             connection.commit()
             connection.close()
@@ -407,7 +408,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
     def loadConsultationMonths(self):
         connection = sqlite3.connect('database/sqlite.db')
         cur = connection.cursor()
-        sql_q = 'SELECT * FROM consultation_mounth where service=?'
+        sql_q = 'SELECT * FROM consultaion_mounth where service=?'
         tablerow = 0
         cur.execute(sql_q, ('dentiste',))
         results = cur.fetchall()
@@ -502,7 +503,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             id = self.table_gardes.item(row, 0).text()
             connection = sqlite3.connect('database/sqlite.db')
             cur = connection.cursor()
-            sql_q = 'DELETE FROM consultation_mounth WHERE consultation_mounth_id=?'
+            sql_q = 'DELETE FROM consultaion_mounth WHERE consultation_mounth_id=?'
             cur.execute(sql_q, (id,))
             connection.commit()
             connection.close()

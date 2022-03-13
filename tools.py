@@ -38,7 +38,7 @@ def get_guard_months_count(service):
 def get_consultation_months_count(service):
     connection = sqlite3.connect('database/sqlite.db')
     cur = connection.cursor()
-    sql_q = 'SELECT count(*) FROM consultation_mounth where service=?'
+    sql_q = 'SELECT count(*) FROM consultaion_mounth where service=?'
     cur.execute(sql_q, (service,))
     results = cur.fetchall()
     connection.close()
