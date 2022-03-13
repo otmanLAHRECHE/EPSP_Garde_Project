@@ -298,7 +298,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Ajouter nouveau infirmier :</string>
+       <string>Ajouter nouveau agent :</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -332,7 +332,7 @@
        </font>
       </property>
       <property name="text">
-       <string>nom d' infirmier :</string>
+       <string>nom d' agents :</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit">
@@ -360,7 +360,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Liste des infirmiers :</string>
+       <string>Liste des agents :</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

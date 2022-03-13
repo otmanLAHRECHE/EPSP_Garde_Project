@@ -19,7 +19,7 @@ class PharmacieMainUi(QtWidgets.QMainWindow):
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
         self.tab.setTabText(0, "Listes de garde")
-        self.tab.setTabText(1, "Agents de radio")
+        self.tab.setTabText(1, "Pharmaciens")
         self.medcinname = self.findChild(QLineEdit, "lineEdit")
         self.add_garde = self.findChild(QPushButton, "pushButton_4")
         self.add_garde.setIcon(QIcon("asstes/images/plus.png"))

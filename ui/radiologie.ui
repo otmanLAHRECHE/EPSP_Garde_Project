@@ -605,11 +605,6 @@
         <string>Service</string>
        </property>
       </column>
-      <column>
-       <property name="text">
-        <string>Groupe</string>
-       </property>
-      </column>
      </widget>
     </widget>
    </widget>
