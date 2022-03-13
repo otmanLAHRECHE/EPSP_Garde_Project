@@ -321,8 +321,8 @@ class Thread_create_dentiste_guard(QThread):
                 if str(rl[0]) == med_name:
                     print("do nothing")
                 elif str(rl[0]) != med_name and med_name != "":
-                    id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
-                    id_new = get_workerId_by_name(med_name, "urgence")[0]
+                    id1 = get_workerId_by_name(str(rl[0]), "dentiste")[0]
+                    id_new = get_workerId_by_name(med_name, "dentiste")[0]
                     id1 = id1[0]
                     id_new = id_new[0]
                     sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
@@ -333,13 +333,13 @@ class Thread_create_dentiste_guard(QThread):
 
                 elif str(rl[0]) != med_name and med_name == "":
 
-                    id1 = get_workerId_by_name(str(rl[0]), "urgence")[0]
+                    id1 = get_workerId_by_name(str(rl[0]), "dentiste")[0]
                     id1 = id1[0]
                     sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
                     cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
 
             elif med_name != "":
-                id_new = get_workerId_by_name(med_name, "urgence")[0]
+                id_new = get_workerId_by_name(med_name, "dentiste")[0]
                 id_new = id_new[0]
                 sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
                 cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
