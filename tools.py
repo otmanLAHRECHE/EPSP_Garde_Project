@@ -1,6 +1,6 @@
 import sqlite3
 
-from fpdf import FPDF
+
 
 from epsp_pdf import EpspPdf
 import os
