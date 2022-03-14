@@ -1,6 +1,7 @@
 import os
 
 from PyQt5 import uic, QtWidgets
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
 
@@ -131,6 +132,7 @@ class MainUi(QtWidgets.QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'guard.png')))
     window = MainUi()
     window.show()
     app.exec_()
