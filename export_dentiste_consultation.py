@@ -51,7 +51,7 @@ class ExportDentisteConsultationUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le planing de garde service dentiste " + m + "/" + str(self.year))
+        self.ttl.setText("Exporté le planing de consultation service dentiste " + m + "/" + str(self.year))
 
         self.thr = ThreadConsultationDentiste(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
@@ -68,7 +68,7 @@ class ExportDentisteConsultationUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("CHIRURGIE DENTAIRE", "CONSULTATION", self.month, self.year, self.data, filePath)
+            create_garde_page("CHIRURGIE DENTAIRE", "CONSULTATION DENTISTE", self.month, self.year, self.data, filePath)
             self.next_page = dentiste.DentisteMainUi()
             self.next_page.show()
             self.close()
