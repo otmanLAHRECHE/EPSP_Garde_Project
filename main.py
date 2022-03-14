@@ -132,7 +132,7 @@ class MainUi(QtWidgets.QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'guard.png')))
+    app.setWindowIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'guard.ico')))
     window = MainUi()
     window.show()
     app.exec_()
