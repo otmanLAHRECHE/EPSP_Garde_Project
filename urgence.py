@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from PyQt5 import uic, QtWidgets
@@ -5,17 +6,19 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
 
+
 from dialogs import Update_worker_dialog, Add_new_month
 import export_urgence_planing
 from tools import get_workers_count, get_guard_months_count
 import urgence_guard
 from widgets import Buttons
+basedir = os.path.dirname(__file__)
 
 
 class UrgenceMainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(UrgenceMainUi, self).__init__()
-        uic.loadUi('ui/urgence.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'urgence.ui'), self)
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
@@ -70,7 +73,8 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
             message = 'Maximum nombre des medecin, supremer un medecin'
             self.alert_(message)
         else:
-            connection = sqlite3.connect('database/sqlite.db')
+
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
             cur = connection.cursor()
             sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
             med = (self.medcinname.text(), 'urgence')
@@ -93,7 +97,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
                 message = "Maximum liste des garde, suprimrer des listes"
                 self.alert_(message)
             else:
-                connection = sqlite3.connect('database/sqlite.db')
+                connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
                 cur = connection.cursor()
                 sql_q = "INSERT INTO guard_mounth (m,y,service) values (?,?,?)"
                 m = 0
@@ -134,7 +138,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         row = self.table.currentRow()
         if row > -1:
             id = self.table.item(row, 0).text()
-            connection = sqlite3.connect('database/sqlite.db')
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
             cur = connection.cursor()
             sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
             cur.execute(sql_q, (id,))
@@ -159,7 +163,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
                     self.alert_(message)
                 else:
                     id = self.table.item(row, 0).text()
-                    connection = sqlite3.connect('database/sqlite.db')
+                    connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
                     cur = connection.cursor()
                     sql_q = 'UPDATE health_worker SET full_name= ? WHERE worker_id= ?'
                     cur.execute(sql_q, (dialog.worker.text(), id))
@@ -173,7 +177,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
     def loadUsers(self):
         print("load users")
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT * FROM health_worker where service=?'
         tablerow = 0
@@ -190,8 +194,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         connection.close()
 
     def loadGuardMonths(self):
-        print("load guards")
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT * FROM guard_mounth where service=?'
         tablerow = 0
@@ -286,7 +289,7 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         row = index.row()
         if row > -1:
             id = self.table_gardes.item(row, 0).text()
-            connection = sqlite3.connect('database/sqlite.db')
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
             cur = connection.cursor()
             sql_q = 'DELETE FROM guard_mounth WHERE guard_mounth_id=?'
             cur.execute(sql_q, (id,))

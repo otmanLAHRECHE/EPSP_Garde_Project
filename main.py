@@ -1,24 +1,34 @@
-
-
+import os
 
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import *
 import sys
 
 
-from dentiste_chose import DentisteChoseUi
+
 from dialogs import Login_dialog
+from dentiste_chose import DentisteChoseUi
 from radiologie import RadiologieMainUi
 from laboratoire import LaboratoireMainUi
 from pharmacie import PharmacieMainUi
 from tools import create_garde_page
 from urgence import UrgenceMainUi
 
+basedir = os.path.dirname(__file__)
+
+try:
+    from ctypes import windll  # Only exists on Windows.
+    myappid = 'EPSP_Djanet.EPSP_Guard.1'
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+except ImportError:
+    pass
+
+
 
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainUi, self).__init__()
-        uic.loadUi('ui/main.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'main.ui'), self)
 
 
 
@@ -26,6 +36,8 @@ class MainUi(QtWidgets.QMainWindow):
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
 
         self.choisir.setContentsMargins(40, 0, 5, 0)
+
+
 
         self.grid = self.findChild(QtWidgets.QGridLayout, "gridLayout")
         self.urgence = self.findChild(QtWidgets.QPushButton, "pushButton")

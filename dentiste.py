@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from PyQt5 import QtWidgets, uic
@@ -10,14 +11,16 @@ from dialogs import Add_new_month, Update_worker_dialog
 import export_dentiste_consultation
 import export_dentiste_guard
 from tools import get_workers_count, get_guard_months_count, get_consultation_months_count
-from urgence_guard import UrgenceGuardUi
+
 from widgets import Buttons
+basedir = os.path.dirname(__file__)
 
 
 class DentisteMainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(DentisteMainUi, self).__init__()
-        uic.loadUi('ui/dentiste.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'dentiste.ui'), self)
+
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
@@ -27,20 +30,21 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         self.dentistename = self.findChild(QLineEdit, "lineEdit")
         self.add_garde = self.findChild(QPushButton, "pushButton_4")
-        self.add_garde.setIcon(QIcon("asstes/images/plus.png"))
+        self.add_garde.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'plus.png')))
+
 
         self.add_consultation = self.findChild(QPushButton, "pushButton_5")
-        self.add_consultation.setIcon(QIcon("asstes/images/plus.png"))
+        self.add_consultation.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'plus.png')))
 
         self.add_consultation = self.findChild(QPushButton, "pushButton_5")
-        self.add_consultation.setIcon(QIcon("asstes/images/plus.png"))
+        self.add_consultation.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'plus.png')))
 
         self.add = self.findChild(QPushButton, "pushButton")
-        self.add.setIcon(QIcon("asstes/images/plus.png"))
+        self.add.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'plus.png')))
         self.update = self.findChild(QPushButton, "pushButton_3")
-        self.update.setIcon(QIcon("asstes/images/edit.png"))
+        self.update.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'edit.png')))
         self.delete = self.findChild(QPushButton, "pushButton_2")
-        self.delete.setIcon(QIcon("asstes/images/user-x.png"))
+        self.delete.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'user-x.png')))
         self.table = self.findChild(QTableWidget, "tableWidget")
         self.table.setColumnWidth(0, 80)
         self.table.setColumnWidth(1, 200)
@@ -90,7 +94,8 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             message = 'Maximum nombre des dentistes, supremer un dentiste'
             self.alert_(message)
         else:
-            connection = sqlite3.connect('database/sqlite.db')
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
+
             cur = connection.cursor()
             sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
             med = (self.dentistename.text(), 'dentiste')
@@ -113,7 +118,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                 message = "Maximum liste des garde, suprimrer des listes"
                 self.alert_(message)
             else:
-                connection = sqlite3.connect('database/sqlite.db')
+                connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
                 cur = connection.cursor()
                 sql_q = "INSERT INTO guard_mounth (m,y,service) values (?,?,?)"
                 m = 0
@@ -154,7 +159,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
         row = self.table.currentRow()
         if row > -1:
             id = self.table.item(row, 0).text()
-            connection = sqlite3.connect('database/sqlite.db')
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
             cur = connection.cursor()
             sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
             cur.execute(sql_q, (id,))
@@ -179,7 +184,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                     self.alert_(message)
                 else:
                     id = self.table.item(row, 0).text()
-                    connection = sqlite3.connect('database/sqlite.db')
+                    connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
                     cur = connection.cursor()
                     sql_q = 'UPDATE health_worker SET full_name= ? WHERE worker_id= ?'
                     cur.execute(sql_q, (dialog.worker.text(), id))
@@ -193,7 +198,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
     def loadUsers(self):
         print("load users")
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT * FROM health_worker where service=?'
         tablerow = 0
@@ -211,7 +216,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
     def loadGuardMonths(self):
         print("load guards")
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT * FROM guard_mounth where service=?'
         tablerow = 0
@@ -306,7 +311,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
         row = index.row()
         if row > -1:
             id = self.table_gardes.item(row, 0).text()
-            connection = sqlite3.connect('database/sqlite.db')
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
             cur = connection.cursor()
             sql_q = 'DELETE FROM guard_mounth WHERE guard_mounth_id=?'
             cur.execute(sql_q, (id,))
@@ -369,7 +374,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                 message = "Maximum liste des consultations, suprimrer des listes"
                 self.alert_(message)
             else:
-                connection = sqlite3.connect('database/sqlite.db')
+                connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
                 cur = connection.cursor()
                 sql_q = "INSERT INTO consultaion_mounth (m,y,service) values (?,?,?)"
                 m = 0
@@ -406,7 +411,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                 self.loadConsultationMonths()
 
     def loadConsultationMonths(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT * FROM consultaion_mounth where service=?'
         tablerow = 0
@@ -501,7 +506,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
         row = index.row()
         if row > -1:
             id = self.table_gardes.item(row, 0).text()
-            connection = sqlite3.connect('database/sqlite.db')
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
             cur = connection.cursor()
             sql_q = 'DELETE FROM consultaion_mounth WHERE consultation_mounth_id=?'
             cur.execute(sql_q, (id,))

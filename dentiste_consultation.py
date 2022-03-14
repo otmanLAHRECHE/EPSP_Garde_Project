@@ -1,4 +1,5 @@
 import datetime
+import os
 import sqlite3
 from calendar import monthrange
 
@@ -9,12 +10,14 @@ import dentiste
 from dialogs import Saving_progress_dialog, CustomDialog
 from threads import Thread_load_consultation_dentiste, Thread_create_dentiste_consultation
 from widgets import Chose_worker
+basedir = os.path.dirname(__file__)
 
 
 class DentisteConsultationUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(DentisteConsultationUi, self).__init__()
-        uic.loadUi('ui/consultation_dentiste.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'consultation_dentiste.ui'), self)
+
 
         self.want_to_close = False
 
@@ -73,7 +76,7 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
         self.thr2.start()
 
     def load_dentiste(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
         cur.execute(sql_q, ('dentiste',))

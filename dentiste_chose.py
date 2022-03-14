@@ -1,13 +1,17 @@
+import os
+
 from PyQt5 import QtWidgets, uic
 
 import dentiste
 import infirmier
 
+basedir = os.path.dirname(__file__)
+
 
 class DentisteChoseUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(DentisteChoseUi, self).__init__()
-        uic.loadUi('ui/dentiste_chose.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'dentiste_chose.ui'), self)
 
 
         self.dentiste = self.findChild(QtWidgets.QPushButton, "pushButton")
