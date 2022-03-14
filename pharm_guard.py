@@ -9,12 +9,13 @@ import pharmacie
 from dialogs import Saving_progress_dialog, CustomDialog
 from threads import Thread_load_guards_pharmacie, Thread_create_pharmacie_guard
 from widgets import Chose_worker
-
+import os
+basedir = os.path.dirname(__file__)
 
 class PharmGuardUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(PharmGuardUi, self).__init__()
-        uic.loadUi('ui/guard_pharm.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'guard_pharm.ui'), self)
 
         self.want_to_close = False
         self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
@@ -75,7 +76,7 @@ class PharmGuardUi(QtWidgets.QMainWindow):
         self.thr2.start()
 
     def load_med(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
         cur.execute(sql_q, ('pharm',))

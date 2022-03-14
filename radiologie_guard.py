@@ -9,12 +9,13 @@ import radiologie
 from dialogs import Saving_progress_dialog, CustomDialog
 from threads import Thread_load_guards_radio, Thread_create_radio_guard
 from widgets import Chose_worker
-
+import os
+basedir = os.path.dirname(__file__)
 
 class RadiologieGuardUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(RadiologieGuardUi, self).__init__()
-        uic.loadUi('ui/guard_radio.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'guard_radio.ui'), self)
 
         self.want_to_close = False
 
@@ -74,7 +75,7 @@ class RadiologieGuardUi(QtWidgets.QMainWindow):
         self.thr2.start()
 
     def load_med(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
         cur.execute(sql_q, ('radio',))

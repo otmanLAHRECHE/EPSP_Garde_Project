@@ -11,12 +11,13 @@ import urgence
 from threads import Thread_create_urgence_guard, Thread_load_guards_urgences
 from tools import get_workerId_by_name
 from widgets import Chose_worker
-
+import os
+basedir = os.path.dirname(__file__)
 
 class UrgenceGuardUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(UrgenceGuardUi, self).__init__()
-        uic.loadUi('ui/guard_urgence.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'guard_urgence.ui'), self)
 
         self.want_to_close = False
 
@@ -77,7 +78,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.thr2.start()
 
     def load_med(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
         cur.execute(sql_q, ('urgence',))

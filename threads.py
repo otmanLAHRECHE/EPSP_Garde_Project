@@ -6,6 +6,8 @@ import time
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from tools import get_workerId_by_name
+import os
+basedir = os.path.dirname(__file__)
 
 
 class ThreadGuard(QThread):
@@ -24,7 +26,7 @@ class ThreadGuard(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -106,7 +108,7 @@ class Thread_create_urgence_guard(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         for row in range(self.num_days):
             day = row + 1
@@ -210,7 +212,7 @@ class Thread_load_guards_urgences(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -255,7 +257,7 @@ class Thread_load_guards_dentiste(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -301,7 +303,7 @@ class Thread_create_dentiste_guard(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         for row in range(self.num_days):
             day = row + 1
@@ -409,7 +411,7 @@ class Thread_load_consultation_dentiste(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -455,7 +457,7 @@ class Thread_create_dentiste_consultation(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         for row in range(self.num_days):
             day = row + 1
@@ -563,7 +565,7 @@ class ThreadGuardDentiste(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -650,7 +652,7 @@ class ThreadConsultationDentiste(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -736,7 +738,7 @@ class Thread_create_radio_guard(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         for row in range(self.num_days):
             day = row + 1
@@ -843,7 +845,7 @@ class Thread_load_guards_radio(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -888,7 +890,7 @@ class ThreadGuardRadio(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -971,7 +973,7 @@ class Thread_create_infirmier_guard(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         for row in range(self.num_days):
             day = row + 1
@@ -1080,7 +1082,7 @@ class Thread_load_guards_infirmier(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -1125,7 +1127,7 @@ class ThreadGuardInfirmier(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -1208,7 +1210,7 @@ class Thread_create_laboratoire_guard(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         for row in range(self.num_days):
             day = row + 1
@@ -1316,7 +1318,7 @@ class Thread_load_guards_laboratoire(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -1361,7 +1363,7 @@ class ThreadGuardLaboratoire(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -1444,7 +1446,7 @@ class Thread_create_pharmacie_guard(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
         for row in range(self.num_days):
             day = row + 1
@@ -1553,7 +1555,7 @@ class Thread_load_guards_pharmacie(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):
@@ -1598,7 +1600,7 @@ class ThreadGuardPharmacie(QThread):
         self.wait()
 
     def run(self):
-        connection = sqlite3.connect('database/sqlite.db')
+        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
         cur = connection.cursor()
 
         for row in range(self.num_days):

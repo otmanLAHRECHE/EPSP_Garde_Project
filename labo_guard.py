@@ -17,7 +17,6 @@ class LaboGuardUi(QtWidgets.QMainWindow):
         super(LaboGuardUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'guard_labo.ui'), self)
 
-
         self.want_to_close = False
         self.days_of_week = "Dimanche" + "  " + "Lundi" + "  " + "Mardi" + "  " + "Mercredi" + "  " + "Jeudi"
 
