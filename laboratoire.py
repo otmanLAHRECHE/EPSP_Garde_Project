@@ -9,12 +9,14 @@ import labo_guard
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
 from widgets import Buttons
-
+import os
+basedir = os.path.dirname(__file__)
 
 class LaboratoireMainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(LaboratoireMainUi, self).__init__()
-        uic.loadUi('ui/labo.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'labo.ui'), self)
+
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
 
@@ -22,14 +24,14 @@ class LaboratoireMainUi(QtWidgets.QMainWindow):
         self.tab.setTabText(1, "Agents de laboratoire")
         self.medcinname = self.findChild(QLineEdit, "lineEdit")
         self.add_garde = self.findChild(QPushButton, "pushButton_4")
-        self.add_garde.setIcon(QIcon("asstes/images/plus.png"))
+        self.add_garde.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'plus.png')))
 
         self.add = self.findChild(QPushButton, "pushButton")
-        self.add.setIcon(QIcon("asstes/images/plus.png"))
+        self.add.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'plus.png')))
         self.update = self.findChild(QPushButton, "pushButton_3")
-        self.update.setIcon(QIcon("asstes/images/edit.png"))
+        self.update.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'edit.png')))
         self.delete = self.findChild(QPushButton, "pushButton_2")
-        self.delete.setIcon(QIcon("asstes/images/user-x.png"))
+        self.delete.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'user-x.png')))
         self.table = self.findChild(QTableWidget, "tableWidget")
         self.table.setColumnWidth(0, 80)
         self.table.setColumnWidth(1, 200)
@@ -68,7 +70,7 @@ class LaboratoireMainUi(QtWidgets.QMainWindow):
             message = 'Maximum nombre des agents, supremer un agents'
             self.alert_(message)
         else:
-            connection = sqlite3.connect('database/sqlite.db')
+            connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
             cur = connection.cursor()
             sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
             med = (self.medcinname.text(), 'labo')
@@ -91,7 +93,7 @@ class LaboratoireMainUi(QtWidgets.QMainWindow):
                 message = "Maximum liste des garde, suprimrer des listes"
                 self.alert_(message)
             else:
-                connection = sqlite3.connect('database/sqlite.db')
+                connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
                 cur = connection.cursor()
                 sql_q = "INSERT INTO guard_mounth (m,y,service) values (?,?,?)"
                 m = 0

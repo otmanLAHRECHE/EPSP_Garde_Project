@@ -6,12 +6,13 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import radiologie
 from threads import ThreadGuard, ThreadGuardRadio
 from tools import create_garde_page
-
+import os
+basedir = os.path.dirname(__file__)
 
 class ExportRadioGuard(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(ExportRadioGuard, self).__init__()
-        uic.loadUi('ui/export_planing.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
         self.month = month
         self.year = year

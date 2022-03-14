@@ -7,12 +7,13 @@ import pharmacie
 import radiologie
 from threads import ThreadGuardPharmacie
 from tools import create_garde_page
-
+import os
+basedir = os.path.dirname(__file__)
 
 class ExportPharmGuard(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(ExportPharmGuard, self).__init__()
-        uic.loadUi('ui/export_planing.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
         self.month = month
         self.year = year

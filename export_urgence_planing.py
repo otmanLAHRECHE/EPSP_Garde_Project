@@ -11,12 +11,13 @@ from PyQt5 import QtWidgets, uic
 
 from threads import ThreadGuard
 from tools import create_garde_page
-
+import os
+basedir = os.path.dirname(__file__)
 
 class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(ExportUrgencePlaningUi, self).__init__()
-        uic.loadUi('ui/export_planing.ui', self)
+        uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
         self.month = month
         self.year = year
