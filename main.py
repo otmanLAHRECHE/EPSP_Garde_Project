@@ -33,6 +33,7 @@ class MainUi(QtWidgets.QMainWindow):
 
 
 
+
         self.epsp = self.findChild(QtWidgets.QLabel, "label")
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
 
@@ -132,7 +133,8 @@ class MainUi(QtWidgets.QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'guard.ico')))
+    app.setWindowIcon(QIcon(os.path.join(basedir, 'asstes', 'asstes', 'guard.ico')))
+
     window = MainUi()
     window.show()
     app.exec_()

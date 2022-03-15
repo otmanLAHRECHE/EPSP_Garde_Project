@@ -76,7 +76,7 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
         self.thr2.start()
 
     def load_dentiste(self):
-        connection = sqlite3.connect(os.path.join(basedir, 'database', 'sqlite.db'))
+        connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
         sql_q = 'SELECT full_name FROM health_worker where service=?'
         cur.execute(sql_q, ('dentiste',))
