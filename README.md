@@ -18,3 +18,7 @@ In this project you will find how to:
 ![Capture3](https://user-images.githubusercontent.com/30577764/158579187-e6c3bc4b-e8ca-490a-9f89-42f69a3a62fa.PNG)
 
 
+for create .exe file, use Pyinstaller:
+              
+              pyinstaller --onefile --windowed --icon=asstes\images\guard.ico --add-data="asstes\images\*.png;asstes\images" --add-data="asstes\images\*.ico;asstes\images" --add-                data="ui\*.ui;ui" main.py
+
