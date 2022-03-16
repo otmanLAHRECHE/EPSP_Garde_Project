@@ -1,0 +1,32 @@
+CREATE TABLE health_worker (
+   worker_id INTEGER PRIMARY KEY AUTOINCREMENT,
+   full_name text NOT NULL,
+   service text NOT NULL
+);
+
+CREATE TABLE guard (
+   guard_id INTEGER PRIMARY KEY AUTOINCREMENT,
+   y integer NOT NULL,
+   m integer NOT NULL,
+   d integer NOT NULL,
+   periode text NOT NULL,
+   gardien_id integer NOT NULL,
+  FOREIGN KEY(gardien_id) REFERENCES health_worker(worker_id)
+);
+
+CREATE TABLE consultation (
+   consultation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+   y integer NOT NULL,
+   m integer NOT NULL,
+   d integer NOT NULL,
+   periode text NOT NULL,
+   consultent_id integer NOT NULL,
+  FOREIGN KEY(consultent_id) REFERENCES health_worker(worker_id)
+);
+
+create table guard_mounth (
+    guard_mounth_id INTEGER PRIMARY KEY autoincrement ,
+    m INTEGER not null ,
+    y INTEGER not null ,
+    service TEXT not null
+);
