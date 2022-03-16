@@ -3,13 +3,13 @@ python application for manage night guard of hospital services
 
 In this project you will find how to:
 
-    1- Manipulating PyQt5 librery with python and use multiple PyQt elements(QtTableWidget, QtTab, .......).
+   1- Manipulating PyQt5 librery with python and use multiple PyQt elements(QtTableWidget, QtTab, .......).
     
-    2- Database CRUD operation with SQLite.
+   2- Database CRUD operation with SQLite.
     
-    3- Use the concept of multithreading and use threads to prevent GUI freezing (PyQT QThread).
+   3- Use the concept of multithreading and use threads to prevent GUI freezing (PyQT QThread).
     
-    4- Create and export PDF reports to local file with fpdf2 librery.
+   4- Create and export PDF reports to local file with fpdf2 librery.
     
 ![Capture](https://user-images.githubusercontent.com/30577764/158579056-ba017029-0041-4a7e-a4b1-10c1c0966ef8.PNG)
     
