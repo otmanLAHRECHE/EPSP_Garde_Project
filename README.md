@@ -20,5 +20,5 @@ In this project you will find how to:
 
 for create .exe file, use Pyinstaller:
               
-              pyinstaller --onefile --windowed --icon=asstes\images\guard.ico --add-data="asstes\images\*.png;asstes\images" --add-data="asstes\images\*.ico;asstes\images" --add-                data="ui\*.ui;ui" main.py
+              pyinstaller --onefile --windowed --icon=asstes\images\guard.ico --add-data="asstes\images\*.png;asstes\images" --add-data="asstes\images\*.ico;asstes\images" --add-data="ui\*.ui;ui" main.py
 
