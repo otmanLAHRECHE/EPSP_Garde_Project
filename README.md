@@ -3,7 +3,7 @@ python application for manage night guard of hospital services
 
 In this project you will find how to:
 
-   1- Manipulating PyQt5 librery with python and use multiple PyQt elements(QtTableWidget, QtTab, .......).
+   1- Manipulating PyQt5 librery with python and use multiple PyQt elements(QtTableWidget, QtTab, .......) and importing .ui files from QtDesigner.
     
    2- Database CRUD operation with SQLite.
     
