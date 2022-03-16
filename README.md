@@ -13,5 +13,4 @@ In this project you will find how to:
 
 ![Capture3](https://user-images.githubusercontent.com/30577764/158579187-e6c3bc4b-e8ca-490a-9f89-42f69a3a62fa.PNG)
 
-![Capture4](https://user-images.githubusercontent.com/30577764/158579203-cc35057a-ca1a-4fbe-93c1-59ac447d17c4.PNG)
 
