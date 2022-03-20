@@ -4,8 +4,9 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/venv2" />
+      <excludeFolder url="file://$MODULE_DIR$/venv3" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (EPSP_Garde_Progect)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (EPSP_Garde_Progect) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
