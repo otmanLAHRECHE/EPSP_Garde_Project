@@ -6,12 +6,12 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
 
-
 from dialogs import Update_worker_dialog, Add_new_month
 import export_urgence_planing
 from tools import get_workers_count, get_guard_months_count
 import urgence_guard
 from widgets import Buttons
+
 basedir = os.path.dirname(__file__)
 
 
@@ -21,7 +21,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
         uic.loadUi(os.path.join(basedir, 'ui', 'urgence.ui'), self)
 
         self.tab = self.findChild(QtWidgets.QTabWidget, "tabWidget")
-
 
         self.tab.setTabText(0, "Listes de garde")
         self.tab.setTabText(1, "Medecins")
