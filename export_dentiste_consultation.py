@@ -7,13 +7,14 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import dentiste
 from threads import ThreadConsultationDentiste
 from tools import create_garde_page
+
 basedir = os.path.dirname(__file__)
+
 
 class ExportDentisteConsultationUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
         super(ExportDentisteConsultationUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
-
 
         self.month = month
         self.year = year
@@ -64,7 +65,6 @@ class ExportDentisteConsultationUi(QtWidgets.QMainWindow):
         print(self.data)
         filePath, _ = QFileDialog.getSaveFileName(self, "Save consultation", "",
                                                   "PDF(*.pdf);;All Files(*.*) ")
-
 
         if filePath == "":
             message = "destination untrouvable"
