@@ -125,9 +125,6 @@ class RecapUi(QtWidgets.QMainWindow):
             self.table.setItem(pr, 5, QTableWidgetItem(str(total)))
 
         elif type(progress) == bool:
-            for row in range(self.table.rowCount()):
-                if self.table.item(row, 0) == "":
-                    self.table.removeRow(row)
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()

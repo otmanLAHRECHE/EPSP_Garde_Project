@@ -1689,6 +1689,7 @@ class Thread_recap_load(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
+
         sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
         cur.execute(sql_q, (self.service, self.month, self.year))
         res = cur.fetchall()
@@ -1702,36 +1703,49 @@ class Thread_recap_load(QThread):
             jw = 0
             jf = 0
             prog = pr * 100 / self.num_days
-            for day in range(self.num_days):
 
-                d = day + 1
-                x = datetime.datetime(self.year, self.month, d)
+            id_ag = get_workerId_by_name(agent[0], self.service)
+            id_ag = id_ag[0]
 
-                id_ag = get_workerId_by_name(agent[0], self.service)
-                id_ag = id_ag[0]
+            sql_q = 'SELECT recap.jo,recap.jw,recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+            cur.execute(sql_q, (self.service, id_ag[0], self.month, self.year))
+            res1 = cur.fetchall()
 
-                sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and health_worker.worker_id = ?  and guard.d =? and guard.m =? and guard.y =?'
-                cur.execute(sql_q, (self.service, id_ag[0], d, self.month, self.year))
-                result = cur.fetchall()
+            if res1:
+                jo = res1[0]
+                jw = res1[1]
+                jf = res1[2]
 
-                if result:
-                    if x.strftime("%A") == "Saturday":
-                        jw = jw + 1
-                    elif x.strftime("%A") == "Sunday":
-                        jo = jo + 1
-                    elif x.strftime("%A") == "Monday":
-                        jo = jo + 1
-                    elif x.strftime("%A") == "Tuesday":
-                        jo = jo + 1
-                    elif x.strftime("%A") == "Wednesday":
-                        jo = jo + 1
-                    elif x.strftime("%A") == "Thursday":
-                        jo = jo + 1
-                    elif x.strftime("%A") == "Friday":
-                        jw = jw + 1
+                jo = jo[0]
+                jw = jw[0]
+                jf = jf[0]
+
+            else:
+                for day in range(self.num_days):
+                    d = day + 1
+                    x = datetime.datetime(self.year, self.month, d)
+                    sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and health_worker.worker_id = ?  and guard.d =? and guard.m =? and guard.y =?'
+                    cur.execute(sql_q, (self.service, id_ag[0], d, self.month, self.year))
+                    result = cur.fetchall()
+
+                    if result:
+                        if x.strftime("%A") == "Saturday":
+                            jw = jw + 1
+                        elif x.strftime("%A") == "Sunday":
+                            jo = jo + 1
+                        elif x.strftime("%A") == "Monday":
+                            jo = jo + 1
+                        elif x.strftime("%A") == "Tuesday":
+                            jo = jo + 1
+                        elif x.strftime("%A") == "Wednesday":
+                            jo = jo + 1
+                        elif x.strftime("%A") == "Thursday":
+                            jo = jo + 1
+                        elif x.strftime("%A") == "Friday":
+                            jw = jw + 1
+
 
             list = []
-
             list.append(agent[0])
             list.append(jo)
             list.append(jw)
