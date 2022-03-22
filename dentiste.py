@@ -454,7 +454,9 @@ class DentisteMainUi(QtWidgets.QMainWindow):
             buttons = Buttons()
             self.table_consultation.setCellWidget(tablerow, 4, buttons)
             buttons.print_garde.clicked.connect(self.print_cns)
+            buttons.print_garde.setDisabled(True)
             buttons.edit_garde.clicked.connect(self.edit_cns)
+            buttons.edit_garde.setText("PLAN")
             buttons.delete_garde.clicked.connect(self.delete_cns)
 
             tablerow += 1
