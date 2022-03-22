@@ -135,3 +135,11 @@ class RecapUi(QtWidgets.QMainWindow):
 
         for worker in progress:
             self.chef.addItem(worker[0])
+
+    def save_(self):
+        print("save")
+
+
+    def export_(self):
+        print("export")
+
