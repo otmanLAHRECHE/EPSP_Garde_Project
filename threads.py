@@ -1708,9 +1708,10 @@ class Thread_recap_load(QThread):
                 x = datetime.datetime(self.year, self.month, d)
 
                 id_ag = get_workerId_by_name(agent[0], self.service)
+                id_ag = id_ag[0]
 
-                sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and health_worker.worker_id = ? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-                cur.execute(sql_q, (self.service, id_ag, d, self.month, self.year))
+                sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and health_worker.worker_id = ?  and guard.d =? and guard.m =? and guard.y =?'
+                cur.execute(sql_q, (self.service, id_ag[0], d, self.month, self.year))
                 result = cur.fetchall()
 
                 if result:
@@ -1730,10 +1731,12 @@ class Thread_recap_load(QThread):
                         jw = jw + 1
 
             list = []
+
             list.append(agent[0])
             list.append(jo)
             list.append(jw)
             list.append(jf)
+            list.append(pr)
             pr = pr + 1
 
             self._signal.emit(list)

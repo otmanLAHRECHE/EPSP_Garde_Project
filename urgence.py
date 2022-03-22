@@ -6,6 +6,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
 
+import recap
 from dialogs import Update_worker_dialog, Add_new_month
 import export_urgence_planing
 from tools import get_workers_count, get_guard_months_count
@@ -334,8 +335,6 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.next_page = export_urgence_planing.ExportUrgencePlaningUi(m, y)
+        self.next_page = recap.RecapUi(m, y, "urgence")
         self.close()
         self.next_page.show()
-        """

@@ -63,7 +63,6 @@ class RecapUi(QtWidgets.QMainWindow):
         self.title.setText("RECAP Service de " + self.service + " mois " + str(m) + "/" + str(self.year) + ":")
         self.load_recap()
 
-
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         message = "Votre liste de RECAP na pas sauvgarder, es-tu sûr de quiter"
         dialog = CustomDialog(message)
@@ -93,13 +92,11 @@ class RecapUi(QtWidgets.QMainWindow):
         else:
             self.close()
 
-
     def load_recap(self):
         self.dialog = Saving_progress_dialog()
         self.dialog.label.setText("loading RECAP")
         self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.dialog.show()
-
 
         self.thr1 = Thread_recap_load(self.month, self.year, self.service)
         self.thr1._signal.connect(self.signal_accepted_load)
@@ -107,7 +104,6 @@ class RecapUi(QtWidgets.QMainWindow):
         self.thr1._signal_finish.connect(self.signal_accepted_load)
         self.thr1._signal_users.connect(self.signal_accepted_load_users)
         self.thr1.start()
-
 
     def signal_accepted_load(self, progress):
         if type(progress) == int:
@@ -118,24 +114,23 @@ class RecapUi(QtWidgets.QMainWindow):
             jo = progress[1]
             jw = progress[2]
             jf = progress[3]
+            pr = progress[4]
 
-            rows = self.table.rowCount()
-
-            for row in range(rows):
-
-                self.table.setRowHeight(row, 50)
-                self.table.setItem(row, 1, QTableWidgetItem(agents_name))
-                self.table.setItem(row, 2, QTableWidgetItem(str(jo)))
-                self.table.setItem(row, 3, QTableWidgetItem(str(jw)))
-                self.table.setItem(row, 4, QTableWidgetItem(str(jf)))
-                total = jo + jw + jf
-                self.table.setItem(row, 5, QTableWidgetItem(str(total)))
+            self.table.setRowHeight(pr, 50)
+            self.table.setItem(pr, 1, QTableWidgetItem(agents_name))
+            self.table.setItem(pr, 2, QTableWidgetItem(str(jo)))
+            self.table.setItem(pr, 3, QTableWidgetItem(str(jw)))
+            self.table.setItem(pr, 4, QTableWidgetItem(str(jf)))
+            total = jo + jw + jf
+            self.table.setItem(pr, 5, QTableWidgetItem(str(total)))
 
         elif type(progress) == bool:
+            for row in range(self.table.rowCount()):
+                if self.table.item(row, 0) == "":
+                    self.table.removeRow(row)
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
-
 
     def signal_accepted_load_users(self, progress):
 
@@ -143,8 +138,3 @@ class RecapUi(QtWidgets.QMainWindow):
 
         for worker in progress:
             self.chef.addItem(worker[0])
-
-
-
-
-
