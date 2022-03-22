@@ -333,6 +333,8 @@ class InfermierMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
+        """
         self.next_page = export_infermier_guard.ExportInfirmierGuard(m, y)
         self.close()
         self.next_page.show()
+        """

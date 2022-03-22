@@ -80,7 +80,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Reset</string>
+     <string>Export</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="tableWidget">

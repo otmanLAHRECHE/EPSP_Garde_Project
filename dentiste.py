@@ -357,9 +357,11 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
+        """
         self.next_page = export_dentiste_guard.ExportDentisteGuardUi(m, y)
         self.close()
         self.next_page.show()
+        """
 
     def add_cns(self):
 
@@ -552,7 +554,9 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
+        """
         self.next_page = export_dentiste_consultation.ExportDentisteConsultationUi(m, y)
         self.close()
         self.next_page.show()
+        """
 

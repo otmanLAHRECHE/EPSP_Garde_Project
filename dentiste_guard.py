@@ -6,6 +6,7 @@ from calendar import monthrange
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtWidgets import QTableWidgetItem
 
+import export_dentiste_guard
 from dialogs import Saving_progress_dialog, CustomDialog
 from threads import Thread_load_guards_dentiste, Thread_create_dentiste_guard
 
@@ -25,6 +26,7 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.exportPd = self.findChild(QtWidgets.QPushButton, "pushButton_2")
         self.table.setColumnWidth(2, 220)
         self.table.setColumnWidth(3, 220)
 
@@ -62,11 +64,10 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
         self.load_med()
         self.load_guards()
 
-        print(self.medcins)
+        self.exportPd.clicked.connect(self.export)
         self.save.clicked.connect(self.save_)
 
     def load_guards(self):
-        print("load guard list")
         self.dialog = Saving_progress_dialog()
         self.dialog.label.setText("loading gardes")
         self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
@@ -174,3 +175,9 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
+
+    def export(self):
+        self.want_to_close = True
+        self.next_page = export_dentiste_guard.ExportDentisteGuardUi(self.month, self.year)
+        self.close()
+        self.next_page.show()

@@ -327,7 +327,8 @@ class PharmacieMainUi(QtWidgets.QMainWindow):
             m = 12
 
         y = int(y)
-
+        """
         self.next_page = export_pharm_guard.ExportPharmGuard(m, y)
         self.close()
         self.next_page.show()
+        """

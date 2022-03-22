@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtWidgets import QTableWidgetItem
 
 import dentiste
+import export_dentiste_consultation
 from dialogs import Saving_progress_dialog, CustomDialog
 from threads import Thread_load_consultation_dentiste, Thread_create_dentiste_consultation
 from widgets import Chose_worker
@@ -24,6 +25,7 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.exportPd = self.findChild(QtWidgets.QPushButton, "pushButton_2")
         self.table.setColumnWidth(2, 220)
         self.table.setColumnWidth(3, 220)
 
@@ -60,6 +62,8 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
         self.ttl.setText("Planing de consultation dentistes mois " + str(m) + "/" + str(self.year) + ":")
         self.load_dentiste()
         self.load_consultations()
+
+        self.exportPd.clicked.connect(self.export)
         self.save.clicked.connect(self.save_)
 
     def load_consultations(self):
@@ -169,3 +173,9 @@ class DentisteConsultationUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
+
+    def export(self):
+        self.want_to_close = True
+        self.next_page = export_dentiste_consultation.ExportDentisteConsultationUi(self.month, self.year)
+        self.close()
+        self.next_page.show()

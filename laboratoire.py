@@ -330,6 +330,8 @@ class LaboratoireMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
+        """
         self.next_page = export_labo_guard.ExportLaboGuard(m, y)
         self.close()
         self.next_page.show()
+        """

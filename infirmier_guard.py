@@ -5,6 +5,7 @@ from calendar import monthrange
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtWidgets import QTableWidgetItem
 
+import export_infermier_guard
 import infirmier
 from dialogs import Saving_progress_dialog, CustomDialog
 from threads import Thread_load_guards_infirmier, Thread_create_infirmier_guard
@@ -25,6 +26,7 @@ class InfirmierGuardUi(QtWidgets.QMainWindow):
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.exportPd = self.findChild(QtWidgets.QPushButton, "pushButton_2")
         self.table.setColumnWidth(2, 220)
         self.table.setColumnWidth(3, 220)
 
@@ -61,7 +63,7 @@ class InfirmierGuardUi(QtWidgets.QMainWindow):
         self.load_med()
         self.load_guards()
 
-        print(self.medcins)
+        self.exportPd.clicked.connect(self.export)
         self.save.clicked.connect(self.save_)
 
     def load_guards(self):
@@ -172,3 +174,9 @@ class InfirmierGuardUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
+
+    def export(self):
+        self.want_to_close = True
+        self.next_page = export_infermier_guard.ExportInfirmierGuard(self.month, self.year)
+        self.close()
+        self.next_page.show()
