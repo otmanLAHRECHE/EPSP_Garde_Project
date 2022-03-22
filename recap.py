@@ -2,6 +2,7 @@ import datetime
 import os
 
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
+from PyQt5.QtWidgets import QTableWidgetItem
 
 import dentiste
 import infirmier
@@ -29,6 +30,7 @@ class RecapUi(QtWidgets.QMainWindow):
 
         self.title = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
+        self.table.hideColumn(0)
         self.chef = self.findChild(QtWidgets.QComboBox, "comboBox")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton_2")
@@ -112,45 +114,22 @@ class RecapUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(progress)
         elif type(progress) == list:
 
-            row = progress[0]
-            results_light = progress[1]
-            results_night = progress[2]
+            agents_name = progress[0]
+            jo = progress[1]
+            jw = progress[2]
+            jf = progress[3]
 
-            day = row + 1
-            x = datetime.datetime(self.year, self.month, day)
-            m = ""
-            if x.strftime("%A") == "Saturday":
-                m = "Samedi"
-            elif x.strftime("%A") == "Sunday":
-                m = "Dimanche"
-            elif x.strftime("%A") == "Monday":
-                m = "Lundi"
-            elif x.strftime("%A") == "Tuesday":
-                m = "Mardi"
-            elif x.strftime("%A") == "Wednesday":
-                m = "Mercredi"
-            elif x.strftime("%A") == "Thursday":
-                m = "Jeudi"
-            elif x.strftime("%A") == "Friday":
-                m = "Vendredi"
+            rows = self.table.rowCount()
 
-            self.table.setRowHeight(row, 50)
-            self.table.setItem(row, 0, QTableWidgetItem(m))
-            self.table.setItem(row, 1, QTableWidgetItem(str(day) + "/" + str(self.month) + "/" + str(self.year)))
-            chose_light = Chose_worker(self.medcins)
-            chose_night = Chose_worker(self.medcins)
+            for row in range(rows):
 
-            if results_light:
-                print(results_light)
-                rl = results_light[0]
-                chose_light.chose.setCurrentText(str(rl[0]))
-            if results_night:
-                print(results_night)
-                rn = results_night[0]
-                chose_night.chose.setCurrentText(str(rn[0]))
-
-            self.table.setCellWidget(row, 2, chose_light)
-            self.table.setCellWidget(row, 3, chose_night)
+                self.table.setRowHeight(row, 50)
+                self.table.setItem(row, 1, QTableWidgetItem(agents_name))
+                self.table.setItem(row, 2, QTableWidgetItem(str(jo)))
+                self.table.setItem(row, 3, QTableWidgetItem(str(jw)))
+                self.table.setItem(row, 4, QTableWidgetItem(str(jf)))
+                total = jo + jw + jf
+                self.table.setItem(row, 5, QTableWidgetItem(str(total)))
 
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
