@@ -63,7 +63,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.load_guards()
         self.exportPd.clicked.connect(self.export)
 
-        print(self.medcins)
+
         self.save.clicked.connect(self.save_)
 
     def load_guards(self):

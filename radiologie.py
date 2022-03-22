@@ -330,7 +330,8 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
             m = 12
 
         y = int(y)
-
+        """
         self.next_page = export_radio_guard.ExportRadioGuard(m, y)
         self.close()
         self.next_page.show()
+        """
