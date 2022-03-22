@@ -13,7 +13,7 @@ from radiologie import RadiologieMainUi
 from laboratoire import LaboratoireMainUi
 from pharmacie import PharmacieMainUi
 from tools import create_garde_page
-from urgence import UrgenceMainUi
+from urgence_chose import UrgenceChoseUi
 
 basedir = os.path.dirname(__file__)
 
@@ -70,7 +70,7 @@ class MainUi(QtWidgets.QMainWindow):
         if dialog.exec() == QtWidgets.QDialog.Accepted:
             if dialog.username.text() == "urgence" and dialog.password.text() == "urgence":
                 self.resp.setText("authentifié")
-                self.urgencepage = UrgenceMainUi()
+                self.urgencepage = UrgenceChoseUi()
                 self.urgencepage.show()
                 self.close()
 
