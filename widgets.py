@@ -10,11 +10,11 @@ class Buttons(QWidget):
         # add your buttons
         button_layout = QtWidgets.QHBoxLayout()
         self.edit_garde = QtWidgets.QPushButton()
-        self.edit_garde.setText("edit")
+        self.edit_garde.setText("GARDE")
         self.delete_garde = QtWidgets.QPushButton()
-        self.delete_garde.setText("delete")
+        self.delete_garde.setText("Delete")
         self.print_garde = QtWidgets.QPushButton()
-        self.print_garde.setText("print")
+        self.print_garde.setText("RECAP")
 
         button_layout.addStretch(1)
         button_layout.addWidget(self.print_garde)

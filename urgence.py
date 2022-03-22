@@ -334,6 +334,8 @@ class UrgenceMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
+        """
         self.next_page = export_urgence_planing.ExportUrgencePlaningUi(m, y)
         self.close()
         self.next_page.show()
+        """

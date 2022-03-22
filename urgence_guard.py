@@ -6,6 +6,7 @@ from calendar import monthrange
 
 from PyQt5.QtWidgets import QTableWidgetItem, qApp
 
+import export_urgence_planing
 from dialogs import CustomDialog, Saving_progress_dialog
 import urgence
 from threads import Thread_create_urgence_guard, Thread_load_guards_urgences
@@ -24,6 +25,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.exportPd = self.findChild(QtWidgets.QPushButton, "pushButton_2")
         self.table.setColumnWidth(2, 220)
         self.table.setColumnWidth(3, 220)
 
@@ -59,6 +61,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.ttl.setText("Planing de garde urgence mois " + str(m) + "/" + str(self.year) + ":")
         self.load_med()
         self.load_guards()
+        self.exportPd.clicked.connect(self.export)
 
         print(self.medcins)
         self.save.clicked.connect(self.save_)
@@ -168,3 +171,9 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
+
+    def export(self):
+        self.want_to_close = True
+        self.next_page = export_urgence_planing.ExportUrgencePlaningUi(self.month, self.year)
+        self.close()
+        self.next_page.show()
