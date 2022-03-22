@@ -166,7 +166,7 @@
     </column>
     <column>
      <property name="text">
-      <string>total</string>
+      <string>Total</string>
      </property>
     </column>
    </widget>

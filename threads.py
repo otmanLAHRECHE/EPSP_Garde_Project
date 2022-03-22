@@ -2,6 +2,7 @@ import datetime
 import os
 import sqlite3
 import time
+from calendar import monthrange
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
@@ -1670,6 +1671,7 @@ class ThreadGuardPharmacie(QThread):
 
 class Thread_recap_load(QThread):
     _signal_status = pyqtSignal(int)
+    _signal_users = pyqtSignal(list)
     _signal = pyqtSignal(list)
     _signal_finish = pyqtSignal(bool)
 
@@ -1687,27 +1689,57 @@ class Thread_recap_load(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
-        for row in range(self.num_days):
-            day = row + 1
-            prog = row * 100 / self.num_days
+        sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+        cur.execute(sql_q, (self.service, self.month, self.year))
+        res = cur.fetchall()
+        self.agents = res
+        self._signal_users.emit(self.agents)
+        self.num_days = monthrange(self.year, self.month)[1]
+        pr = 0
+        for agent in self.agents:
 
+            jo = 0
+            jw = 0
+            jf = 0
+            prog = pr * 100 / self.num_days
+            for day in range(self.num_days):
 
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('pharm', 'light', day, self.month, self.year))
-            results_light = cur.fetchall()
+                d = day + 1
+                x = datetime.datetime(self.year, self.month, d)
 
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('pharm', 'night', day, self.month, self.year))
-            results_night = cur.fetchall()
+                id_ag = get_workerId_by_name(agent[0], self.service)
 
-            list =[]
-            list.append(row)
-            list.append(results_light)
-            list.append(results_night)
+                sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and health_worker.worker_id = ? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
+                cur.execute(sql_q, (self.service, id_ag, d, self.month, self.year))
+                result = cur.fetchall()
+
+                if result:
+                    if x.strftime("%A") == "Saturday":
+                        jw = jw + 1
+                    elif x.strftime("%A") == "Sunday":
+                        jo = jo + 1
+                    elif x.strftime("%A") == "Monday":
+                        jo = jo + 1
+                    elif x.strftime("%A") == "Tuesday":
+                        jo = jo + 1
+                    elif x.strftime("%A") == "Wednesday":
+                        jo = jo + 1
+                    elif x.strftime("%A") == "Thursday":
+                        jo = jo + 1
+                    elif x.strftime("%A") == "Friday":
+                        jw = jw + 1
+
+            list = []
+            list.append(agent[0])
+            list.append(jo)
+            list.append(jw)
+            list.append(jf)
+            pr = pr + 1
 
             self._signal.emit(list)
             time.sleep(0.1)
             self._signal_status.emit(int(prog))
+
 
         connection.close()
         self._signal_finish.emit(True)
