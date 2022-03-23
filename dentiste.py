@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+import recap
 from dentiste_consultation import DentisteConsultationUi
 from dentiste_guard import DentisteGuardUi
 from dialogs import Add_new_month, Update_worker_dialog
@@ -357,11 +358,11 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.next_page = export_dentiste_guard.ExportDentisteGuardUi(m, y)
+
+        self.next_page = recap.RecapUi(m, y, "dentiste")
         self.close()
         self.next_page.show()
-        """
+
 
     def add_cns(self):
 

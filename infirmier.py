@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, Q
 
 import export_infermier_guard
 import infirmier_guard
+import recap
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
 from widgets import Buttons
@@ -333,8 +334,8 @@ class InfermierMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.next_page = export_infermier_guard.ExportInfirmierGuard(m, y)
+
+        self.next_page = recap.RecapUi(m, y, "dentiste_inf")
         self.close()
         self.next_page.show()
-        """
+

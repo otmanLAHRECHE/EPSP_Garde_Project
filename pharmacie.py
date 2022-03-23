@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, Q
 
 import export_pharm_guard
 import pharm_guard
+import recap
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
 from widgets import Buttons
@@ -327,8 +328,8 @@ class PharmacieMainUi(QtWidgets.QMainWindow):
             m = 12
 
         y = int(y)
-        """
-        self.next_page = export_pharm_guard.ExportPharmGuard(m, y)
+
+        self.next_page = recap.RecapUi(m, y, "pharm")
         self.close()
         self.next_page.show()
-        """
+

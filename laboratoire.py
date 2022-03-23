@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, Q
 
 import export_labo_guard
 import labo_guard
+import recap
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
 from widgets import Buttons
@@ -330,8 +331,7 @@ class LaboratoireMainUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.next_page = export_labo_guard.ExportLaboGuard(m, y)
+
+        self.next_page = recap.RecapUi(m, y, "labo")
         self.close()
         self.next_page.show()
-        """
