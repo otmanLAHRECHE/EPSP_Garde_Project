@@ -32,7 +32,6 @@ class ExportRecapUi(QtWidgets.QMainWindow):
         self.export.setEnabled(False)
         self.export.clicked.connect(self.export_pdf)
         self.status.setText("Preparation des données")
-        self.num_days = monthrange(self.year, self.month)[1]
 
         if self.month == 1:
             m = "janvier"
