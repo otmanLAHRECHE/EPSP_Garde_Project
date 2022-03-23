@@ -68,7 +68,7 @@ class ExportRecapUi(QtWidgets.QMainWindow):
         filePath, _ = QFileDialog.getSaveFileName(self, "Save garde", "",
                                                   "PDF(*.pdf);;All Files(*.*) ")
 
-        # if file path is blank return back
+
         if filePath == "":
             message = "destination untrouvable"
             self.alert_(message)
