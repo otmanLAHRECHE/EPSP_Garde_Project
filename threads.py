@@ -1808,7 +1808,7 @@ class Thread_save_recap(QThread):
                     cur.execute(sql_q, (jf2, self.service, id_agn, self.month, self.year))
 
             else :
-                if jo2 == 0 and jw2 ==0 and jf2 == 0:
+                if jo2 == 0 and jw2 == 0 and jf2 == 0:
                     print("do nothing")
                 else :
                     sql_q = 'INSERT INTO recap (jo,jw,jf,m,y,agents_id) VALUES (?,?,?,?,?,?)'

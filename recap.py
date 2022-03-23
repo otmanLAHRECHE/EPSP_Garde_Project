@@ -11,7 +11,7 @@ import laboratoire
 import radiologie
 import urgence
 from dialogs import Saving_progress_dialog, CustomDialog
-from threads import Thread_recap_load
+from threads import Thread_recap_load, Thread_save_recap
 
 basedir = os.path.dirname(__file__)
 
@@ -141,9 +141,41 @@ class RecapUi(QtWidgets.QMainWindow):
             self.chef.addItem(worker[0])
 
     def save_(self):
-        print("save")
+        self.want_to_close = True
+        self.dialog = Saving_progress_dialog()
+        self.dialog.show()
+        self.thr = Thread_save_recap( self.month, self.year, self.table, self.service)
+        self.thr._signal.connect(self.signal_accepted_save)
+        self.thr._signal_status.connect(self.signal_accepted_save)
+        self.thr.start()
 
 
     def export_(self):
         print("export")
 
+
+    def signal_accepted_save(self, progress):
+        if type(progress) == int :
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == bool:
+            self.dialog.progress.setValue(100)
+            self.dialog.label.setText("complete")
+            self.dialog.close()
+            if self.service == "urgence":
+                self.next_page = urgence.UrgenceMainUi()
+            elif self.service == "dentiste":
+                self.next_page = dentiste.DentisteMainUi()
+            elif self.service == "dentiste_inf":
+                self.next_page = infirmier.InfermierMainUi()
+            elif self.service == "labo":
+                self.next_page = laboratoire.LaboratoireMainUi()
+            elif self.service == "radio":
+                self.next_page = radiologie.RadiologieMainUi()
+            elif self.service == "pharm":
+                self.next_page = dentiste.DentisteMainUi()
+            elif self.service == "urgence_surv":
+                self.next_page = dentiste.DentisteMainUi()
+            elif self.service == "urgence_inf":
+                self.next_page = dentiste.DentisteMainUi()
+            self.next_page.show()
+            self.close()
