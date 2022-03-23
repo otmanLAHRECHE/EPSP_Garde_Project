@@ -1822,3 +1822,47 @@ class Thread_save_recap(QThread):
 
         connection.close()
         self._signal.emit(True)
+
+
+class ThreadRecapExport(QThread):
+    _signal = pyqtSignal(int)
+    _signal_result = pyqtSignal(list)
+
+    def __init__(self, month, year, service):
+        super(ThreadRecapExport, self).__init__()
+        self.service = service
+        self.month = month
+        self.year = year
+        self.data = [(" ", "Jours ouvrable", "Jours week-end", "Jours fériés", "Total")]
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+
+        sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+        cur.execute(sql_q, (self.service, self.month, self.year))
+        res = cur.fetchall()
+        count = cur.rowcount
+
+        for row in res:
+
+            prog = row * 100 / count
+
+
+
+
+
+            data_agent = ()
+
+            self.data.append(data_agent)
+
+            time.sleep(0.3)
+            self._signal.emit(int(prog))
+
+        connection.close()
+        print(self.data)
+        self._signal_result.emit(self.data)
