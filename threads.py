@@ -9,6 +9,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 
 from tools import get_workerId_by_name
 import os
+
 basedir = os.path.dirname(__file__)
 
 
@@ -221,7 +222,6 @@ class Thread_load_guards_urgences(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('urgence', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
@@ -230,7 +230,7 @@ class Thread_load_guards_urgences(QThread):
             cur.execute(sql_q, ('urgence', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-            list =[]
+            list = []
             list.append(row)
             list.append(results_light)
             list.append(results_night)
@@ -266,7 +266,6 @@ class Thread_load_guards_dentiste(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('dentiste', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
@@ -275,7 +274,7 @@ class Thread_load_guards_dentiste(QThread):
             cur.execute(sql_q, ('dentiste', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-            list =[]
+            list = []
             list.append(row)
             list.append(results_light)
             list.append(results_night)
@@ -420,7 +419,6 @@ class Thread_load_consultation_dentiste(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN consultation ON health_worker.worker_id = consultation.consultent_id where service=? and consultation.periode =? and consultation.d =? and consultation.m =? and consultation.y =?'
             cur.execute(sql_q, ('dentiste', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
@@ -429,7 +427,7 @@ class Thread_load_consultation_dentiste(QThread):
             cur.execute(sql_q, ('dentiste', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-            list =[]
+            list = []
             list.append(row)
             list.append(results_light)
             list.append(results_night)
@@ -617,7 +615,6 @@ class ThreadGuardDentiste(QThread):
             cur.execute(sql_q, ('dentiste', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-
             if results_light:
                 rl = results_light[0]
                 light = light + str(rl[0])
@@ -703,7 +700,6 @@ class ThreadConsultationDentiste(QThread):
             cur.execute(sql_q, ('dentiste', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-
             if results_light:
                 rl = results_light[0]
                 light = light + str(rl[0])
@@ -748,8 +744,6 @@ class Thread_create_radio_guard(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('radio', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
-
-
 
             check = self.table.cellWidget(row, 2)
             med_name = check.chose.currentText()
@@ -854,7 +848,6 @@ class Thread_load_guards_radio(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('radio', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
@@ -863,7 +856,7 @@ class Thread_load_guards_radio(QThread):
             cur.execute(sql_q, ('radio', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-            list =[]
+            list = []
             list.append(row)
             list.append(results_light)
             list.append(results_night)
@@ -936,7 +929,6 @@ class ThreadGuardRadio(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('radio', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
-
 
             if results_light:
                 rl = results_light[0]
@@ -1091,7 +1083,6 @@ class Thread_load_guards_infirmier(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('dentiste_inf', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
@@ -1100,7 +1091,7 @@ class Thread_load_guards_infirmier(QThread):
             cur.execute(sql_q, ('dentiste_inf', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-            list =[]
+            list = []
             list.append(row)
             list.append(results_light)
             list.append(results_night)
@@ -1173,7 +1164,6 @@ class ThreadGuardInfirmier(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('dentiste_inf', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
-
 
             if results_light:
                 rl = results_light[0]
@@ -1327,7 +1317,6 @@ class Thread_load_guards_laboratoire(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('labo', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
@@ -1336,7 +1325,7 @@ class Thread_load_guards_laboratoire(QThread):
             cur.execute(sql_q, ('labo', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-            list =[]
+            list = []
             list.append(row)
             list.append(results_light)
             list.append(results_night)
@@ -1409,7 +1398,6 @@ class ThreadGuardLaboratoire(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('labo', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
-
 
             if results_light:
                 rl = results_light[0]
@@ -1564,7 +1552,6 @@ class Thread_load_guards_pharmacie(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
             cur.execute(sql_q, ('pharm', 'light', day, self.month, self.year))
             results_light = cur.fetchall()
@@ -1573,7 +1560,7 @@ class Thread_load_guards_pharmacie(QThread):
             cur.execute(sql_q, ('pharm', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-            list =[]
+            list = []
             list.append(row)
             list.append(results_light)
             list.append(results_night)
@@ -1647,7 +1634,6 @@ class ThreadGuardPharmacie(QThread):
             cur.execute(sql_q, ('pharm', 'night', day, self.month, self.year))
             results_night = cur.fetchall()
 
-
             if results_light:
                 rl = results_light[0]
                 light = light + str(rl[0])
@@ -1687,7 +1673,6 @@ class Thread_recap_load(QThread):
     def run(self):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
-
 
         sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
         cur.execute(sql_q, (self.service, self.month, self.year))
@@ -1740,7 +1725,6 @@ class Thread_recap_load(QThread):
                         elif x.strftime("%A") == "Friday":
                             jw = jw + 1
 
-
             list = []
             list.append(agent[0])
             list.append(jo)
@@ -1752,7 +1736,6 @@ class Thread_recap_load(QThread):
             self._signal.emit(list)
             time.sleep(0.1)
             self._signal_status.emit(int(prog))
-
 
         connection.close()
         self._signal_finish.emit(True)
@@ -1778,7 +1761,7 @@ class Thread_save_recap(QThread):
         cur = connection.cursor()
         for row in range(self.table.rowCount()):
             prog = row * 100 / self.table.rowCount()
-            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem :
+            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
                 id_agn = get_workerId_by_name(self.table.item(row, 1).text(), self.service)
                 id_agn = id_agn[0]
 
@@ -1791,7 +1774,7 @@ class Thread_save_recap(QThread):
                 jw2 = int(self.table.item(row, 3).text())
                 jf2 = int(self.table.item(row, 4).text())
 
-                if results :
+                if results:
                     jo1 = results[0]
                     jw1 = results[1]
                     jf1 = results[2]
@@ -1809,10 +1792,10 @@ class Thread_save_recap(QThread):
                             sql_q = 'UPDATE recap SET jf =? where  recap.agents_id =? and recap.m =? and recap.y =?'
                             cur.execute(sql_q, (jf2, id_agn[0], self.month, self.year))
 
-                else :
+                else:
                     if jo2 == 0 and jw2 == 0 and jf2 == 0:
                         print("do nothing")
-                    else :
+                    else:
                         sql_q = 'INSERT INTO recap (jo,jw,jf,m,y,agents_id) VALUES (?,?,?,?,?,?)'
                         cur.execute(sql_q, (jo2, jw2, jf2, self.month, self.year, id_agn[0]))
 
@@ -1847,21 +1830,31 @@ class ThreadRecapExport(QThread):
         cur.execute(sql_q, (self.service, self.month, self.year))
         res = cur.fetchall()
         count = cur.rowcount
-
-        for row in res:
-
+        row = 0
+        for agent in res:
             prog = row * 100 / count
 
+            id_agn = get_workerId_by_name(agent[0], self.service)
+            id_agn = id_agn[0]
 
+            sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+            cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+            results = cur.fetchall()
+            results = results[0]
 
+            jo = results[0]
+            jw = results[1]
+            jf = results[2]
 
+            total = int(jo) + int(jw) + int(jf)
 
-            data_agent = ()
+            data_agent = (agent[0], jo, jw, jf, total)
 
             self.data.append(data_agent)
 
             time.sleep(0.3)
             self._signal.emit(int(prog))
+            row = row + 1
 
         connection.close()
         print(self.data)

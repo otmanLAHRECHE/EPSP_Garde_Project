@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 import dentiste
 import infirmier
 import laboratoire
+import pharmacie
 import radiologie
 import urgence
 from dialogs import Saving_progress_dialog, CustomDialog
@@ -91,7 +92,7 @@ class RecapUi(QtWidgets.QMainWindow):
                 elif self.service == "radio":
                     self.next_page = radiologie.RadiologieMainUi()
                 elif self.service == "pharm":
-                    self.next_page = dentiste.DentisteMainUi()
+                    self.next_page = pharmacie.PharmacieMainUi()
                 elif self.service == "urgence_surv":
                     self.next_page = dentiste.DentisteMainUi()
                 elif self.service == "urgence_inf":
@@ -196,7 +197,7 @@ class RecapUi(QtWidgets.QMainWindow):
             elif self.service == "radio":
                 self.next_page = radiologie.RadiologieMainUi()
             elif self.service == "pharm":
-                self.next_page = dentiste.DentisteMainUi()
+                self.next_page = pharmacie.PharmacieMainUi()
             elif self.service == "urgence_surv":
                 self.next_page = dentiste.DentisteMainUi()
             elif self.service == "urgence_inf":
