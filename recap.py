@@ -1,9 +1,10 @@
 import datetime
 import os
 
+import PyQt5
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 import dentiste
 import infirmier
@@ -64,6 +65,15 @@ class RecapUi(QtWidgets.QMainWindow):
 
         self.title.setText("RECAP Service de " + self.service + " mois " + str(m) + "/" + str(self.year) + ":")
         self.load_recap()
+
+        self.save.clicked.connect(self.save_)
+        self.export.clicked.connect(self.export_)
+
+    def alert_(self, message):
+        alert = QMessageBox()
+        alert.setWindowTitle("alert")
+        alert.setText(message)
+        alert.exec_()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         message = "Votre liste de RECAP na pas sauvgarder, es-tu sûr de quiter"
@@ -141,14 +151,22 @@ class RecapUi(QtWidgets.QMainWindow):
             self.chef.addItem(worker[0])
 
     def save_(self):
-        self.want_to_close = True
-        self.dialog = Saving_progress_dialog()
-        self.dialog.show()
-        self.thr = Thread_save_recap( self.month, self.year, self.table, self.service)
-        self.thr._signal.connect(self.signal_accepted_save)
-        self.thr._signal_status.connect(self.signal_accepted_save)
-        self.thr.start()
+        alert = False
+        for row in range(self.table.rowCount()):
+            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem :
+                if not str(self.table.item(row, 2).text()).isnumeric() or not str(self.table.item(row, 3).text()).isnumeric() or not str(self.table.item(row, 4).text()).isnumeric():
+                    alert = True
 
+        if alert:
+            self.alert_("Entrer des valeurs valide")
+        else:
+            self.want_to_close = True
+            self.dialog = Saving_progress_dialog()
+            self.dialog.show()
+            self.thr = Thread_save_recap(self.month, self.year, self.table, self.service)
+            self.thr._signal.connect(self.signal_accepted_save)
+            self.thr._signal_status.connect(self.signal_accepted_save)
+            self.thr.start()
 
     def export_(self):
         print("export")
