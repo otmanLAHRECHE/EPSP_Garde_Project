@@ -2,6 +2,7 @@ import datetime
 import os
 
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QTableWidgetItem
 
 import dentiste
@@ -33,8 +34,9 @@ class RecapUi(QtWidgets.QMainWindow):
         self.table.hideColumn(0)
         self.chef = self.findChild(QtWidgets.QComboBox, "comboBox")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.save.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'save.png')))
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton_2")
-
+        self.export.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'download.png')))
         if self.month == 1:
             m = "janvier"
         elif self.month == 2:
