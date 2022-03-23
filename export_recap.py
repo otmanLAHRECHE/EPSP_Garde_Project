@@ -10,6 +10,7 @@ import laboratoire
 import pharmacie
 import radiologie
 import urgence
+from threads import ThreadRecapExport
 from tools import create_garde_page
 
 basedir = os.path.dirname(__file__)
@@ -20,10 +21,14 @@ class ExportRecapUi(QtWidgets.QMainWindow):
         super(ExportRecapUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
+        self.chef = chef
+
+
         self.month = month
         self.year = year
         self.service = service
 
+        self.setWindowTitle("Export RECAP service: " + self.service)
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.progress = self.findChild(QtWidgets.QProgressBar, "progressBar")
         self.progress.setValue(0)
@@ -60,9 +65,14 @@ class ExportRecapUi(QtWidgets.QMainWindow):
 
         self.ttl.setText("Exporté le RECAP service du" + self.service + " mois de  " + m + "/" + str(self.year))
 
+        self.thr = ThreadRecapExport(self.month, self.year, self.service)
+        self.thr._signal.connect(self.signal_accept)
+        self.thr._signal_result.connect(self.signal_accept)
+        self.thr.start()
+
     def export_pdf(self):
         print(self.data)
-        """
+
         filePath, _ = QFileDialog.getSaveFileName(self, "Save garde", "",
                                                   "PDF(*.pdf);;All Files(*.*) ")
 
@@ -93,7 +103,7 @@ class ExportRecapUi(QtWidgets.QMainWindow):
             self.next_page.show()
             print(self.thr.isFinished())
             self.close()
-            """
+
 
     def signal_accept(self, progress):
         if type(progress) == int:

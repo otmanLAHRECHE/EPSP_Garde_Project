@@ -173,9 +173,14 @@ class RecapUi(QtWidgets.QMainWindow):
 
 
     def export_(self):
-        self.next_page = export_recap.ExportRecapUi()
+
+        self.want_to_close = True
+        print(self.chef.currentText())
+
+        self.next_page = export_recap.ExportRecapUi(self.month, self.year, self.service, self.chef.currentText())
         self.next_page.show()
         self.close()
+
 
 
     def signal_accepted_save(self, progress):

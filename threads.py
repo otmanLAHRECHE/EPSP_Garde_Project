@@ -1826,13 +1826,18 @@ class ThreadRecapExport(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
-        sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+        sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
         cur.execute(sql_q, (self.service, self.month, self.year))
         res = cur.fetchall()
-        count = cur.rowcount
+
+        sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+        cur.execute(sql_q, (self.service, self.month, self.year))
+        res2 = cur.fetchall()
+
+        count = res2[0]
         row = 0
         for agent in res:
-            prog = row * 100 / count
+            prog = row * 100 / count[0]
 
             id_agn = get_workerId_by_name(agent[0], self.service)
             id_agn = id_agn[0]

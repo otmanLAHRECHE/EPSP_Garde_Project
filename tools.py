@@ -122,7 +122,7 @@ def create_garde_page(service, grd_cons, month, year, data, path):
     pdf.output(path)
 
 
-def create_recap_page(service, month, year, data, path):
+def create_recap_page(service, month, year, data, chef, path):
     pdf = EpspPdf()
     pdf.alias_nb_pages()
     pdf.add_page()
@@ -185,7 +185,8 @@ def create_recap_page(service, month, year, data, path):
     pdf.ln(1)
     pdf.set_right_margin(30)
     pdf.set_left_margin(30)
-    pdf.cell(0, 10, "Chef service", 0, 0, "L")
-    pdf.cell(0, 10, "D.S.S", 0, 0, "R")
+
+    if chef != "":
+        pdf.cell(0, 10, "Recuperation de chef service (4 jours): " + chef, 0, 0, "L")
 
     pdf.output(path)
