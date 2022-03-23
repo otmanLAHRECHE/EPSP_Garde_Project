@@ -1816,7 +1816,7 @@ class ThreadRecapExport(QThread):
         self.service = service
         self.month = month
         self.year = year
-        self.data = [(" ", "Jours ouvrable", "Jours week-end", "Jours fériés", "Total")]
+        self.data = [(" / ", "Jours ouvrable", "Jours week-end", "Jours fériés", "Total")]
 
     def __del__(self):
         self.terminate()
