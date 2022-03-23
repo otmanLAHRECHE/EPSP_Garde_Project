@@ -1786,14 +1786,14 @@ class Thread_save_recap(QThread):
             cur.execute(sql_q, (self.service, id_agn, self.month, self.year))
             results = cur.fetchall()
 
+            jo2 = int(self.table.item(row, 2).text())
+            jw2 = int(self.table.item(row, 3).text())
+            jf2 = int(self.table.item(row, 4).text())
+
             if results :
                 jo1 = results[0]
                 jw1 = results[1]
                 jf1 = results[2]
-
-                jo2 = int(self.table.item(row, 2).text())
-                jw2 = int(self.table.item(row, 3).text())
-                jf2 = int(self.table.item(row, 4).text())
 
                 if jo1 == jo2 and jw1 == jw2 and jf1 == jf2:
                     print("do nothing")
@@ -1808,83 +1808,8 @@ class Thread_save_recap(QThread):
                     cur.execute(sql_q, (jf2, self.service, id_agn, self.month, self.year))
 
             else :
-
-
-            if self.table.item(row, 0).text() in self.days_of_week:
-                print("do nothing ")
-                med_name = ""
-            else:
-                check = self.table.cellWidget(row, 2)
-                med_name = check.chose.currentText()
-
-            check_2 = self.table.cellWidget(row, 3)
-            med_name_2 = check_2.chose.currentText()
-
-            if results_light:
-
-                rl = results_light[0]
-
-                if str(rl[0]) == med_name:
-                    print("do nothing")
-                elif str(rl[0]) != med_name and med_name != "":
-                    id1 = get_workerId_by_name(str(rl[0]), "pharm")[0]
-                    id_new = get_workerId_by_name(med_name, "pharm")[0]
-                    id1 = id1[0]
-                    id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
-
-                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
-
-                elif str(rl[0]) != med_name and med_name == "":
-
-                    id1 = get_workerId_by_name(str(rl[0]), "pharm")[0]
-                    id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
-
-            elif med_name != "":
-                id_new = get_workerId_by_name(med_name, "pharm")[0]
-                id_new = id_new[0]
-                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
-
-            # guard shift night :
-
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('pharm', 'night', day, self.month, self.year))
-            results_night = cur.fetchall()
-            print(results_night)
-
-            if results_night:
-                rn = results_night[0]
-
-                if str(rn[0]) == med_name_2:
-                    print("do nothing")
-                elif str(rn[0]) != med_name_2 and med_name_2 != "":
-                    id1 = get_workerId_by_name(str(rn[0]), "pharm")[0]
-                    id_new = get_workerId_by_name(med_name_2, "pharm")[0]
-                    id1 = id1[0]
-                    id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
-
-                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
-
-                elif str(rn[0]) != med_name_2 and med_name_2 == "":
-
-                    id1 = get_workerId_by_name(str(rn[0]), "pharm")[0]
-                    id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
-
-            elif med_name_2 != "":
-                id_new = get_workerId_by_name(med_name_2, "pharm")[0]
-                id_new = id_new[0]
-                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
+                sql_q = 'INSERT INTO recap (jo,jw,jf,m,y,agents_id) VALUES (?,?,?,?,?,?)'
+                cur.execute(sql_q, (jo2, jw2, jf2, self.month, self.year, id_agn))
 
             connection.commit()
             time.sleep(0.1)
