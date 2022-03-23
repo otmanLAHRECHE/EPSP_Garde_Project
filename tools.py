@@ -89,7 +89,7 @@ def create_garde_page(service, grd_cons, month, year, data, path):
 
     pdf.set_font("Times", size=10)
     line_height = pdf.font_size * 2
-    col_width = pdf.epw / 4  # distribute content evenly
+    col_width = pdf.epw / 4
     fill = False
     for row in data:
         for datum in row:
@@ -175,7 +175,8 @@ def create_recap_page(service, month, year, data, chef, path):
             else:
                 pdf.set_fill_color(224, 235, 255)
                 pdf.set_font("Times", size=10)
-                pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size,
+
+                pdf.multi_cell(col_width, line_height, str(datum), border=1, ln=3, max_line_height=pdf.font_size,
                                    fill=fill)
 
         fill = not fill

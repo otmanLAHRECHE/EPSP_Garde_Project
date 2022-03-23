@@ -11,7 +11,7 @@ import pharmacie
 import radiologie
 import urgence
 from threads import ThreadRecapExport
-from tools import create_garde_page
+from tools import create_garde_page, create_recap_page
 
 basedir = os.path.dirname(__file__)
 
@@ -81,7 +81,7 @@ class ExportRecapUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("URGENCE", "GARDE URGENCE", self.month, self.year, self.data, filePath)
+            create_recap_page("URGENCE", self.month, self.year, self.data, self.chef, filePath)
 
             if self.service == "urgence":
                 self.next_page = urgence.UrgenceMainUi()
