@@ -14,8 +14,9 @@ from tools import create_garde_page
 
 basedir = os.path.dirname(__file__)
 
+
 class ExportRecapUi(QtWidgets.QMainWindow):
-    def __init__(self, month, year, service):
+    def __init__(self, month, year, service, chef):
         super(ExportRecapUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
@@ -60,11 +61,9 @@ class ExportRecapUi(QtWidgets.QMainWindow):
 
         self.ttl.setText("Exporté le RECAP service du" + self.service + " mois de  " + m + "/" + str(self.year))
 
-
-
-
     def export_pdf(self):
         print(self.data)
+        """
         filePath, _ = QFileDialog.getSaveFileName(self, "Save garde", "",
                                                   "PDF(*.pdf);;All Files(*.*) ")
 
@@ -95,6 +94,7 @@ class ExportRecapUi(QtWidgets.QMainWindow):
             self.next_page.show()
             print(self.thr.isFinished())
             self.close()
+            """
 
     def signal_accept(self, progress):
         if type(progress) == int:

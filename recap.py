@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 import dentiste
+import export_recap
 import infirmier
 import laboratoire
 import pharmacie
@@ -172,7 +173,9 @@ class RecapUi(QtWidgets.QMainWindow):
 
 
     def export_(self):
-        print("export")
+        self.next_page = export_recap.ExportRecapUi()
+        self.next_page.show()
+        self.close()
 
 
     def signal_accepted_save(self, progress):
