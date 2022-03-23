@@ -4,6 +4,7 @@ import sqlite3
 import time
 from calendar import monthrange
 
+import PyQt5
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from tools import get_workerId_by_name
@@ -1708,15 +1709,12 @@ class Thread_recap_load(QThread):
             sql_q = 'SELECT recap.jo,recap.jw,recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
             cur.execute(sql_q, (self.service, id_ag[0], self.month, self.year))
             res1 = cur.fetchall()
+            res1 = res1[0]
 
             if res1:
                 jo = res1[0]
                 jw = res1[1]
                 jf = res1[2]
-
-                jo = jo[0]
-                jw = jw[0]
-                jf = jf[0]
 
             else:
                 for day in range(self.num_days):
@@ -1779,40 +1777,42 @@ class Thread_save_recap(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
         for row in range(self.table.rowCount()):
-            prog = row * 100 / self.num_days
-            id_agn = get_workerId_by_name(int(self.table.item(row, 1).text()))
+            prog = row * 100 / self.table.rowCount()
+            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem :
+                id_agn = get_workerId_by_name(self.table.item(row, 1).text(), self.service)
+                id_agn = id_agn[0]
 
-            sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents.id =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, (self.service, id_agn, self.month, self.year))
-            results = cur.fetchall()
+                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+                results = cur.fetchall()
 
-            jo2 = int(self.table.item(row, 2).text())
-            jw2 = int(self.table.item(row, 3).text())
-            jf2 = int(self.table.item(row, 4).text())
+                jo2 = int(self.table.item(row, 2).text())
+                jw2 = int(self.table.item(row, 3).text())
+                jf2 = int(self.table.item(row, 4).text())
 
-            if results :
-                jo1 = results[0]
-                jw1 = results[1]
-                jf1 = results[2]
+                if results :
+                    jo1 = results[0]
+                    jw1 = results[1]
+                    jf1 = results[2]
 
-                if jo1 == jo2 and jw1 == jw2 and jf1 == jf2:
-                    print("do nothing")
-                elif jo1 != jo2:
-                    sql_q = 'UPDATE recap SET recap.jo =? where service=? and recap.agents.id =? and guard.m =? and guard.y =?'
-                    cur.execute(sql_q, (jo2, self.service, id_agn, self.month, self.year))
-                elif jw1 != jw2:
-                    sql_q = 'UPDATE recap SET recap.jw =? where service=? and recap.agents.id =? and guard.m =? and guard.y =?'
-                    cur.execute(sql_q, (jw2, self.service, id_agn, self.month, self.year))
-                elif jf1 != jf2:
-                    sql_q = 'UPDATE recap SET recap.jf =? where service=? and recap.agents.id =? and guard.m =? and guard.y =?'
-                    cur.execute(sql_q, (jf2, self.service, id_agn, self.month, self.year))
+                    if jo1 == jo2 and jw1 == jw2 and jf1 == jf2:
+                        print("do nothing")
+                    elif jo1 != jo2:
+                        sql_q = 'UPDATE recap SET recap.jo =? where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                        cur.execute(sql_q, (jo2, self.service, id_agn, self.month, self.year))
+                    elif jw1 != jw2:
+                        sql_q = 'UPDATE recap SET recap.jw =? where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                        cur.execute(sql_q, (jw2, self.service, id_agn, self.month, self.year))
+                    elif jf1 != jf2:
+                        sql_q = 'UPDATE recap SET recap.jf =? where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                        cur.execute(sql_q, (jf2, self.service, id_agn, self.month, self.year))
 
-            else :
-                if jo2 == 0 and jw2 == 0 and jf2 == 0:
-                    print("do nothing")
                 else :
-                    sql_q = 'INSERT INTO recap (jo,jw,jf,m,y,agents_id) VALUES (?,?,?,?,?,?)'
-                    cur.execute(sql_q, (jo2, jw2, jf2, self.month, self.year, id_agn))
+                    if jo2 == 0 and jw2 == 0 and jf2 == 0:
+                        print("do nothing")
+                    else :
+                        sql_q = 'INSERT INTO recap (jo,jw,jf,m,y,agents_id) VALUES (?,?,?,?,?,?)'
+                        cur.execute(sql_q, (jo2, jw2, jf2, self.month, self.year, id_agn[0]))
 
             connection.commit()
             time.sleep(0.1)
