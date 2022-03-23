@@ -168,6 +168,8 @@ class RecapUi(QtWidgets.QMainWindow):
             self.thr._signal_status.connect(self.signal_accepted_save)
             self.thr.start()
 
+
+
     def export_(self):
         print("export")
 
@@ -179,6 +181,10 @@ class RecapUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
+
+            for row in range(self.table.rowCount()):
+                if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
+                    self.table.setItem(row, 5, QTableWidgetItem(str(int(self.table.item(row, 2).text()) + int(self.table.item(row, 3).text()) + int(self.table.item(row, 4).text()))))
             if self.service == "urgence":
                 self.next_page = urgence.UrgenceMainUi()
             elif self.service == "dentiste":

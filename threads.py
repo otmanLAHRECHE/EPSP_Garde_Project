@@ -1785,6 +1785,7 @@ class Thread_save_recap(QThread):
                 sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
                 cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
                 results = cur.fetchall()
+                results = results[0]
 
                 jo2 = int(self.table.item(row, 2).text())
                 jw2 = int(self.table.item(row, 3).text())
@@ -1797,15 +1798,16 @@ class Thread_save_recap(QThread):
 
                     if jo1 == jo2 and jw1 == jw2 and jf1 == jf2:
                         print("do nothing")
-                    elif jo1 != jo2:
-                        sql_q = 'UPDATE recap SET recap.jo =? where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-                        cur.execute(sql_q, (jo2, self.service, id_agn, self.month, self.year))
-                    elif jw1 != jw2:
-                        sql_q = 'UPDATE recap SET recap.jw =? where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-                        cur.execute(sql_q, (jw2, self.service, id_agn, self.month, self.year))
-                    elif jf1 != jf2:
-                        sql_q = 'UPDATE recap SET recap.jf =? where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-                        cur.execute(sql_q, (jf2, self.service, id_agn, self.month, self.year))
+                    else:
+                        if jo1 != jo2:
+                            sql_q = 'UPDATE recap SET jo =? where  recap.agents_id =? and recap.m =? and recap.y =?'
+                            cur.execute(sql_q, (jo2, id_agn[0], self.month, self.year))
+                        if jw1 != jw2:
+                            sql_q = 'UPDATE recap SET jw =? where  recap.agents_id =? and recap.m =? and recap.y =?'
+                            cur.execute(sql_q, (jw2, id_agn[0], self.month, self.year))
+                        if jf1 != jf2:
+                            sql_q = 'UPDATE recap SET jf =? where  recap.agents_id =? and recap.m =? and recap.y =?'
+                            cur.execute(sql_q, (jf2, id_agn[0], self.month, self.year))
 
                 else :
                     if jo2 == 0 and jw2 == 0 and jf2 == 0:
