@@ -2227,12 +2227,12 @@ class ThreadGuardUrgenceInf(QThread):
                 else:
                     date_day = str(0) + str(day) + "/" + str(0) + str(self.month) + "/" + str(self.year)
 
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence_surv', 'light', day, self.month, self.year))
+            sql_q = 'SELECT guard_groupe.g FROM guard_groupe WHERE guard_groupe.periode =? and guard_groupe.d =? and guard_groupe.m =? and guard_groupe.y =?'
+            cur.execute(sql_q, ('light', day, self.month, self.year))
             results_light = cur.fetchall()
 
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence_surv', 'night', day, self.month, self.year))
+            sql_q = 'SELECT guard_groupe.g FROM guard_groupe WHERE guard_groupe.periode =? and guard_groupe.d =? and guard_groupe.m =? and guard_groupe.y =?'
+            cur.execute(sql_q, ('night', day, self.month, self.year))
             results_night = cur.fetchall()
 
             light = ""

@@ -10,7 +10,7 @@ class EpspPdf(FPDF):
         # Moving cursor to the right:
 
         self.cell(80)
-        self.cell(30, 10, "MINISTERE DE LA SANTE DE LA POPULATION ET DE LA REFORME HOSPITALIERE", 0, 0, "C")
+        self.cell(30, 10, "MINISTERE DE LA SANTE", 0, 0, "C")
 
         self.ln(5)
 
