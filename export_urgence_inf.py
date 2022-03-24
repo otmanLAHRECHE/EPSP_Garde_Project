@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 import urgence_inf
 from threads import ThreadGuardUrgenceInf
-from tools import create_garde_page
+from tools import create_garde_page, create_garde_inf_page
 
 basedir = os.path.dirname(__file__)
 
@@ -74,7 +74,7 @@ class ExportUrgenceInf(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("URGENCE", "GARDE (GROUPE DES INFIRMIERS)", self.month, self.year, self.data, filePath)
+            create_garde_inf_page("URGENCE", "GARDE (GROUPE DES INFIRMIERS)", self.month, self.year, self.data, self.groupes, filePath)
             self.next_page = urgence_inf.UrgenceInfUi()
             self.next_page.show()
             print(self.thr.isFinished())

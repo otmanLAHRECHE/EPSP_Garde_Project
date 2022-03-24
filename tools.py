@@ -194,3 +194,87 @@ def create_recap_page(service, month, year, data, chef, path):
         pdf.cell(0, 10, "Recuperation de chef service (4 jours): " + chef, 0, 0, "L")
 
     pdf.output(path)
+
+
+def create_garde_inf_page(service, grd_cons, month, year, data, groupes, path):
+    pdf = EpspPdf()
+    pdf.alias_nb_pages()
+    pdf.add_page()
+    pdf.set_font("helvetica", size=12)
+    pdf.cell(0, 10, "Service de: "+service, 0, 0, markdown=True)
+    pdf.ln(10)
+
+    pdf.set_font("helvetica", "B", size=17)
+    pdf.cell(0, 10, "Planing de "+grd_cons, 1, 0, "C")
+    pdf.ln(8)
+    m = ""
+    if month == 1:
+        m = "janvier"
+    elif month == 2:
+        m = "février"
+    elif month == 3:
+        m = "mars"
+    elif month == 4:
+        m = "avril"
+    elif month == 5:
+        m = "mai"
+    elif month == 6:
+        m = "juin"
+    elif month == 7:
+        m = "juillet"
+    elif month == 8:
+        m = "août"
+    elif month == 9:
+        m = "septembre"
+    elif month == 10:
+        m = "octobre"
+    elif month == 11:
+        m = "novembre"
+    elif month == 12:
+        m = "décembre"
+    pdf.set_font("helvetica", size=12)
+    pdf.cell(0, 10, "Mois de "+m+"/"+str(year), 0, 0, "C")
+
+    pdf.ln(8)
+
+    pdf.set_font("Times", size=10)
+    line_height = pdf.font_size * 1.55
+    col_width = pdf.epw / 4
+    fill = False
+    for row in data:
+        for datum in row:
+            if datum == "Vendredi" or datum == "Samedi":
+                fill = True
+
+            if datum == "Jours" or datum == "Date" or datum == "De 08h:00 à 20h:00" or datum == "De 20h:00 à 08h:00" or datum == "De 08h:00 à 16h:00" or datum == "De 16h:00 à 20h:00" or datum == "De 16h:00 à 08h:00":
+                pdf.set_font("Times", "B", size=10)
+                pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size)
+            else:
+                if(datum == " "):
+                    pdf.set_fill_color(160, 160, 160)
+                    pdf.set_font("Times", size=10)
+                    pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size,
+                                   fill=True)
+                else:
+                    pdf.set_fill_color(224, 235, 255)
+                    pdf.set_font("Times", size=10)
+                    pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size,
+                                   fill=fill)
+
+
+        fill = False
+
+        pdf.ln(line_height)
+
+    for groupe in groupes:
+        pdf.cell(0, 10, groupe, 0, 0, "L")
+        pdf.ln(1)
+
+
+    pdf.ln(2)
+    pdf.set_right_margin(30)
+    pdf.set_left_margin(30)
+    pdf.cell(0, 10, "Chef service", 0, 0, "L")
+    pdf.cell(0, 10, "D.S.S", 0, 0, "R")
+
+    pdf.output(path)
