@@ -3,11 +3,11 @@ import sqlite3
 
 from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox
+from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem
 
-from dialogs import Add_new_inf, Saving_progress_dialog
+from dialogs import Add_new_inf, Saving_progress_dialog, Add_new_month
 from threads import ThreadAddGroupe
-from tools import get_workers_count
+from tools import get_workers_count, get_guard_months_count
 
 basedir = os.path.dirname(__file__)
 
@@ -71,8 +71,8 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
         self.update.clicked.connect(self.updateUser)
         self.add_garde.clicked.connect(self.add_grd)
 
-        self.add_group.clicked.connect()
-        self.delete_group.clicked.connect()
+        self.add_group.clicked.connect(self.add_to_groupe)
+        self.delete_group.clicked.connect(self.deleteUser_group)
         self.update_group.clicked.connect()
 
 
@@ -124,28 +124,96 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
                 self.thr._signal.connect()
                 self.thr._signal_result.connect()
 
+    def add_grd(self):
 
+        guards_months_count = get_guard_months_count("urgence_sur_inf")[0]
 
+        dialog = Add_new_month()
+        if dialog.exec() == QtWidgets.QDialog.Accepted:
+            if dialog.year.text() == "":
+                message = "Entrer une valid année"
+                self.alert_(message)
+            elif guards_months_count[0] > 13:
+                message = "Maximum liste des garde, suprimrer des listes"
+                self.alert_(message)
+            else:
+                connection = sqlite3.connect("database/sqlite.db")
+                cur = connection.cursor()
+                sql_q = "INSERT INTO guard_mounth (m,y,service) values (?,?,?)"
+                m = 0
+                if dialog.month.currentIndex() == 0:
+                    m = 1
+                elif dialog.month.currentIndex() == 1:
+                    m = 2
+                elif dialog.month.currentIndex() == 2:
+                    m = 3
+                elif dialog.month.currentIndex() == 3:
+                    m = 4
+                elif dialog.month.currentIndex() == 4:
+                    m = 5
+                elif dialog.month.currentIndex() == 5:
+                    m = 6
+                elif dialog.month.currentIndex() == 6:
+                    m = 7
+                elif dialog.month.currentIndex() == 7:
+                    m = 8
+                elif dialog.month.currentIndex() == 8:
+                    m = 9
+                elif dialog.month.currentIndex() == 9:
+                    m = 10
+                elif dialog.month.currentIndex() == 10:
+                    m = 11
+                elif dialog.month.currentIndex() == 11:
+                    m = 12
 
+                guard_m = (m, int(dialog.year.text()), 'urgence_sur_inf')
+                print(guard_m)
 
-        if self.medcinname.text() == "":
-            message = 'Le champ de nom est vide!'
-            self.alert_(message)
+                cur.execute(sql_q, guard_m)
+                connection.commit()
+                connection.close()
+                self.loadGuardMonths()
 
-        elif med_count[0] > 25:
-            message = 'Maximum nombre des medecin, supremer un medecin'
-            self.alert_(message)
-        else:
-
+    def deleteUser(self):
+        row = self.table.currentRow()
+        if row > -1:
+            id = self.table.item(row, 0).text()
             connection = sqlite3.connect("database/sqlite.db")
             cur = connection.cursor()
-            sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
-            med = (self.medcinname.text(), 'urgence_surv')
-            cur.execute(sql_q, med)
+            sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
+            cur.execute(sql_q, (id,))
             connection.commit()
             connection.close()
-            self.medcinname.setText("")
+            self.table.setItem(row, 0, QTableWidgetItem(""))
+            self.table.setItem(row, 1, QTableWidgetItem(""))
+            self.table.setItem(row, 2, QTableWidgetItem(""))
             self.loadUsers()
+        else:
+            message = 'Selectioner un medecin'
+            self.alert_(message)
+
+    def deleteUser_group(self):
+        row = self.table.currentRow()
+        if row > -1:
+            id = self.table.item(row, 0).text()
+            connection = sqlite3.connect("database/sqlite.db")
+            cur = connection.cursor()
+            sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
+            cur.execute(sql_q, (id,))
+
+            sql_q = 'DELETE FROM groupe WHERE inf_id=?'
+            cur.execute(sql_q, (id,))
+
+            connection.commit()
+            connection.close()
+            self.table.setItem(row, 0, QTableWidgetItem(""))
+            self.table.setItem(row, 1, QTableWidgetItem(""))
+            self.table.setItem(row, 2, QTableWidgetItem(""))
+            self.loadGroups()
+        else:
+            message = 'Selectioner un medecin'
+            self.alert_(message)
+
 
     def signal_accepted(self, progress):
         if type(progress) == int:
@@ -156,6 +224,7 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
             print(progress)
             self.dialog.close()
             self.loadGroups()
+
 
 
 
