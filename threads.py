@@ -2403,7 +2403,7 @@ class Thread_load_guards_inf_urgences(QThread):
     _signal_finish = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year):
-        super(Thread_load_guards_surv_urgences, self).__init__()
+        super(Thread_load_guards_inf_urgences, self).__init__()
         self.num_days = num_days
         self.month = month
         self.year = year
@@ -2420,12 +2420,12 @@ class Thread_load_guards_inf_urgences(QThread):
             day = row + 1
             prog = row * 100 / self.num_days
 
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence_surv', 'light', day, self.month, self.year))
+            sql_q = 'SELECT guard_groupe.g FROM guard_groupe WHERE guard_groupe.periode =? and guard_groupe.d =? and guard_groupe.m =? and guard_groupe.y =?'
+            cur.execute(sql_q, ('light', day, self.month, self.year))
             results_light = cur.fetchall()
 
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence_surv', 'night', day, self.month, self.year))
+            sql_q = 'SELECT guard_groupe.g FROM guard_groupe WHERE guard_groupe.periode =? and guard_groupe.d =? and guard_groupe.m =? and guard_groupe.y =?'
+            cur.execute(sql_q, ('night', day, self.month, self.year))
             results_night = cur.fetchall()
 
             list = []
