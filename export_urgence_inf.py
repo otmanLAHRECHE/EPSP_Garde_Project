@@ -59,8 +59,8 @@ class ExportUrgenceInf(QtWidgets.QMainWindow):
         self.thr = ThreadGuardUrgenceInf(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
-        self.thr._signal_finish.connect()
-        self.thr._signal_groupes.connect()
+        self.thr._signal_finish.connect(self.signal_accept)
+        self.thr._signal_groupes.connect(self.signal_accept_groupes)
 
         self.thr.start()
 
