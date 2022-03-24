@@ -1864,3 +1864,42 @@ class ThreadRecapExport(QThread):
         connection.close()
         print(self.data)
         self._signal_result.emit(self.data)
+
+
+class ThreadAddGroupe(QThread):
+    _signal = pyqtSignal(int)
+    _signal_result = pyqtSignal(bool)
+
+    def __init__(self, name, groupe):
+        super(ThreadAddGroupe, self).__init__()
+        self.name = name
+        self.groupe = groupe
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+        sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
+        cur.execute(sql_q, self.name, "urgence_inf")
+
+        id_inf = get_workerId_by_name(self.name, "urgence_inf")
+        id_inf = id_inf[0]
+
+        sql_q = "INSERT INTO groupe (g,inf_id) values (?,?)"
+        cur.execute(sql_q, self.groupe, id_inf[0])
+
+        for n in range(20):
+            self._signal.emit(n)
+            time.sleep(0.1)
+
+        self._signal_result.emit(True)
+
+
+
+
+
+

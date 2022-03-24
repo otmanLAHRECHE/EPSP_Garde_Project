@@ -59,3 +59,13 @@ class Saving_progress_dialog(QtWidgets.QDialog):
         self.label = self.findChild(QtWidgets.QLabel, "label")
         self.progress = self.findChild(QtWidgets.QProgressBar, "progressBar")
         self.progress.setValue(0)
+
+
+class Add_new_inf(QtWidgets.QDialog):
+    def __init__(self):
+        super(Add_new_inf, self).__init__()
+        uic.loadUi(os.path.join(basedir, 'ui', 'add_new_inf.ui'), self)
+
+        self.setWindowTitle("ajouter nouvelle infermier")
+        self.groupe = self.findChild(QtWidgets.QComboBox, "comboBox")
+        self.nom = self.findChild(QtWidgets.QLineEdit, "lineEdit")

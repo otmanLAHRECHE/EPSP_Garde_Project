@@ -36,3 +36,26 @@ class Chose_worker(QWidget):
         widget.addWidget(self.chose)
 
         self.setLayout(widget)
+
+
+class Buttons_inf(QWidget):
+    def __init__(self):
+        super(Buttons, self).__init__()
+
+        # add your buttons
+        button_layout = QtWidgets.QHBoxLayout()
+        self.edit_garde_surv = QtWidgets.QPushButton()
+        self.edit_garde_surv.setText("GARDE Surv")
+        self.edit_garde_inf = QtWidgets.QPushButton()
+        self.edit_garde_inf.setText("GARDE Inf")
+        self.delete_garde = QtWidgets.QPushButton()
+        self.delete_garde.setText("Delete")
+        self.print_garde = QtWidgets.QPushButton()
+        self.print_garde.setText("RECAP")
+
+        button_layout.addStretch(1)
+        button_layout.addWidget(self.print_garde)
+        button_layout.addWidget(self.edit_garde)
+        button_layout.addWidget(self.delete_garde)
+
+        self.setLayout(button_layout)

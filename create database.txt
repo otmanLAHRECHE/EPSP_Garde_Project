@@ -31,3 +31,10 @@ create table guard_mounth (
     y INTEGER not null ,
     service TEXT not null
 );
+
+CREATE TABLE groupe (
+   groupe_id INTEGER PRIMARY KEY AUTOINCREMENT,
+   g text NOT NULL,
+   inf_id integer NOT NULL,
+  FOREIGN KEY(inf_id) REFERENCES health_worker(worker_id)
+);

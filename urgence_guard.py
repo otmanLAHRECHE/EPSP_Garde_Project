@@ -13,7 +13,9 @@ from threads import Thread_create_urgence_guard, Thread_load_guards_urgences
 from tools import get_workerId_by_name
 from widgets import Chose_worker
 import os
+
 basedir = os.path.dirname(__file__)
+
 
 class UrgenceGuardUi(QtWidgets.QMainWindow):
     def __init__(self, month, year):
@@ -63,7 +65,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.load_guards()
         self.exportPd.clicked.connect(self.export)
 
-
         self.save.clicked.connect(self.save_)
 
     def load_guards(self):
@@ -72,7 +73,6 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.dialog.label.setText("loading gardes")
         self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.dialog.show()
-
 
         self.thr2 = Thread_load_guards_urgences(self.num_days, self.month, self.year)
         self.thr2._signal.connect(self.signal_accepted_load)
