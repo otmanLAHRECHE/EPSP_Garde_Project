@@ -1,10 +1,16 @@
-
+import datetime
 import os
+import sqlite3
 from calendar import monthrange
 
-from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5 import QtWidgets, uic, QtCore, QtGui
+from PyQt5.QtWidgets import QTableWidgetItem
 
-from dialogs import Saving_progress_dialog
+import export_urgence_inf
+import urgence_inf
+from dialogs import Saving_progress_dialog, CustomDialog
+from threads import Thread_load_guards_inf_urgences, Thread_create_urgence_inf_guard
+from widgets import Chose_worker
 
 basedir = os.path.dirname(__file__)
 
@@ -65,7 +71,7 @@ class UrgenceInfGuardUi(QtWidgets.QMainWindow):
         self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.dialog.show()
 
-        self.thr2 = Thread_load_guards_surv_urgences(self.num_days, self.month, self.year)
+        self.thr2 = Thread_load_guards_inf_urgences(self.num_days, self.month, self.year)
         self.thr2._signal.connect(self.signal_accepted_load)
         self.thr2._signal_status.connect(self.signal_accepted_load)
         self.thr2._signal_finish.connect(self.signal_accepted_load)
@@ -74,8 +80,8 @@ class UrgenceInfGuardUi(QtWidgets.QMainWindow):
     def load_med(self):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
-        sql_q = 'SELECT full_name FROM health_worker where service=?'
-        cur.execute(sql_q, ('urgence_surv',))
+        sql_q = 'SELECT DISTINCT g FROM groupe'
+        cur.execute(sql_q)
         self.medcins = cur.fetchall()
         connection.close()
 
@@ -83,7 +89,7 @@ class UrgenceInfGuardUi(QtWidgets.QMainWindow):
         self.want_to_close = True
         self.dialog = Saving_progress_dialog()
         self.dialog.show()
-        self.thr = Thread_create_urgence_surv_guard(self.num_days, self.month, self.year, self.table)
+        self.thr = Thread_create_urgence_inf_guard(self.num_days, self.month, self.year, self.table)
         self.thr._signal.connect(self.signal_accepted)
         self.thr._signal_status.connect(self.signal_accepted)
         self.thr.start()
@@ -165,6 +171,6 @@ class UrgenceInfGuardUi(QtWidgets.QMainWindow):
 
     def export(self):
         self.want_to_close = True
-        self.next_page = export_urgence_surv.ExportUrgenceSurv(self.month, self.year)
+        self.next_page = export_urgence_inf.ExportUrgenceInf(self.month, self.year)
         self.close()
         self.next_page.show()
