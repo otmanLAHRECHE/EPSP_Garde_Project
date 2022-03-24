@@ -93,6 +93,9 @@ def create_garde_page(service, grd_cons, month, year, data, path):
     fill = False
     for row in data:
         for datum in row:
+            if datum == "Vendredi" or datum == "Samedi":
+                fill = True
+
             if datum == "Jours" or datum == "Date" or datum == "De 08h:00 à 20h:00" or datum == "De 20h:00 à 08h:00" or datum == "De 08h:00 à 16h:00" or datum == "De 16h:00 à 20h:00" or datum == "De 16h:00 à 08h:00":
                 pdf.set_font("Times", "B", size=10)
                 pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size)
@@ -109,7 +112,7 @@ def create_garde_page(service, grd_cons, month, year, data, path):
                                    fill=fill)
 
 
-        fill = not fill
+        fill = False
 
         pdf.ln(line_height)
 
