@@ -2279,9 +2279,11 @@ class Thread_create_urgence_inf_guard(QThread):
         for row in range(self.num_days):
             day = row + 1
             prog = row * 100 / self.num_days
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence_inf', 'light', day, self.month, self.year))
+
+            sql_q = 'SELECT guard_groupe.g FROM guard_groupe WHERE guard_groupe.periode =? and guard_groupe.d =? and guard_groupe.m =? and guard_groupe.y =?'
+            cur.execute(sql_q, ('light', day, self.month, self.year))
             results_light = cur.fetchall()
+
             check = self.table.cellWidget(row, 2)
             med_name = check.chose.currentText()
 
@@ -2295,35 +2297,51 @@ class Thread_create_urgence_inf_guard(QThread):
                 if str(rl[0]) == med_name:
                     print("do nothing")
                 elif str(rl[0]) != med_name and med_name != "":
-                    id1 = get_workerId_by_name(str(rl[0]), "urgence_surv")[0]
-                    id_new = get_workerId_by_name(med_name, "urgence_surv")[0]
-                    id1 = id1[0]
-                    id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
+                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    cur.execute(sql_q, (str(rl[0]),))
+                    res1 = cur.fetchall()
 
-                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
+                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    cur.execute(sql_q, (med_name,))
+                    res2 = cur.fetchall()
+
+                    for id in res1:
+                        id = id[0]
+                        sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
+                        cur.execute(sql_q_light, (day, self.month, self.year, 'light', id))
+
+                    for id in res2:
+                        id = id[0]
+                        sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                        cur.execute(sql_q_light, (day, self.month, self.year, 'light', id))
 
                 elif str(rl[0]) != med_name and med_name == "":
 
-                    id1 = get_workerId_by_name(str(rl[0]), "urgence_surv")[0]
-                    id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id1))
+                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    cur.execute(sql_q, (str(rl[0]),))
+                    res1 = cur.fetchall()
+
+                    for id in res1:
+                        id = id[0]
+                        sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
+                        cur.execute(sql_q_light, (day, self.month, self.year, 'light', id))
 
             elif med_name != "":
-                id_new = get_workerId_by_name(med_name, "urgence_surv")[0]
-                id_new = id_new[0]
-                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'light', id_new))
+
+                sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                cur.execute(sql_q, (med_name,))
+                res2 = cur.fetchall()
+                for id in res2:
+                    id = id[0]
+                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', id))
 
             # guard shift night :
 
-            sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.periode =? and guard.d =? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ('urgence_surv', 'night', day, self.month, self.year))
+
+            sql_q = 'SELECT guard_groupe.g FROM guard_groupe WHERE guard_groupe.periode =? and guard_groupe.d =? and guard_groupe.m =? and guard_groupe.y =?'
+            cur.execute(sql_q, ('night', day, self.month, self.year))
             results_night = cur.fetchall()
-            print(results_night)
 
             if results_night:
                 rn = results_night[0]
@@ -2331,28 +2349,45 @@ class Thread_create_urgence_inf_guard(QThread):
                 if str(rn[0]) == med_name_2:
                     print("do nothing")
                 elif str(rn[0]) != med_name_2 and med_name_2 != "":
-                    id1 = get_workerId_by_name(str(rn[0]), "urgence_surv")[0]
-                    id_new = get_workerId_by_name(med_name_2, "urgence_surv")[0]
-                    id1 = id1[0]
-                    id_new = id_new[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
 
-                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
+                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    cur.execute(sql_q, (str(rn[0]),))
+                    res1 = cur.fetchall()
+
+                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    cur.execute(sql_q, (med_name_2,))
+                    res2 = cur.fetchall()
+
+                    for id in res1:
+                        id = id[0]
+                        sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
+                        cur.execute(sql_q_light, (day, self.month, self.year, 'night', id))
+
+                    for id in res2:
+                        id = id[0]
+                        sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                        cur.execute(sql_q_light, (day, self.month, self.year, 'night', id))
 
                 elif str(rn[0]) != med_name_2 and med_name_2 == "":
+                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    cur.execute(sql_q, (str(rn[0]),))
+                    res1 = cur.fetchall()
 
-                    id1 = get_workerId_by_name(str(rn[0]), "urgence_surv")[0]
-                    id1 = id1[0]
-                    sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id1))
+                    for id in res1:
+                        id = id[0]
+                        sql_q_light = 'DELETE FROM guard WHERE guard.d=? and guard.m=? and guard.y=? and guard.periode =? and guard.gardien_id =?'
+                        cur.execute(sql_q_light, (day, self.month, self.year, 'night', id))
+
+
 
             elif med_name_2 != "":
-                id_new = get_workerId_by_name(med_name_2, "urgence_surv")[0]
-                id_new = id_new[0]
-                sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'night', id_new))
+                sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                cur.execute(sql_q, (med_name_2,))
+                res2 = cur.fetchall()
+                for id in res2:
+                    id = id[0]
+                    sql_q_light = 'INSERT INTO guard (d,m,y,periode,gardien_id) values (?,?,?,?,?)'
+                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', id))
 
             connection.commit()
             time.sleep(0.1)
