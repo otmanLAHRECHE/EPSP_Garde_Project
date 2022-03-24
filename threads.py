@@ -1899,6 +1899,48 @@ class ThreadAddGroupe(QThread):
         self._signal_result.emit(True)
 
 
+class ThreadUpdateGroupe(QThread):
+    _signal = pyqtSignal(int)
+    _signal_result = pyqtSignal(bool)
+
+    def __init__(self, id, name, groupe):
+        super(ThreadUpdateGroupe, self).__init__()
+        self.name = name
+        self.groupe = groupe
+        self.id = id
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+
+        if self.name == "":
+            sql_q = 'UPDATE groupe SET g= ? WHERE inf_id= ?'
+            cur.execute(sql_q, (self.groupe, self.id))
+        elif self.groupe == "":
+            sql_q = 'UPDATE health_worker SET full_name= ? WHERE worker_id= ?'
+            cur.execute(sql_q, (self.name, self.id))
+        else:
+            sql_q = 'UPDATE groupe SET g= ? WHERE inf_id= ?'
+            cur.execute(sql_q, (self.groupe, self.id))
+
+            sql_q = 'UPDATE health_worker SET full_name= ? WHERE worker_id= ?'
+            cur.execute(sql_q, (self.name, self.id))
+
+        connection.commit()
+        connection.close()
+
+        for n in range(20):
+            self._signal.emit(n)
+            time.sleep(0.1)
+
+        self._signal_result.emit(True)
+
+
 
 
 

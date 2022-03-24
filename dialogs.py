@@ -67,5 +67,6 @@ class Add_new_inf(QtWidgets.QDialog):
         uic.loadUi(os.path.join(basedir, 'ui', 'add_new_inf.ui'), self)
 
         self.setWindowTitle("ajouter nouvelle infermier")
+        self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.groupe = self.findChild(QtWidgets.QComboBox, "comboBox")
         self.nom = self.findChild(QtWidgets.QLineEdit, "lineEdit")

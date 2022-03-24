@@ -5,8 +5,8 @@ from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem
 
-from dialogs import Add_new_inf, Saving_progress_dialog, Add_new_month
-from threads import ThreadAddGroupe
+from dialogs import Add_new_inf, Saving_progress_dialog, Add_new_month, Update_worker_dialog
+from threads import ThreadAddGroupe, ThreadUpdateGroupe
 from tools import get_workers_count, get_guard_months_count
 
 basedir = os.path.dirname(__file__)
@@ -90,7 +90,7 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
             self.alert_(message)
 
         elif med_count[0] > 25:
-            message = 'Maximum nombre des medecin, supremer un medecin'
+            message = 'Maximum nombre des inf, supremer un inf'
             self.alert_(message)
         else:
 
@@ -112,7 +112,7 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
                 message = 'Le champ de nom est vide!'
                 self.alert_(message)
             elif med_count[0] > 25:
-                message = 'Maximum nombre des medecin, supremer un medecin'
+                message = 'Maximum nombre des inf, supremer un inf'
                 self.alert_(message)
             else:
                 self.dialog = Saving_progress_dialog()
@@ -189,13 +189,13 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
             self.table.setItem(row, 2, QTableWidgetItem(""))
             self.loadUsers()
         else:
-            message = 'Selectioner un medecin'
+            message = 'Selectioner un inf'
             self.alert_(message)
 
     def deleteUser_group(self):
-        row = self.table.currentRow()
+        row = self.table_group.currentRow()
         if row > -1:
-            id = self.table.item(row, 0).text()
+            id = self.table_group.item(row, 0).text()
             connection = sqlite3.connect("database/sqlite.db")
             cur = connection.cursor()
             sql_q = 'DELETE FROM health_worker WHERE worker_id=?'
@@ -206,16 +206,127 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
 
             connection.commit()
             connection.close()
-            self.table.setItem(row, 0, QTableWidgetItem(""))
-            self.table.setItem(row, 1, QTableWidgetItem(""))
-            self.table.setItem(row, 2, QTableWidgetItem(""))
+            self.table_group.setItem(row, 0, QTableWidgetItem(""))
+            self.table_group.setItem(row, 1, QTableWidgetItem(""))
+            self.table_group.setItem(row, 2, QTableWidgetItem(""))
+            self.table_group.setItem(row, 3, QTableWidgetItem(""))
             self.loadGroups()
         else:
-            message = 'Selectioner un medecin'
+            message = 'Selectioner un inf'
             self.alert_(message)
+
+    def updateUser(self):
+        row = self.table.currentRow()
+        if row > -1:
+            dialog = Update_worker_dialog()
+            print("dialog")
+            if dialog.exec() == QtWidgets.QDialog.Accepted:
+                if dialog.worker.text() == "":
+                    message = "enter un valide nom"
+                    self.alert_(message)
+                else:
+                    id = self.table.item(row, 0).text()
+                    connection = sqlite3.connect("database/sqlite.db")
+                    cur = connection.cursor()
+                    sql_q = 'UPDATE health_worker SET full_name= ? WHERE worker_id= ?'
+                    cur.execute(sql_q, (dialog.worker.text(), id))
+                    connection.commit()
+                    connection.close()
+                    self.loadUsers()
+
+        else:
+            message = 'Selectioner un inf'
+            self.alert_(message)
+
+    def updateUserGroupe(self):
+        row = self.table_group.currentRow()
+        if row > -1:
+            id = self.table_group.item(row, 0).text()
+            name = self.table_group.item(row, 1).text()
+            groupe = self.table_group.item(row, 3).text()
+
+            dialog = Add_new_inf()
+            dialog.setWindowTitle("Update infirmier")
+            dialog.nom.setText(name)
+            dialog.groupe.setCurrentText(groupe)
+            dialog.ttl.setText("metre a jour l'infirmier :")
+            if dialog.exec() == QtWidgets.QDialog.Accepted:
+                if dialog.nom.text() == "":
+                    message = "enter un valide nom"
+                    self.alert_(message)
+                elif dialog.nom.text() == name and dialog.groupe.currentText() == groupe:
+                    print("do nothing")
+                elif dialog.nom.text() == name:
+                    self.thr1 = ThreadUpdateGroupe(id, "", dialog.groupe.currentText())
+                    self.thr1._signal.connect(self.signal_accepted_update)
+                    self.thr1._signal_result.connect(self.signal_accepted_update)
+                    self.thr1.start()
+                elif dialog.groupe == groupe:
+                    self.thr1 = ThreadUpdateGroupe(id, dialog.nom.text(), "")
+                    self.thr1._signal.connect(self.signal_accepted_update)
+                    self.thr1._signal_result.connect(self.signal_accepted_update)
+                    self.thr1.start()
+                else:
+                    self.thr1 = ThreadUpdateGroupe(id, dialog.nom.text(), dialog.groupe.currentText())
+                    self.thr1._signal.connect(self.signal_accepted_update)
+                    self.thr1._signal_result.connect(self.signal_accepted_update)
+                    self.thr1.start()
+
+            self.loadGroups()
+        else:
+            message = 'Selectioner un inf'
+            self.alert_(message)
+
+    def loadUsers(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+        sql_q = 'SELECT * FROM health_worker where service=?'
+        tablerow = 0
+        cur.execute(sql_q, ('urgence_surv',))
+        results = cur.fetchall()
+        for row in results:
+            self.table.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
+            self.table.setItem(tablerow, 1, QTableWidgetItem(row[1]))
+            self.table.setItem(tablerow, 2, QTableWidgetItem(row[2]))
+            tablerow += 1
+        self.table.setItem(tablerow, 0, QTableWidgetItem(""))
+        self.table.setItem(tablerow, 1, QTableWidgetItem(""))
+        self.table.setItem(tablerow, 2, QTableWidgetItem(""))
+        connection.close()
+
+    def loadGroups(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+        sql_q = 'SELECT health_worker.id, health_worker.full_name, health_worker.service, groupe.g  FROM health_worker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id where health_worker.service=?'
+        tablerow = 0
+        cur.execute(sql_q, ('urgence_inf',))
+        results = cur.fetchall()
+        for row in results:
+            self.table_group.setItem(tablerow, 0, QTableWidgetItem(str(row[0])))
+            self.table_group.setItem(tablerow, 1, QTableWidgetItem(row[1]))
+            self.table_group.setItem(tablerow, 2, QTableWidgetItem(row[2]))
+            self.table_group.setItem(tablerow, 3, QTableWidgetItem(row[3]))
+            tablerow += 1
+        self.table_group.setItem(tablerow, 0, QTableWidgetItem(""))
+        self.table_group.setItem(tablerow, 1, QTableWidgetItem(""))
+        self.table_group.setItem(tablerow, 2, QTableWidgetItem(""))
+        self.table_group.setItem(tablerow, 3, QTableWidgetItem(""))
+        connection.close()
+
+
 
 
     def signal_accepted(self, progress):
+        if type(progress) == int:
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == bool:
+            self.dialog.progress.setValue(100)
+            self.dialog.label.setText("complete")
+            print(progress)
+            self.dialog.close()
+            self.loadGroups()
+
+    def signal_accepted_update(self, progress):
         if type(progress) == int:
             self.dialog.progress.setValue(progress)
         elif type(progress) == bool:
