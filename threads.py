@@ -2331,12 +2331,12 @@ class Thread_create_urgence_inf_guard(QThread):
                     res2 = cur.fetchall()
 
                     sql_q = 'DELETE FROM guard_groupe WHERE  guard_groupe.d=? and guard_groupe.m=? and guard_groupe.y=? and guard_groupe.periode =? and guard_groupe.g =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', str(rl[0])))
+                    cur.execute(sql_q, (day, self.month, self.year, 'light', str(rl[0])))
 
                     connection.commit()
 
                     sql_q = 'INSERT INTO guard_groupe (d,m,y,periode,g) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', med_name))
+                    cur.execute(sql_q, (day, self.month, self.year, 'light', med_name))
 
                     connection.commit()
 
@@ -2357,7 +2357,7 @@ class Thread_create_urgence_inf_guard(QThread):
                     res1 = cur.fetchall()
 
                     sql_q = 'DELETE FROM guard_groupe WHERE  guard_groupe.d=? and guard_groupe.m=? and guard_groupe.y=? and guard_groupe.periode =? and guard_groupe.g =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'light', str(rl[0])))
+                    cur.execute(sql_q, (day, self.month, self.year, 'light', str(rl[0])))
 
                     connection.commit()
 
@@ -2369,7 +2369,7 @@ class Thread_create_urgence_inf_guard(QThread):
             elif med_name != "":
 
                 sql_q = 'INSERT INTO guard_groupe (d,m,y,periode,g) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'light', med_name))
+                cur.execute(sql_q, (day, self.month, self.year, 'light', med_name))
 
                 connection.commit()
 
@@ -2395,21 +2395,21 @@ class Thread_create_urgence_inf_guard(QThread):
                     print("do nothing")
                 elif str(rn[0]) != med_name_2 and med_name_2 != "":
 
-                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    sql_q = 'SELECT health_worker.worker_id FROM health_worker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
                     cur.execute(sql_q, (str(rn[0]),))
                     res1 = cur.fetchall()
 
-                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    sql_q = 'SELECT health_worker.worker_id FROM health_worker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
                     cur.execute(sql_q, (med_name_2,))
                     res2 = cur.fetchall()
 
                     sql_q = 'DELETE FROM guard_groupe WHERE  guard_groupe.d=? and guard_groupe.m=? and guard_groupe.y=? and guard_groupe.periode =? and guard_groupe.g =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', str(rn[0])))
+                    cur.execute(sql_q, (day, self.month, self.year, 'night', str(rn[0])))
 
                     connection.commit()
 
                     sql_q = 'INSERT INTO guard_groupe (d,m,y,periode,g) values (?,?,?,?,?)'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', med_name_2))
+                    cur.execute(sql_q, (day, self.month, self.year, 'night', med_name_2))
 
                     connection.commit()
 
@@ -2424,12 +2424,12 @@ class Thread_create_urgence_inf_guard(QThread):
                         cur.execute(sql_q_light, (day, self.month, self.year, 'night', id))
 
                 elif str(rn[0]) != med_name_2 and med_name_2 == "":
-                    sql_q = 'SELECT health_worker.worker_id FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+                    sql_q = 'SELECT health_worker.worker_id FROM health_worker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
                     cur.execute(sql_q, (str(rn[0]),))
                     res1 = cur.fetchall()
 
                     sql_q = 'DELETE FROM guard_groupe WHERE  guard_groupe.d=? and guard_groupe.m=? and guard_groupe.y=? and guard_groupe.periode =? and guard_groupe.g =?'
-                    cur.execute(sql_q_light, (day, self.month, self.year, 'night', str(rn[0])))
+                    cur.execute(sql_q, (day, self.month, self.year, 'night', str(rn[0])))
 
                     connection.commit()
 
@@ -2443,7 +2443,7 @@ class Thread_create_urgence_inf_guard(QThread):
             elif med_name_2 != "":
 
                 sql_q = 'INSERT INTO guard_groupe (d,m,y,periode,g) values (?,?,?,?,?)'
-                cur.execute(sql_q_light, (day, self.month, self.year, 'night', med_name_2))
+                cur.execute(sql_q, (day, self.month, self.year, 'night', med_name_2))
 
                 connection.commit()
 

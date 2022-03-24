@@ -88,7 +88,7 @@ def create_garde_page(service, grd_cons, month, year, data, path):
     pdf.ln(8)
 
     pdf.set_font("Times", size=10)
-    line_height = pdf.font_size * 2
+    line_height = pdf.font_size * 1.9
     col_width = pdf.epw / 4
     fill = False
     for row in data:
@@ -167,7 +167,7 @@ def create_recap_page(service, month, year, data, chef, path):
     pdf.ln(8)
 
     pdf.set_font("Times", size=10)
-    line_height = pdf.font_size * 2
+    line_height = pdf.font_size * 1.9
     col_width = pdf.epw / 5  # distribute content evenly
     fill = False
     for row in data:
@@ -238,7 +238,7 @@ def create_garde_inf_page(service, grd_cons, month, year, data, groupes, path):
     pdf.ln(8)
 
     pdf.set_font("Times", size=10)
-    line_height = pdf.font_size * 1.55
+    line_height = pdf.font_size * 1.7
     col_width = pdf.epw / 4
     fill = False
     for row in data:
@@ -268,10 +268,10 @@ def create_garde_inf_page(service, grd_cons, month, year, data, groupes, path):
 
     for groupe in groupes:
         pdf.cell(0, 10, groupe, 0, 0, "L")
-        pdf.ln(1)
+        pdf.ln(4)
 
 
-    pdf.ln(2)
+    pdf.ln(20)
     pdf.set_right_margin(30)
     pdf.set_left_margin(30)
     pdf.cell(0, 10, "Chef service", 0, 0, "L")
