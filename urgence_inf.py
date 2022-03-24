@@ -259,16 +259,28 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
                 elif dialog.nom.text() == name and dialog.groupe.currentText() == groupe:
                     print("do nothing")
                 elif dialog.nom.text() == name:
+                    self.dialog = Saving_progress_dialog()
+                    self.dialog.label.setText("saving")
+                    self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                    self.dialog.show()
                     self.thr1 = ThreadUpdateGroupe(id, "", dialog.groupe.currentText())
                     self.thr1._signal.connect(self.signal_accepted_update)
                     self.thr1._signal_result.connect(self.signal_accepted_update)
                     self.thr1.start()
                 elif dialog.groupe == groupe:
+                    self.dialog = Saving_progress_dialog()
+                    self.dialog.label.setText("saving")
+                    self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                    self.dialog.show()
                     self.thr1 = ThreadUpdateGroupe(id, dialog.nom.text(), "")
                     self.thr1._signal.connect(self.signal_accepted_update)
                     self.thr1._signal_result.connect(self.signal_accepted_update)
                     self.thr1.start()
                 else:
+                    self.dialog = Saving_progress_dialog()
+                    self.dialog.label.setText("saving")
+                    self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                    self.dialog.show()
                     self.thr1 = ThreadUpdateGroupe(id, dialog.nom.text(), dialog.groupe.currentText())
                     self.thr1._signal.connect(self.signal_accepted_update)
                     self.thr1._signal_result.connect(self.signal_accepted_update)
