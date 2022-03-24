@@ -2178,7 +2178,9 @@ class Thread_load_guards_surv_urgences(QThread):
 
 class ThreadGuardUrgenceInf(QThread):
     _signal = pyqtSignal(int)
+    _signal_groupes = pyqtSignal(list)
     _signal_result = pyqtSignal(list)
+    _signal_finish = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year):
         super(ThreadGuardSurv, self).__init__()
@@ -2253,9 +2255,32 @@ class ThreadGuardUrgenceInf(QThread):
             time.sleep(0.3)
             self._signal.emit(int(prog))
 
-        connection.close()
         print(self.data)
         self._signal_result.emit(self.data)
+
+        sql_q = 'SELECT DISTINCT g FROM groupe'
+        cur.execute(sql_q)
+        groupes = cur.fetchall()
+
+        grs = []
+
+        for groupe in groupes:
+            sql_q = 'SELECT health_worker.full_name FROM health_woker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
+            cur.execute(sql_q, (groupe[0],))
+            workers = cur.fetchall()
+            gr = "Groupe " + groupe[0] +": "
+
+            for worker in workers:
+                gr = gr + worker[0] + " / "
+
+            grs.append(gr)
+
+        self._signal_groupes.emit(grs)
+        connection.close()
+
+        self._signal_finish.emit(True)
+
+
 
 
 class Thread_create_urgence_inf_guard(QThread):

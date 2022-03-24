@@ -59,6 +59,9 @@ class ExportUrgenceInf(QtWidgets.QMainWindow):
         self.thr = ThreadGuardUrgenceInf(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
+        self.thr._signal_finish.connect()
+        self.thr._signal_groupes.connect()
+
         self.thr.start()
 
     def export_pdf(self):
@@ -81,11 +84,17 @@ class ExportUrgenceInf(QtWidgets.QMainWindow):
         if type(progress) == int:
             self.progress.setValue(progress)
         elif type(progress) == list:
-            self.progress.setValue(100)
             self.data = progress
             print(self.data)
+        elif type(progress) == bool:
+            self.progress.setValue(100)
             self.status.setText("complete, click sur exporter")
             self.export.setEnabled(True)
+
+
+    def signal_accept_groupes(self, progress):
+        if type(progress) == list:
+            self.groupes = progress
 
     def alert_(self, message):
         alert = QMessageBox()
