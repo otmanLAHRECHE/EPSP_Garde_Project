@@ -3,6 +3,7 @@ import os
 from PyQt5 import QtWidgets, uic
 
 import urgence
+import urgence_inf
 
 basedir = os.path.dirname(__file__)
 
@@ -25,10 +26,10 @@ class UrgenceChoseUi(QtWidgets.QMainWindow):
 
     def infirmier_click(self):
 
-        """
-        self.next_page = urgence.UrgenceMainUi()
+
+        self.next_page = urgence_inf.UrgenceInfUi()
         self.next_page.show()
         self.close()
-        """
+
 
 

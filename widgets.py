@@ -40,7 +40,7 @@ class Chose_worker(QWidget):
 
 class Buttons_inf(QWidget):
     def __init__(self):
-        super(Buttons, self).__init__()
+        super(Buttons_inf, self).__init__()
 
         # add your buttons
         button_layout = QtWidgets.QHBoxLayout()
@@ -55,7 +55,8 @@ class Buttons_inf(QWidget):
 
         button_layout.addStretch(1)
         button_layout.addWidget(self.print_garde)
-        button_layout.addWidget(self.edit_garde)
+        button_layout.addWidget(self.edit_garde_inf)
+        button_layout.addWidget(self.edit_garde_surv)
         button_layout.addWidget(self.delete_garde)
 
         self.setLayout(button_layout)
