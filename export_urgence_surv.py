@@ -1,23 +1,18 @@
-import datetime
-import sqlite3
-import time
+import os
 from calendar import monthrange
 
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
-import urgence
-
-from PyQt5 import QtWidgets, uic
-
-from threads import ThreadGuard
+import urgence_inf
+from threads import ThreadGuardSurv
 from tools import create_garde_page
-import os
 
 basedir = os.path.dirname(__file__)
 
-class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
+class ExportUrgenceSurv(QtWidgets.QMainWindow):
     def __init__(self, month, year):
-        super(ExportUrgencePlaningUi, self).__init__()
+        super(ExportUrgenceSurv, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
         self.month = month
@@ -58,9 +53,9 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le planing de garde service d urgence " + m + "/" + str(self.year))
+        self.ttl.setText("Exporté le planing de garde d urgence (Infirmiers survients)" + m + "/" + str(self.year))
 
-        self.thr = ThreadGuard(self.num_days, self.month, self.year)
+        self.thr = ThreadGuardSurv(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
         self.thr.start()
@@ -75,8 +70,8 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("URGENCE", "GARDE URGENCE", self.month, self.year, self.data, filePath)
-            self.next_page = urgence.UrgenceMainUi()
+            create_garde_page("URGENCE", "GARDE INFIRMIERS SURVIENTS", self.month, self.year, self.data, filePath)
+            self.next_page = urgence_inf.UrgenceInfUi()
             self.next_page.show()
             print(self.thr.isFinished())
             self.close()
@@ -96,7 +91,6 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
         alert.setWindowTitle("alert")
         alert.setText(message)
         alert.exec_()
-
 
 
 

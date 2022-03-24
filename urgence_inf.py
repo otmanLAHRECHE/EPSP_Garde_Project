@@ -5,6 +5,8 @@ from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+import urgence_inf_guard
+import urgence_surv_guard
 from dialogs import Add_new_inf, Saving_progress_dialog, Add_new_month, Update_worker_dialog
 from threads import ThreadAddGroupe, ThreadUpdateGroupe
 from tools import get_workers_count, get_guard_months_count
@@ -438,11 +440,11 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.urgence_guard_page = urgence_guard.UrgenceGuardUi(m, y)
-        self.urgence_guard_page.show()
+
+        self.next_page = urgence_inf_guard.UrgenceInfGuardUi(m, y)
+        self.next_page.show()
         self.close()
-        """
+
 
     def edit_g_surv(self):
         clickme = qApp.focusWidget()
@@ -477,11 +479,11 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.urgence_guard_page = urgence_guard.UrgenceGuardUi(m, y)
-        self.urgence_guard_page.show()
+
+        self.next_page = urgence_surv_guard.UrgenceSurvGuardUi(m, y)
+        self.next_page.show()
         self.close()
-        """
+
 
     def delete_g(self):
         clickme = qApp.focusWidget()
