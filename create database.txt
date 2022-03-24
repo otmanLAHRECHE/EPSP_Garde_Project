@@ -38,3 +38,12 @@ CREATE TABLE groupe (
    inf_id integer NOT NULL,
   FOREIGN KEY(inf_id) REFERENCES health_worker(worker_id)
 );
+
+CREATE TABLE guard_groupe (
+   guard_groupe_id INTEGER PRIMARY KEY AUTOINCREMENT,
+   y integer NOT NULL,
+   m integer NOT NULL,
+   d integer NOT NULL,
+   periode text NOT NULL,
+   g text NOT NULL
+);
