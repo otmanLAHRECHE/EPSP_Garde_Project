@@ -13,12 +13,10 @@ class UrgenceChoseUi(QtWidgets.QMainWindow):
         uic.loadUi(os.path.join(basedir, 'ui', 'urgence_chose.ui'), self)
 
         self.med = self.findChild(QtWidgets.QPushButton, "pushButton")
-        self.infirmier = self.findChild(QtWidgets.QPushButton, "pushButton_2")
-        self.infirmier_surv = self.findChild(QtWidgets.QPushButton, "pushButton_2")
+        self.infirmier = self.findChild(QtWidgets.QPushButton, "pushButton_3")
 
         self.med.clicked.connect(self.med_click)
         self.infirmier.clicked.connect(self.infirmier_click)
-        self.infirmier_surv.clicked.connect(self.infirmier_surv_click)
 
     def med_click(self):
         self.next_page = urgence.UrgenceMainUi()
@@ -33,10 +31,4 @@ class UrgenceChoseUi(QtWidgets.QMainWindow):
         self.close()
         """
 
-    def infirmier_surv_click(self):
 
-        """
-        self.next_page = urgence.UrgenceMainUi()
-        self.next_page.show()
-        self.close()
-        """

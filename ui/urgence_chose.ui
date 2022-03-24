@@ -32,24 +32,6 @@
    <string>Choisire </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>90</y>
-      <width>201</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Groupes des infirmiers</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
@@ -91,7 +73,7 @@
      <rect>
       <x>170</x>
       <y>90</y>
-      <width>151</width>
+      <width>361</width>
       <height>71</height>
      </rect>
     </property>
@@ -101,7 +83,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Infirmiers survient</string>
+     <string>Infirmiers survient et Groupes des infirmiers</string>
     </property>
    </widget>
   </widget>
