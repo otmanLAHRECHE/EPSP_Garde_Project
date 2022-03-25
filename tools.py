@@ -299,7 +299,7 @@ def create_statistique_page(month, year, data, path):
     pdf.ln(10)
 
     pdf.set_font("helvetica", "B", size=17)
-    pdf.cell(0, 10, "Statistique", 1, 0, "C")
+    pdf.cell(0, 10, "Statistique de service RADIOLOGIE", 1, 0, "C")
     pdf.ln(8)
     m = ""
     if month == 1:

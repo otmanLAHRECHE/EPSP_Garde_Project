@@ -15,7 +15,7 @@ basedir = os.path.dirname(__file__)
 
 
 class RadioStatistiquesUi(QtWidgets.QMainWindow):
-    def __init__(self, month, year, service):
+    def __init__(self, month, year):
         super(RadioStatistiquesUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'radiologie_statistiques.ui'), self)
 
