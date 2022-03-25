@@ -47,3 +47,48 @@ CREATE TABLE guard_groupe (
    periode text NOT NULL,
    g text NOT NULL
 );
+
+create table state_homme (
+    state_homme_id INTEGER PRIMARY KEY autoincrement ,
+    m INTEGER not null ,
+    y INTEGER not null ,
+    Poumon INTEGER not null ,
+    OS INTEGER not null ,
+    Abdomen_simple INTEGER not null ,
+    UIV INTEGER not null ,
+    Cholecystographie INTEGER not null ,
+    Estomac INTEGER not null ,
+    Echographie INTEGER not null ,
+    Fibroscopie INTEGER not null ,
+    ECG INTEGER not null
+);
+
+create table state_famme (
+    state_famme_id INTEGER PRIMARY KEY autoincrement ,
+    m INTEGER not null ,
+    y INTEGER not null ,
+    Poumon INTEGER not null ,
+    OS INTEGER not null ,
+    Abdomen_simple INTEGER not null ,
+    UIV INTEGER not null ,
+    Cholecystographie INTEGER not null ,
+    Estomac INTEGER not null ,
+    Echographie INTEGER not null ,
+    Fibroscopie INTEGER not null ,
+    ECG INTEGER not null
+);
+
+create table state_enfant (
+    state_enfant_id INTEGER PRIMARY KEY autoincrement ,
+    m INTEGER not null ,
+    y INTEGER not null ,
+    Poumon INTEGER not null ,
+    OS INTEGER not null ,
+    Abdomen_simple INTEGER not null ,
+    UIV INTEGER not null ,
+    Cholecystographie INTEGER not null ,
+    Estomac INTEGER not null ,
+    Echographie INTEGER not null ,
+    Fibroscopie INTEGER not null ,
+    ECG INTEGER not null
+);

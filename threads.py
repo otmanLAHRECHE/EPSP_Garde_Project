@@ -2338,8 +2338,6 @@ class ThreadGuardUrgenceInf(QThread):
         self._signal_finish.emit(True)
 
 
-
-
 class Thread_create_urgence_inf_guard(QThread):
     _signal_status = pyqtSignal(int)
     _signal = pyqtSignal(bool)
@@ -2564,6 +2562,321 @@ class Thread_load_guards_inf_urgences(QThread):
 
         connection.close()
         self._signal_finish.emit(True)
+
+
+class Thread_state_load(QThread):
+    _signal_status = pyqtSignal(int)
+    _signal = pyqtSignal(list)
+    _signal_finish = pyqtSignal(bool)
+
+    def __init__(self, month, year):
+        super(Thread_state_load, self).__init__()
+        self.month = month
+        self.year = year
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+
+
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_homme where state_homme.m =? and state_homme.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_h = cur.fetchall()
+
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_f = cur.fetchall()
+
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_enfant where state_enfant.m =? and state_enfant.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_e = cur.fetchall()
+
+        self.Poumon = []
+        self.OS = []
+        self.Abdomen_simple = []
+        self.UIV = []
+        self.Cholecystographie = []
+        self.Estomac = []
+        self.Echographie = []
+        self.Fibroscopie = []
+        self.ECG = []
+
+        if res_h:
+            po = res_h[0]
+            self.Poumon.append(po[0])
+            os = res_h[1]
+            self.OS.append(os[0])
+            abd = res_h[2]
+            self.Abdomen_simple.append(abd[0])
+            uiv = res_h[3]
+            self.UIV.append(uiv[0])
+            chol = res_h[4]
+            self.Cholecystographie.append(chol[0])
+            est = res_h[5]
+            self.Estomac.append(est[0])
+            echo = res_h[6]
+            self.Echographie.append(echo[0])
+            fibr = res_h[7]
+            self.Fibroscopie.append(fibr[0])
+            ecg = res_h[8]
+            self.ECG.append(ecg[0])
+        else:
+            self.Poumon.append(0)
+            self.OS.append(0)
+            self.Abdomen_simple.append(0)
+            self.UIV.append(0)
+            self.Cholecystographie.append(0)
+            self.Estomac.append(0)
+            self.Echographie.append(0)
+            self.Fibroscopie.append(0)
+            self.ECG.append(0)
+
+        if res_f:
+            po = res_f[0]
+            self.Poumon.append(po[0])
+            os = res_f[1]
+            self.OS.append(os[0])
+            abd = res_f[2]
+            self.Abdomen_simple.append(abd[0])
+            uiv = res_f[3]
+            self.UIV.append(uiv[0])
+            chol = res_f[4]
+            self.Cholecystographie.append(chol[0])
+            est = res_f[5]
+            self.Estomac.append(est[0])
+            echo = res_f[6]
+            self.Echographie.append(echo[0])
+            fibr = res_f[7]
+            self.Fibroscopie.append(fibr[0])
+            ecg = res_f[8]
+            self.ECG.append(ecg[0])
+        else:
+            self.Poumon.append(0)
+            self.OS.append(0)
+            self.Abdomen_simple.append(0)
+            self.UIV.append(0)
+            self.Cholecystographie.append(0)
+            self.Estomac.append(0)
+            self.Echographie.append(0)
+            self.Fibroscopie.append(0)
+            self.ECG.append(0)
+
+        if res_e:
+            po = res_e[0]
+            self.Poumon.append(po[0])
+            os = res_e[1]
+            self.OS.append(os[0])
+            abd = res_e[2]
+            self.Abdomen_simple.append(abd[0])
+            uiv = res_e[3]
+            self.UIV.append(uiv[0])
+            chol = res_e[4]
+            self.Cholecystographie.append(chol[0])
+            est = res_e[5]
+            self.Estomac.append(est[0])
+            echo = res_e[6]
+            self.Echographie.append(echo[0])
+            fibr = res_e[7]
+            self.Fibroscopie.append(fibr[0])
+            ecg = res_e[8]
+            self.ECG.append(ecg[0])
+        else:
+            self.Poumon.append(0)
+            self.OS.append(0)
+            self.Abdomen_simple.append(0)
+            self.UIV.append(0)
+            self.Cholecystographie.append(0)
+            self.Estomac.append(0)
+            self.Echographie.append(0)
+            self.Fibroscopie.append(0)
+            self.ECG.append(0)
+
+
+
+        list = []
+        list.append(self.Poumon)
+        list.append(self.OS)
+        list.append(self.Abdomen_simple)
+        list.append(self.UIV)
+        list.append(self.Cholecystographie)
+        list.append(self.Estomac)
+        list.append(self.Echographie)
+        list.append(self.Fibroscopie)
+        list.append(self.ECG)
+
+        for prog in range(20):
+            time.sleep(0.1)
+            self._signal_status.emit(int(prog))
+
+        self._signal.emit(list)
+
+        connection.close()
+        self._signal_finish.emit(True)
+
+
+class Thread_save_state(QThread):
+    _signal_status = pyqtSignal(int)
+    _signal = pyqtSignal(bool)
+
+    def __init__(self, month, year, table, service):
+        super(Thread_save_recap, self).__init__()
+        self.month = month
+        self.year = year
+        self.table = table
+        self.service = service
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+        for row in range(self.table.rowCount()):
+            prog = row * 100 / self.table.rowCount()
+            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
+                if self.service == "urgence_surv_inf":
+                    serv = get_workerService_by_name(self.table.item(row, 1).text())
+                    serv = serv[0]
+                    id_agn = get_workerId_by_name(self.table.item(row, 1).text(), serv[0])
+                    id_agn = id_agn[0]
+                    sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service in (?,?) and recap.agents_id =? and recap.m =? and recap.y =?'
+                    cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_agn[0], self.month, self.year))
+                else:
+                    id_agn = get_workerId_by_name(self.table.item(row, 1).text(), self.service)
+                    id_agn = id_agn[0]
+                    sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                    cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+
+                results = cur.fetchall()
+
+
+                jo2 = int(self.table.item(row, 2).text())
+                jw2 = int(self.table.item(row, 3).text())
+                jf2 = int(self.table.item(row, 4).text())
+
+                if results:
+                    results = results[0]
+                    jo1 = results[0]
+                    jw1 = results[1]
+                    jf1 = results[2]
+
+                    if jo1 == jo2 and jw1 == jw2 and jf1 == jf2:
+                        print("do nothing")
+                    else:
+                        if jo1 != jo2:
+                            sql_q = 'UPDATE recap SET jo =? where  recap.agents_id =? and recap.m =? and recap.y =?'
+                            cur.execute(sql_q, (jo2, id_agn[0], self.month, self.year))
+                        if jw1 != jw2:
+                            sql_q = 'UPDATE recap SET jw =? where  recap.agents_id =? and recap.m =? and recap.y =?'
+                            cur.execute(sql_q, (jw2, id_agn[0], self.month, self.year))
+                        if jf1 != jf2:
+                            sql_q = 'UPDATE recap SET jf =? where  recap.agents_id =? and recap.m =? and recap.y =?'
+                            cur.execute(sql_q, (jf2, id_agn[0], self.month, self.year))
+
+                else:
+                    if jo2 == 0 and jw2 == 0 and jf2 == 0:
+                        print("do nothing")
+                    else:
+                        sql_q = 'INSERT INTO recap (jo,jw,jf,m,y,agents_id) VALUES (?,?,?,?,?,?)'
+                        cur.execute(sql_q, (jo2, jw2, jf2, self.month, self.year, id_agn[0]))
+
+            connection.commit()
+            time.sleep(0.1)
+            self._signal_status.emit(int(prog))
+
+        connection.close()
+        self._signal.emit(True)
+
+
+class ThreadStateExport(QThread):
+    _signal = pyqtSignal(int)
+    _signal_result = pyqtSignal(list)
+
+    def __init__(self, month, year, service):
+        super(ThreadRecapExport, self).__init__()
+        self.service = service
+        self.month = month
+        self.year = year
+        self.data = [(" / ", "Jours ouvrable", "Jours week-end", "Jours fériés", "Total")]
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+
+        if self.service == "urgence_surv_inf":
+            sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ("urgence_inf", "urgence_surv", self.month, self.year))
+            res = cur.fetchall()
+
+            sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ("urgence_inf", "urgence_surv", self.month, self.year))
+            res2 = cur.fetchall()
+        else:
+            sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, (self.service, self.month, self.year))
+            res = cur.fetchall()
+
+            sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, (self.service, self.month, self.year))
+            res2 = cur.fetchall()
+
+
+        count = res2[0]
+        row = 0
+        for agent in res:
+            prog = row * 100 / count[0]
+
+            if self.service == "urgence_surv_inf":
+                serv = get_workerService_by_name(agent[0])
+                serv = serv[0]
+                id_ag = get_workerId_by_name(agent[0], serv[0])
+                id_ag = id_ag[0]
+
+                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service in (?,?) and recap.agents_id =? and recap.m =? and recap.y =?'
+                cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_ag[0], self.month, self.year))
+
+            else:
+                id_agn = get_workerId_by_name(agent[0], self.service)
+                id_agn = id_agn[0]
+
+                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+
+
+            results = cur.fetchall()
+            if results:
+                results = results[0]
+
+                jo = results[0]
+                jw = results[1]
+                jf = results[2]
+            else:
+                jo = 0
+                jw = 0
+                jf = 0
+
+            total = int(jo) + int(jw) + int(jf)
+
+            data_agent = (agent[0], jo, jw, jf, total)
+
+            self.data.append(data_agent)
+
+            time.sleep(0.3)
+            self._signal.emit(int(prog))
+            row = row + 1
+
+        connection.close()
+        print(self.data)
+        self._signal_result.emit(self.data)
 
 
 

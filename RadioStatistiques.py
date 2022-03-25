@@ -1,29 +1,20 @@
-import datetime
 import os
 
-import PyQt5
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
-import dentiste
-import export_recap
-import infirmier
-import laboratoire
-import pharmacie
 import radiologie
-import urgence
-import urgence_inf
-from dialogs import Saving_progress_dialog, CustomDialog
-from threads import Thread_recap_load, Thread_save_recap
+from dialogs import CustomDialog, Saving_progress_dialog
+from threads import Thread_state_load
 
 basedir = os.path.dirname(__file__)
 
 
-class RecapUi(QtWidgets.QMainWindow):
+class RadioStatistiquesUi(QtWidgets.QMainWindow):
     def __init__(self, month, year, service):
-        super(RecapUi, self).__init__()
-        uic.loadUi(os.path.join(basedir, 'ui', 'recap.ui'), self)
+        super(RadioStatistiquesUi, self).__init__()
+        uic.loadUi(os.path.join(basedir, 'ui', 'radiologie_statistiques.ui'), self)
 
         self.month = month
         self.year = year
@@ -31,16 +22,14 @@ class RecapUi(QtWidgets.QMainWindow):
 
         self.want_to_close = False
 
-        self.setWindowTitle("RECAP Service " + self.service)
-
         self.title = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
         self.table.hideColumn(0)
-        self.chef = self.findChild(QtWidgets.QComboBox, "comboBox")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
         self.save.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'save.png')))
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton_2")
         self.export.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'download.png')))
+
         if self.month == 1:
             m = "janvier"
         elif self.month == 2:
@@ -66,9 +55,9 @@ class RecapUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.title.setText("RECAP Service de " + self.service + " mois " + str(m) + "/" + str(self.year) + ":")
-        self.load_recap()
+        self.title.setText("Radio statistiques " + self.service + " mois de " + str(m) + "/" + str(self.year) + ":")
 
+        self.load_state()
         self.save.clicked.connect(self.save_)
         self.export.clicked.connect(self.export_)
 
@@ -79,27 +68,11 @@ class RecapUi(QtWidgets.QMainWindow):
         alert.exec_()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        message = "Votre liste de RECAP na pas sauvgarder, es-tu sûr de quiter"
+        message = "Votre radio statistiques na pas sauvgarder, es-tu sûr de quiter"
         dialog = CustomDialog(message)
         if not self.want_to_close:
             if dialog.exec():
-                if self.service == "urgence":
-                    self.next_page = urgence.UrgenceMainUi()
-                elif self.service == "dentiste":
-                    self.next_page = dentiste.DentisteMainUi()
-                elif self.service == "dentiste_inf":
-                    self.next_page = infirmier.InfermierMainUi()
-                elif self.service == "labo":
-                    self.next_page = laboratoire.LaboratoireMainUi()
-                elif self.service == "radio":
-                    self.next_page = radiologie.RadiologieMainUi()
-                elif self.service == "pharm":
-                    self.next_page = pharmacie.PharmacieMainUi()
-                elif self.service == "urgence_surv":
-                    self.next_page = dentiste.DentisteMainUi()
-                elif self.service == "urgence_inf":
-                    self.next_page = dentiste.DentisteMainUi()
-
+                self.next_page = radiologie.RadiologieMainUi()
                 self.next_page.show()
                 self.close()
             else:
@@ -107,17 +80,16 @@ class RecapUi(QtWidgets.QMainWindow):
         else:
             self.close()
 
-    def load_recap(self):
+    def load_state(self):
         self.dialog = Saving_progress_dialog()
         self.dialog.label.setText("loading RECAP")
         self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.dialog.show()
 
-        self.thr1 = Thread_recap_load(self.month, self.year, self.service)
+        self.thr1 = Thread_state_load(self.month, self.year)
         self.thr1._signal.connect(self.signal_accepted_load)
         self.thr1._signal_status.connect(self.signal_accepted_load)
         self.thr1._signal_finish.connect(self.signal_accepted_load)
-        self.thr1._signal_users.connect(self.signal_accepted_load_users)
         self.thr1.start()
 
     def signal_accepted_load(self, progress):
@@ -125,19 +97,77 @@ class RecapUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(progress)
         elif type(progress) == list:
 
-            agents_name = progress[0]
-            jo = progress[1]
-            jw = progress[2]
-            jf = progress[3]
-            pr = progress[4]
+            po = progress[0]
+            self.table.setRowHeight(0, 50)
+            self.table.setItem(0, 1, QTableWidgetItem(str(po[0])))
+            self.table.setItem(0, 2, QTableWidgetItem(str(po[1])))
+            self.table.setItem(0, 3, QTableWidgetItem(str(po[2])))
+            total = int(po[0]) + int(po[1]) + int(po[2])
+            self.table.setItem(0, 4, QTableWidgetItem(str(total)))
 
-            self.table.setRowHeight(pr, 50)
-            self.table.setItem(pr, 1, QTableWidgetItem(agents_name))
-            self.table.setItem(pr, 2, QTableWidgetItem(str(jo)))
-            self.table.setItem(pr, 3, QTableWidgetItem(str(jw)))
-            self.table.setItem(pr, 4, QTableWidgetItem(str(jf)))
-            total = jo + jw + jf
-            self.table.setItem(pr, 5, QTableWidgetItem(str(total)))
+            os = progress[1]
+            self.table.setRowHeight(1, 50)
+            self.table.setItem(1, 1, QTableWidgetItem(str(os[0])))
+            self.table.setItem(1, 2, QTableWidgetItem(str(os[1])))
+            self.table.setItem(1, 3, QTableWidgetItem(str(os[2])))
+            total = int(os[0]) + int(os[1]) + int(os[2])
+            self.table.setItem(1, 4, QTableWidgetItem(str(total)))
+
+            abd = progress[2]
+            self.table.setRowHeight(2, 50)
+            self.table.setItem(2, 1, QTableWidgetItem(str(abd[0])))
+            self.table.setItem(2, 2, QTableWidgetItem(str(abd[1])))
+            self.table.setItem(2, 3, QTableWidgetItem(str(abd[2])))
+            total = int(abd[0]) + int(abd[1]) + int(abd[2])
+            self.table.setItem(2, 4, QTableWidgetItem(str(total)))
+
+            uiv = progress[3]
+            self.table.setRowHeight(3, 50)
+            self.table.setItem(3, 1, QTableWidgetItem(str(uiv[0])))
+            self.table.setItem(3, 2, QTableWidgetItem(str(uiv[1])))
+            self.table.setItem(3, 3, QTableWidgetItem(str(uiv[2])))
+            total = int(uiv[0]) + int(uiv[1]) + int(uiv[2])
+            self.table.setItem(3, 4, QTableWidgetItem(str(total)))
+
+            chol = progress[4]
+            self.table.setRowHeight(4, 50)
+            self.table.setItem(4, 1, QTableWidgetItem(str(chol[0])))
+            self.table.setItem(4, 2, QTableWidgetItem(str(chol[1])))
+            self.table.setItem(4, 3, QTableWidgetItem(str(chol[2])))
+            total = int(chol[0]) + int(chol[1]) + int(chol[2])
+            self.table.setItem(4, 4, QTableWidgetItem(str(total)))
+
+            est = progress[5]
+            self.table.setRowHeight(5, 50)
+            self.table.setItem(5, 1, QTableWidgetItem(str(est[0])))
+            self.table.setItem(5, 2, QTableWidgetItem(str(est[1])))
+            self.table.setItem(5, 3, QTableWidgetItem(str(est[2])))
+            total = int(est[0]) + int(est[1]) + int(est[2])
+            self.table.setItem(5, 4, QTableWidgetItem(str(total)))
+
+            echo = progress[6]
+            self.table.setRowHeight(6, 50)
+            self.table.setItem(6, 1, QTableWidgetItem(str(echo[0])))
+            self.table.setItem(6, 2, QTableWidgetItem(str(echo[1])))
+            self.table.setItem(6, 3, QTableWidgetItem(str(echo[2])))
+            total = int(echo[0]) + int(echo[1]) + int(echo[2])
+            self.table.setItem(6, 4, QTableWidgetItem(str(total)))
+
+            fibr = progress[7]
+            self.table.setRowHeight(7, 50)
+            self.table.setItem(7, 1, QTableWidgetItem(str(fibr[0])))
+            self.table.setItem(7, 2, QTableWidgetItem(str(fibr[1])))
+            self.table.setItem(7, 3, QTableWidgetItem(str(fibr[2])))
+            total = int(fibr[0]) + int(fibr[1]) + int(fibr[2])
+            self.table.setItem(7, 4, QTableWidgetItem(str(total)))
+
+            ecg = progress[8]
+            self.table.setRowHeight(8, 50)
+            self.table.setItem(8, 1, QTableWidgetItem(str(ecg[0])))
+            self.table.setItem(8, 2, QTableWidgetItem(str(ecg[1])))
+            self.table.setItem(8, 3, QTableWidgetItem(str(ecg[2])))
+            total = int(ecg[0]) + int(ecg[1]) + int(ecg[2])
+            self.table.setItem(8, 4, QTableWidgetItem(str(total)))
 
 
 
@@ -146,12 +176,6 @@ class RecapUi(QtWidgets.QMainWindow):
             self.dialog.label.setText("complete")
             self.dialog.close()
 
-    def signal_accepted_load_users(self, progress):
-
-        self.chef.addItem("")
-
-        for worker in progress:
-            self.chef.addItem(worker[0])
 
     def save_(self):
         alert = False
@@ -195,23 +219,7 @@ class RecapUi(QtWidgets.QMainWindow):
             for row in range(self.table.rowCount()):
                 if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
                     self.table.setItem(row, 5, QTableWidgetItem(str(int(self.table.item(row, 2).text()) + int(self.table.item(row, 3).text()) + int(self.table.item(row, 4).text()))))
-            if self.service == "urgence":
-                self.next_page = urgence.UrgenceMainUi()
-            elif self.service == "dentiste":
-                self.next_page = dentiste.DentisteMainUi()
-            elif self.service == "dentiste_inf":
-                self.next_page = infirmier.InfermierMainUi()
-            elif self.service == "labo":
-                self.next_page = laboratoire.LaboratoireMainUi()
-            elif self.service == "radio":
-                self.next_page = radiologie.RadiologieMainUi()
-            elif self.service == "pharm":
-                self.next_page = pharmacie.PharmacieMainUi()
-            elif self.service == "urgence_surv":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_surv_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
+
+            self.next_page = radiologie.RadiologieMainUi()
             self.next_page.show()
             self.close()
