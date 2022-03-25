@@ -1,23 +1,27 @@
+import os
 
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QFileDialog
 
-
+import radiologie
+from threads import ThreadStateExport
+from tools import create_statistique_page
 
 basedir = os.path.dirname(__file__)
 
 
-class ExportRecapUi(QtWidgets.QMainWindow):
-    def __init__(self, month, year, service, chef):
-        super(ExportRecapUi, self).__init__()
+class ExportStatistiqueUi(QtWidgets.QMainWindow):
+    def __init__(self, month, year):
+        super(ExportStatistiqueUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
-        self.chef = chef
+
 
 
         self.month = month
         self.year = year
-        self.service = service
 
-        self.setWindowTitle("Export RECAP service: " + self.service)
+        self.setWindowTitle("Export Statistique")
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.progress = self.findChild(QtWidgets.QProgressBar, "progressBar")
         self.progress.setValue(0)
@@ -52,9 +56,9 @@ class ExportRecapUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le RECAP service du" + self.service + " mois de  " + m + "/" + str(self.year))
+        self.ttl.setText("Exporté statistique mois de  " + m + "/" + str(self.year))
 
-        self.thr = ThreadRecapExport(self.month, self.year, self.service)
+        self.thr = ThreadStateExport(self.month, self.year)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
         self.thr.start()
@@ -70,27 +74,8 @@ class ExportRecapUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_recap_page("URGENCE", self.month, self.year, self.data, self.chef, filePath)
-
-            if self.service == "urgence":
-                self.next_page = urgence.UrgenceMainUi()
-            elif self.service == "dentiste":
-                self.next_page = dentiste.DentisteMainUi()
-            elif self.service == "dentiste_inf":
-                self.next_page = infirmier.InfermierMainUi()
-            elif self.service == "labo":
-                self.next_page = laboratoire.LaboratoireMainUi()
-            elif self.service == "radio":
-                self.next_page = radiologie.RadiologieMainUi()
-            elif self.service == "pharm":
-                self.next_page = pharmacie.PharmacieMainUi()
-            elif self.service == "urgence_surv":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_surv_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
-
+            create_statistique_page(self.month, self.year, self.data, filePath)
+            self.next_page = radiologie.RadiologieMainUi()
             self.next_page.show()
             print(self.thr.isFinished())
             self.close()

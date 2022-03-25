@@ -6,6 +6,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
 import export_recap
+import export_statistique
 import radiologie
 from dialogs import CustomDialog, Saving_progress_dialog
 from threads import Thread_state_load, Thread_save_state

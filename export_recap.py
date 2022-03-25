@@ -11,22 +11,23 @@ import pharmacie
 import radiologie
 import urgence
 import urgence_inf
-from threads import ThreadRecapExport, ThreadStateExport
+from threads import ThreadRecapExport
 from tools import create_garde_page, create_recap_page
 
 basedir = os.path.dirname(__file__)
 
 
-class ExportStatistiqueUi(QtWidgets.QMainWindow):
-    def __init__(self, month, year):
-        super(ExportStatistiqueUi, self).__init__()
+class ExportRecapUi(QtWidgets.QMainWindow):
+    def __init__(self, month, year, service, chef):
+        super(ExportRecapUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'export_planing.ui'), self)
 
-
+        self.chef = chef
 
 
         self.month = month
         self.year = year
+        self.service = service
 
         self.setWindowTitle("Export RECAP service: " + self.service)
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
@@ -63,9 +64,9 @@ class ExportStatistiqueUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté Statistique mois de  " + m + "/" + str(self.year))
+        self.ttl.setText("Exporté le RECAP service du" + self.service + " mois de  " + m + "/" + str(self.year))
 
-        self.thr = ThreadStateExport(self.month, self.year)
+        self.thr = ThreadRecapExport(self.month, self.year, self.service)
         self.thr._signal.connect(self.signal_accept)
         self.thr._signal_result.connect(self.signal_accept)
         self.thr.start()
