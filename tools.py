@@ -186,7 +186,7 @@ def create_recap_page(service, month, year, data, chef, path):
 
         pdf.ln(line_height)
 
-    pdf.ln(1)
+    pdf.ln(2)
     pdf.set_right_margin(30)
     pdf.set_left_margin(30)
 

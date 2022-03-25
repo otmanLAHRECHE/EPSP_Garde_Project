@@ -507,22 +507,22 @@ class DentisteMainUi(QtWidgets.QMainWindow):
 
     def delete_cns(self):
         clickme = qApp.focusWidget()
-        index = self.table_gardes.indexAt(clickme.parent().pos())
+        index = self.table_consultation.indexAt(clickme.parent().pos())
         row = index.row()
         if row > -1:
-            id = self.table_gardes.item(row, 0).text()
+            id = self.table_consultation.item(row, 0).text()
             connection = sqlite3.connect("database/sqlite.db")
             cur = connection.cursor()
             sql_q = 'DELETE FROM consultaion_mounth WHERE consultation_mounth_id=?'
             cur.execute(sql_q, (id,))
             connection.commit()
             connection.close()
-            self.table.setItem(row, 0, QTableWidgetItem(""))
-            self.table.setItem(row, 1, QTableWidgetItem(""))
-            self.table.setItem(row, 2, QTableWidgetItem(""))
-            self.table.setItem(row, 3, QTableWidgetItem(""))
-            self.table.setItem(row, 4, QTableWidgetItem(""))
-            self.loadGuardMonths()
+            self.table_consultation.setItem(row, 0, QTableWidgetItem(""))
+            self.table_consultation.setItem(row, 1, QTableWidgetItem(""))
+            self.table_consultation.setItem(row, 2, QTableWidgetItem(""))
+            self.table_consultation.setItem(row, 3, QTableWidgetItem(""))
+            self.table_consultation.setItem(row, 4, QTableWidgetItem(""))
+            self.loadConsultationMonths()
 
     def print_cns(self):
         clickme = qApp.focusWidget()
