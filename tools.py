@@ -17,6 +17,15 @@ def get_workerId_by_name(name, service):
     return results
 
 
+def get_workerService_by_name(name):
+    connection = sqlite3.connect("database/sqlite.db")
+    cur = connection.cursor()
+    sql_q = 'SELECT service FROM health_worker where full_name=?'
+    cur.execute(sql_q, (name,))
+    results = cur.fetchall()
+    connection.close()
+    return results
+
 def get_workers_count(service):
     connection = sqlite3.connect("database/sqlite.db")
     cur = connection.cursor()
@@ -45,6 +54,7 @@ def get_consultation_months_count(service):
     results = cur.fetchall()
     connection.close()
     return results
+
 
 def create_garde_page(service, grd_cons, month, year, data, path):
     pdf = EpspPdf()

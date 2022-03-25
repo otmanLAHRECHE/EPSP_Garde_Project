@@ -7,7 +7,7 @@ from calendar import monthrange
 import PyQt5
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from tools import get_workerId_by_name
+from tools import get_workerId_by_name, get_workerService_by_name
 import os
 
 basedir = os.path.dirname(__file__)
@@ -1674,8 +1674,13 @@ class Thread_recap_load(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
-        sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
-        cur.execute(sql_q, (self.service, self.month, self.year))
+        if self.service == "urgence_surv_inf":
+            sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ("urgence_inf", "urgence_surv", self.month, self.year))
+        else:
+            sql_q = 'SELECT DISTINCT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, (self.service, self.month, self.year))
+
         res = cur.fetchall()
         self.agents = res
         self._signal_users.emit(self.agents)
@@ -1688,11 +1693,22 @@ class Thread_recap_load(QThread):
             jf = 0
             prog = pr * 100 / self.num_days
 
-            id_ag = get_workerId_by_name(agent[0], self.service)
-            id_ag = id_ag[0]
+            if self.service == "urgence_surv_inf":
+                serv = get_workerService_by_name(agent[0])
+                serv = serv[0]
+                id_ag = get_workerId_by_name(agent[0], serv[0])
+                id_ag = id_ag[0]
+            else:
+                id_ag = get_workerId_by_name(agent[0], self.service)
+                id_ag = id_ag[0]
 
-            sql_q = 'SELECT recap.jo,recap.jw,recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-            cur.execute(sql_q, (self.service, id_ag[0], self.month, self.year))
+            if self.service == "urgence_surv_inf":
+                sql_q = 'SELECT recap.jo,recap.jw,recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service in (?,?) and recap.agents_id =? and recap.m =? and recap.y =?'
+                cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_ag[0], self.month, self.year))
+            else:
+                sql_q = 'SELECT recap.jo,recap.jw,recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                cur.execute(sql_q, (self.service, id_ag[0], self.month, self.year))
+
             res1 = cur.fetchall()
             res1 = res1[0]
 
@@ -1705,8 +1721,12 @@ class Thread_recap_load(QThread):
                 for day in range(self.num_days):
                     d = day + 1
                     x = datetime.datetime(self.year, self.month, d)
-                    sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and health_worker.worker_id = ?  and guard.d =? and guard.m =? and guard.y =?'
-                    cur.execute(sql_q, (self.service, id_ag[0], d, self.month, self.year))
+                    if self.service == "urgence_surv_inf":
+                        sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and health_worker.worker_id = ?  and guard.d =? and guard.m =? and guard.y =?'
+                        cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_ag[0], d, self.month, self.year))
+                    else:
+                        sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and health_worker.worker_id = ?  and guard.d =? and guard.m =? and guard.y =?'
+                        cur.execute(sql_q, (self.service, id_ag[0], d, self.month, self.year))
                     result = cur.fetchall()
 
                     if result:
@@ -1765,8 +1785,13 @@ class Thread_save_recap(QThread):
                 id_agn = get_workerId_by_name(self.table.item(row, 1).text(), self.service)
                 id_agn = id_agn[0]
 
-                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-                cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+                if self.service == "urgence_surv_inf":
+                    sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service in (?,?) and recap.agents_id =? and recap.m =? and recap.y =?'
+                    cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_agn[0], self.month, self.year))
+                else:
+                    sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                    cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+
                 results = cur.fetchall()
                 results = results[0]
 
@@ -1826,24 +1851,46 @@ class ThreadRecapExport(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
-        sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
-        cur.execute(sql_q, (self.service, self.month, self.year))
-        res = cur.fetchall()
+        if self.service == "urgence_surv_inf":
+            sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ("urgence_inf", "urgence_surv", self.month, self.year))
+            res = cur.fetchall()
 
-        sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
-        cur.execute(sql_q, (self.service, self.month, self.year))
-        res2 = cur.fetchall()
+            sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and guard.m =? and guard.y =?'
+            cur.execute(sql_q, ("urgence_inf", "urgence_surv", self.month, self.year))
+            res2 = cur.fetchall()
+        else:
+            sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, (self.service, self.month, self.year))
+            res = cur.fetchall()
+
+            sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
+            cur.execute(sql_q, (self.service, self.month, self.year))
+            res2 = cur.fetchall()
+
 
         count = res2[0]
         row = 0
         for agent in res:
             prog = row * 100 / count[0]
 
-            id_agn = get_workerId_by_name(agent[0], self.service)
-            id_agn = id_agn[0]
+            if self.service == "urgence_surv_inf":
+                serv = get_workerService_by_name(agent[0])
+                serv = serv[0]
+                id_ag = get_workerId_by_name(agent[0], serv[0])
+                id_ag = id_ag[0]
 
-            sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-            cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service in (?,?) and recap.agents_id =? and recap.m =? and recap.y =?'
+                cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_agn[0], self.month, self.year))
+
+            else:
+                id_agn = get_workerId_by_name(agent[0], self.service)
+                id_agn = id_agn[0]
+
+                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
+                cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+
+
             results = cur.fetchall()
             results = results[0]
 
