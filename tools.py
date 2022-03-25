@@ -135,7 +135,7 @@ def create_garde_page(service, grd_cons, month, year, data, path):
     pdf.output(path)
 
 
-def create_recap_page(service, month, year, data, chef, path):
+def create_recap_page(service, rec, month, year, data, chef, path):
     pdf = EpspPdf()
     pdf.alias_nb_pages()
     pdf.add_page()
@@ -144,7 +144,7 @@ def create_recap_page(service, month, year, data, chef, path):
     pdf.ln(10)
 
     pdf.set_font("helvetica", "B", size=17)
-    pdf.cell(0, 10, "RECAP de service " + service, 1, 0, "C")
+    pdf.cell(0, 10, "RECAP de " + rec, 1, 0, "C")
     pdf.ln(8)
     m = ""
     if month == 1:

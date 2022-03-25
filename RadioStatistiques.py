@@ -21,7 +21,6 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
 
         self.month = month
         self.year = year
-        self.service = service
 
         self.want_to_close = False
 
@@ -57,7 +56,7 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.title.setText("Radio statistiques " + self.service + " mois de " + str(m) + "/" + str(self.year) + ":")
+        self.title.setText("Radio statistiques mois de " + str(m) + "/" + str(self.year) + ":")
 
         self.load_state()
         self.save.clicked.connect(self.save_)
@@ -84,7 +83,7 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
 
     def load_state(self):
         self.dialog = Saving_progress_dialog()
-        self.dialog.label.setText("loading RECAP")
+        self.dialog.label.setText("loading")
         self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.dialog.show()
 
@@ -106,6 +105,7 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
             self.table.setItem(0, 2, QTableWidgetItem(str(po[2])))
             total = int(po[0]) + int(po[1]) + int(po[2])
             self.table.setItem(0, 3, QTableWidgetItem(str(total)))
+
 
             os = progress[1]
             self.table.setRowHeight(1, 50)
@@ -171,6 +171,18 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
             total = int(ecg[0]) + int(ecg[1]) + int(ecg[2])
             self.table.setItem(8, 3, QTableWidgetItem(str(total)))
 
+            self.table.setRowHeight(9, 50)
+            t1 = po[0] + os[0] +abd[0] + uiv[0] + chol[0] + est[0] + echo[0] + fibr[0] + ecg[0]
+            t2 = po[1] + os[1] +abd[1] + uiv[1] + chol[1] + est[1] + echo[1] + fibr[1] + ecg[1]
+            t3 = po[2] + os[2] +abd[2] + uiv[2] + chol[2] + est[2] + echo[2] + fibr[2] + ecg[2]
+            self.table.setItem(9, 0, QTableWidgetItem(str(t1)))
+            self.table.setItem(9, 1, QTableWidgetItem(str(t2)))
+            self.table.setItem(9, 2, QTableWidgetItem(str(t3)))
+            total = t1 + t2 +t3
+            self.table.setItem(9, 3, QTableWidgetItem(str(total)))
+
+
+
 
 
         elif type(progress) == bool:
@@ -183,7 +195,7 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
         alert = False
         for row in range(self.table.rowCount()):
             if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem :
-                if not str(self.table.item(row, 2).text()).isnumeric() or not str(self.table.item(row, 3).text()).isnumeric() or not str(self.table.item(row, 4).text()).isnumeric():
+                if not str(self.table.item(row, 0).text()).isnumeric() or not str(self.table.item(row, 1).text()).isnumeric() or not str(self.table.item(row, 2).text()).isnumeric():
                     alert = True
 
         if alert:
@@ -201,8 +213,6 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
 
     def export_(self):
         self.want_to_close = True
-        print(self.chef.currentText())
-
         self.next_page = export_statistique.ExportStatistiqueUi(self.month, self.year)
         self.next_page.show()
         self.close()

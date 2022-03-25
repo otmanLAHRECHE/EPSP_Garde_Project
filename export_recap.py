@@ -82,7 +82,37 @@ class ExportRecapUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_recap_page("URGENCE", self.month, self.year, self.data, self.chef, filePath)
+            if self.service == "urgence":
+                s = "URGENCES"
+                r = "medecins d'urgence"
+            elif self.service == "dentiste":
+                s = "DENTISTES"
+                r = "medecins dentiste"
+            elif self.service == "dentiste_inf":
+                s = "DENTISTES"
+                r = "infirmiers dentiste"
+            elif self.service == "labo":
+                s = "LABORATOIRE"
+                r = "service laboratoire"
+            elif self.service == "radio":
+                s = "RADIOLOGIE"
+                r = "service radiologie"
+            elif self.service == "pharm":
+                s = "PHARMACIE"
+                r = "pharmaciens"
+            elif self.service == "urgence_surv":
+                s = "DENTISTES"
+                r = "DENTISTES"
+            elif self.service == "urgence_inf":
+                s = "DENTISTES"
+                r = "DENTISTES"
+            elif self.service == "urgence_surv_inf":
+                s = "URGENCES"
+                r = "survients et infirmiers"
+
+
+
+            create_recap_page(s, r, self.month, self.year, self.data, self.chef, filePath)
 
             if self.service == "urgence":
                 self.next_page = urgence.UrgenceMainUi()

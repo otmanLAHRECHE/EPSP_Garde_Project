@@ -2586,14 +2586,25 @@ class Thread_state_load(QThread):
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_homme where state_homme.m =? and state_homme.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_h = cur.fetchall()
+        print("test")
+        print(res_h)
+
 
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_f = cur.fetchall()
 
+        print(res_f)
+
+
+
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_enfant where state_enfant.m =? and state_enfant.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_e = cur.fetchall()
+
+        print(res_e)
+
+
 
         self.Poumon = []
         self.OS = []
@@ -2606,24 +2617,25 @@ class Thread_state_load(QThread):
         self.ECG = []
 
         if res_h:
+            res_h = res_h[0]
             po = res_h[0]
-            self.Poumon.append(po[0])
+            self.Poumon.append(po)
             os = res_h[1]
-            self.OS.append(os[0])
+            self.OS.append(os)
             abd = res_h[2]
-            self.Abdomen_simple.append(abd[0])
+            self.Abdomen_simple.append(abd)
             uiv = res_h[3]
-            self.UIV.append(uiv[0])
+            self.UIV.append(uiv)
             chol = res_h[4]
-            self.Cholecystographie.append(chol[0])
+            self.Cholecystographie.append(chol)
             est = res_h[5]
-            self.Estomac.append(est[0])
+            self.Estomac.append(est)
             echo = res_h[6]
-            self.Echographie.append(echo[0])
+            self.Echographie.append(echo)
             fibr = res_h[7]
-            self.Fibroscopie.append(fibr[0])
+            self.Fibroscopie.append(fibr)
             ecg = res_h[8]
-            self.ECG.append(ecg[0])
+            self.ECG.append(ecg)
         else:
             self.Poumon.append(0)
             self.OS.append(0)
@@ -2636,24 +2648,25 @@ class Thread_state_load(QThread):
             self.ECG.append(0)
 
         if res_f:
+            res_f = res_f[0]
             po = res_f[0]
-            self.Poumon.append(po[0])
+            self.Poumon.append(po)
             os = res_f[1]
-            self.OS.append(os[0])
+            self.OS.append(os)
             abd = res_f[2]
-            self.Abdomen_simple.append(abd[0])
+            self.Abdomen_simple.append(abd)
             uiv = res_f[3]
-            self.UIV.append(uiv[0])
+            self.UIV.append(uiv)
             chol = res_f[4]
-            self.Cholecystographie.append(chol[0])
+            self.Cholecystographie.append(chol)
             est = res_f[5]
-            self.Estomac.append(est[0])
+            self.Estomac.append(est)
             echo = res_f[6]
-            self.Echographie.append(echo[0])
+            self.Echographie.append(echo)
             fibr = res_f[7]
-            self.Fibroscopie.append(fibr[0])
+            self.Fibroscopie.append(fibr)
             ecg = res_f[8]
-            self.ECG.append(ecg[0])
+            self.ECG.append(ecg)
         else:
             self.Poumon.append(0)
             self.OS.append(0)
@@ -2666,24 +2679,25 @@ class Thread_state_load(QThread):
             self.ECG.append(0)
 
         if res_e:
+            res_e = res_e[0]
             po = res_e[0]
-            self.Poumon.append(po[0])
+            self.Poumon.append(po)
             os = res_e[1]
-            self.OS.append(os[0])
+            self.OS.append(os)
             abd = res_e[2]
-            self.Abdomen_simple.append(abd[0])
+            self.Abdomen_simple.append(abd)
             uiv = res_e[3]
-            self.UIV.append(uiv[0])
+            self.UIV.append(uiv)
             chol = res_e[4]
-            self.Cholecystographie.append(chol[0])
+            self.Cholecystographie.append(chol)
             est = res_e[5]
-            self.Estomac.append(est[0])
+            self.Estomac.append(est)
             echo = res_e[6]
-            self.Echographie.append(echo[0])
+            self.Echographie.append(echo)
             fibr = res_e[7]
-            self.Fibroscopie.append(fibr[0])
+            self.Fibroscopie.append(fibr)
             ecg = res_e[8]
-            self.ECG.append(ecg[0])
+            self.ECG.append(ecg)
         else:
             self.Poumon.append(0)
             self.OS.append(0)
@@ -2712,6 +2726,7 @@ class Thread_state_load(QThread):
             time.sleep(0.1)
             self._signal_status.emit(int(prog))
 
+        print(list)
         self._signal.emit(list)
 
         connection.close()
@@ -2727,6 +2742,7 @@ class Thread_save_state(QThread):
         self.month = month
         self.year = year
         self.table = table
+
         self.Poumon = []
         self.OS = []
         self.Abdomen_simple = []
@@ -2759,20 +2775,46 @@ class Thread_save_state(QThread):
             self.Fibroscopie.append(int(self.table.item(7, c).text()))
             self.ECG.append(int(self.table.item(8, c).text()))
 
-        sql_q = 'INSERT INTO state_homme (Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?)'
-        cur.execute(sql_q, (self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0], self.Cholecystographie[0], self.Estomac[0], self.Echographie[0], self.Fibroscopie[0], self.ECG[0]))
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_homme where state_homme.m =? and state_homme.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_h = cur.fetchall()
 
-        sql_q = 'INSERT INTO state_famme (Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?)'
-        cur.execute(sql_q, (
-        self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],
-        self.Echographie[1], self.Fibroscopie[1], self.ECG[1]))
 
-        sql_q = 'INSERT INTO state_enfant (Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?)'
-        cur.execute(sql_q, (
-        self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],
-        self.Echographie[2], self.Fibroscopie[2], self.ECG[2]))
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_f = cur.fetchall()
 
-        connection.commit()
+
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_enfant where state_enfant.m =? and state_enfant.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_e = cur.fetchall()
+
+        if res_h:
+            sql_q = 'UPDATE state_homme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_homme.m=? and state_homme.y=?'
+            cur.execute(sql_q, (self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0], self.Cholecystographie[0], self.Estomac[0], self.Echographie[0], self.Fibroscopie[0], self.ECG[0], self.month, self.year))
+        else:
+            sql_q = 'INSERT INTO state_homme (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
+            cur.execute(sql_q, (self.month, self.year, self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0],
+                                self.Cholecystographie[0], self.Estomac[0], self.Echographie[0], self.Fibroscopie[0],
+                                self.ECG[0]))
+            connection.commit()
+
+
+        if res_f:
+            sql_q = 'UPDATE state_famme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_famme.m=? and state_famme.y=?'
+            cur.execute(sql_q, (self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],self.Echographie[1], self.Fibroscopie[1], self.ECG[1], self.month, self.year))
+        else:
+            sql_q = 'INSERT INTO state_famme (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
+            cur.execute(sql_q, (self.month, self.year,self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],self.Echographie[1], self.Fibroscopie[1], self.ECG[1]))
+            connection.commit()
+
+        if res_e:
+            sql_q = 'UPDATE state_famme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_enfant.m=? and state_enfant.y=?'
+            cur.execute(sql_q, (self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],self.Echographie[2], self.Fibroscopie[2], self.ECG[2], self.month, self.year))
+        else:
+            sql_q = 'INSERT INTO state_enfant (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
+            cur.execute(sql_q, (self.month, self.year,self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],self.Echographie[2], self.Fibroscopie[2], self.ECG[2]))
+            connection.commit()
 
         for prog in range(20):
             time.sleep(0.1)
@@ -2804,6 +2846,7 @@ class ThreadStateExport(QThread):
         cur.execute(sql_q, (self.month, self.year))
         res_h = cur.fetchall()
 
+
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_f = cur.fetchall()
@@ -2823,24 +2866,25 @@ class ThreadStateExport(QThread):
         self.ECG = []
 
         if res_h:
+            res_h = res_h[0]
             po = res_h[0]
-            self.Poumon.append(po[0])
+            self.Poumon.append(po)
             os = res_h[1]
-            self.OS.append(os[0])
+            self.OS.append(os)
             abd = res_h[2]
-            self.Abdomen_simple.append(abd[0])
+            self.Abdomen_simple.append(abd)
             uiv = res_h[3]
-            self.UIV.append(uiv[0])
+            self.UIV.append(uiv)
             chol = res_h[4]
-            self.Cholecystographie.append(chol[0])
+            self.Cholecystographie.append(chol)
             est = res_h[5]
-            self.Estomac.append(est[0])
+            self.Estomac.append(est)
             echo = res_h[6]
-            self.Echographie.append(echo[0])
+            self.Echographie.append(echo)
             fibr = res_h[7]
-            self.Fibroscopie.append(fibr[0])
+            self.Fibroscopie.append(fibr)
             ecg = res_h[8]
-            self.ECG.append(ecg[0])
+            self.ECG.append(ecg)
         else:
             self.Poumon.append(0)
             self.OS.append(0)
@@ -2853,24 +2897,25 @@ class ThreadStateExport(QThread):
             self.ECG.append(0)
 
         if res_f:
+            res_f = res_f[0]
             po = res_f[0]
-            self.Poumon.append(po[0])
+            self.Poumon.append(po)
             os = res_f[1]
-            self.OS.append(os[0])
+            self.OS.append(os)
             abd = res_f[2]
-            self.Abdomen_simple.append(abd[0])
+            self.Abdomen_simple.append(abd)
             uiv = res_f[3]
-            self.UIV.append(uiv[0])
+            self.UIV.append(uiv)
             chol = res_f[4]
-            self.Cholecystographie.append(chol[0])
+            self.Cholecystographie.append(chol)
             est = res_f[5]
-            self.Estomac.append(est[0])
+            self.Estomac.append(est)
             echo = res_f[6]
-            self.Echographie.append(echo[0])
+            self.Echographie.append(echo)
             fibr = res_f[7]
-            self.Fibroscopie.append(fibr[0])
+            self.Fibroscopie.append(fibr)
             ecg = res_f[8]
-            self.ECG.append(ecg[0])
+            self.ECG.append(ecg)
         else:
             self.Poumon.append(0)
             self.OS.append(0)
@@ -2883,24 +2928,25 @@ class ThreadStateExport(QThread):
             self.ECG.append(0)
 
         if res_e:
+            res_e = res_e[0]
             po = res_e[0]
-            self.Poumon.append(po[0])
+            self.Poumon.append(po)
             os = res_e[1]
-            self.OS.append(os[0])
+            self.OS.append(os)
             abd = res_e[2]
-            self.Abdomen_simple.append(abd[0])
+            self.Abdomen_simple.append(abd)
             uiv = res_e[3]
-            self.UIV.append(uiv[0])
+            self.UIV.append(uiv)
             chol = res_e[4]
-            self.Cholecystographie.append(chol[0])
+            self.Cholecystographie.append(chol)
             est = res_e[5]
-            self.Estomac.append(est[0])
+            self.Estomac.append(est)
             echo = res_e[6]
-            self.Echographie.append(echo[0])
+            self.Echographie.append(echo)
             fibr = res_e[7]
-            self.Fibroscopie.append(fibr[0])
+            self.Fibroscopie.append(fibr)
             ecg = res_e[8]
-            self.ECG.append(ecg[0])
+            self.ECG.append(ecg)
         else:
             self.Poumon.append(0)
             self.OS.append(0)
@@ -2995,7 +3041,6 @@ class ThreadStateExport(QThread):
         self._signal.emit(int(prog))
 
         connection.close()
-        print(self.data)
         self._signal_result.emit(self.data)
 
 

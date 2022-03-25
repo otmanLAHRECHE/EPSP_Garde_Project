@@ -234,7 +234,7 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
             self.table_gardes.setCellWidget(tablerow, 4, buttons)
             buttons.print_garde.clicked.connect(self.print_g)
             buttons.edit_garde.clicked.connect(self.edit_g)
-            buttons.edit_state.clicked.connect()
+            buttons.edit_state.clicked.connect(self.edit_state)
             buttons.delete_garde.clicked.connect(self.delete_g)
 
             tablerow += 1
