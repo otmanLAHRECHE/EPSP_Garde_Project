@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
+import export_recap
 import radiologie
 from dialogs import CustomDialog, Saving_progress_dialog
 from threads import Thread_state_load, Thread_save_state
@@ -201,7 +202,7 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
         self.want_to_close = True
         print(self.chef.currentText())
 
-        self.next_page = export_recap.ExportRecapUi(self.month, self.year, self.service, self.chef.currentText())
+        self.next_page = export_statistique.ExportStatistiqueUi(self.month, self.year)
         self.next_page.show()
         self.close()
 

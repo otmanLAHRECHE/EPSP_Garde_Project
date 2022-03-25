@@ -4,12 +4,13 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+import RadioStatistiques
 import export_radio_guard
 import radiologie_guard
 import recap
 from dialogs import Add_new_month, Update_worker_dialog
 from tools import get_workers_count, get_guard_months_count
-from widgets import Buttons
+from widgets import Buttons, Buttons_rad
 import os
 basedir = os.path.dirname(__file__)
 
@@ -43,7 +44,7 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
         self.table_gardes.setColumnWidth(1, 150)
         self.table_gardes.setColumnWidth(2, 150)
         self.table_gardes.setColumnWidth(3, 180)
-        self.table_gardes.setColumnWidth(4, 220)
+        self.table_gardes.setColumnWidth(4, 350)
         self.table_gardes.hideColumn(0)
 
         self.loadGuardMonths()
@@ -229,10 +230,11 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
             self.table_gardes.setItem(tablerow, 1, QTableWidgetItem(m))
             self.table_gardes.setItem(tablerow, 2, QTableWidgetItem(str(row[2])))
             self.table_gardes.setItem(tablerow, 3, QTableWidgetItem(row[3]))
-            buttons = Buttons()
+            buttons = Buttons_rad()
             self.table_gardes.setCellWidget(tablerow, 4, buttons)
             buttons.print_garde.clicked.connect(self.print_g)
             buttons.edit_garde.clicked.connect(self.edit_g)
+            buttons.edit_state.clicked.connect()
             buttons.delete_garde.clicked.connect(self.delete_g)
 
             tablerow += 1
@@ -333,6 +335,43 @@ class RadiologieMainUi(QtWidgets.QMainWindow):
         y = int(y)
 
         self.next_page = recap.RecapUi(m, y, "radio")
+        self.close()
+        self.next_page.show()
+
+    def edit_state(self):
+        clickme = qApp.focusWidget()
+        index = self.table_gardes.indexAt(clickme.parent().pos())
+        row = index.row()
+        m = self.table_gardes.item(row, 1).text()
+        y = self.table_gardes.item(row, 2).text()
+        if m == "janvier":
+            m = 1
+        elif m == "février":
+            m = 2
+        elif m == "mars":
+            m = 3
+        elif m == "avril":
+            m = 4
+        elif m == "mai":
+            m = 5
+        elif m == "juin":
+            m = 6
+        elif m == "juillet":
+            m = 7
+        elif m == "août":
+            m = 8
+        elif m == "septembre":
+            m = 9
+        elif m == "octobre":
+            m = 10
+        elif m == "novembre":
+            m = 11
+        elif m == "décembre":
+            m = 12
+
+        y = int(y)
+
+        self.next_page = RadioStatistiques.RadioStatistiquesUi(m, y)
         self.close()
         self.next_page.show()
 
