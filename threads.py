@@ -1710,9 +1710,10 @@ class Thread_recap_load(QThread):
                 cur.execute(sql_q, (self.service, id_ag[0], self.month, self.year))
 
             res1 = cur.fetchall()
-            res1 = res1[0]
+
 
             if res1:
+                res1 = res1[0]
                 jo = res1[0]
                 jw = res1[1]
                 jf = res1[2]
@@ -1796,13 +1797,14 @@ class Thread_save_recap(QThread):
                     cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
 
                 results = cur.fetchall()
-                results = results[0]
+
 
                 jo2 = int(self.table.item(row, 2).text())
                 jw2 = int(self.table.item(row, 3).text())
                 jf2 = int(self.table.item(row, 4).text())
 
                 if results:
+                    results = results[0]
                     jo1 = results[0]
                     jw1 = results[1]
                     jf1 = results[2]
