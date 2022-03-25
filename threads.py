@@ -2786,12 +2786,11 @@ class ThreadStateExport(QThread):
     _signal = pyqtSignal(int)
     _signal_result = pyqtSignal(list)
 
-    def __init__(self, month, year, service):
-        super(ThreadRecapExport, self).__init__()
-        self.service = service
+    def __init__(self, month, year):
+        super(ThreadStateExport, self).__init__()
         self.month = month
         self.year = year
-        self.data = [(" / ", "Jours ouvrable", "Jours week-end", "Jours fériés", "Total")]
+        self.data = [("Examen", "Homme", "Famme", "Enfant", "Total")]
 
     def __del__(self):
         self.terminate()
@@ -2801,67 +2800,199 @@ class ThreadStateExport(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
-        if self.service == "urgence_surv_inf":
-            sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ("urgence_inf", "urgence_surv", self.month, self.year))
-            res = cur.fetchall()
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_homme where state_homme.m =? and state_homme.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_h = cur.fetchall()
 
-            sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service in (?,?) and guard.m =? and guard.y =?'
-            cur.execute(sql_q, ("urgence_inf", "urgence_surv", self.month, self.year))
-            res2 = cur.fetchall()
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_f = cur.fetchall()
+
+        sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_enfant where state_enfant.m =? and state_enfant.y =?'
+        cur.execute(sql_q, (self.month, self.year))
+        res_e = cur.fetchall()
+
+        self.Poumon = []
+        self.OS = []
+        self.Abdomen_simple = []
+        self.UIV = []
+        self.Cholecystographie = []
+        self.Estomac = []
+        self.Echographie = []
+        self.Fibroscopie = []
+        self.ECG = []
+
+        if res_h:
+            po = res_h[0]
+            self.Poumon.append(po[0])
+            os = res_h[1]
+            self.OS.append(os[0])
+            abd = res_h[2]
+            self.Abdomen_simple.append(abd[0])
+            uiv = res_h[3]
+            self.UIV.append(uiv[0])
+            chol = res_h[4]
+            self.Cholecystographie.append(chol[0])
+            est = res_h[5]
+            self.Estomac.append(est[0])
+            echo = res_h[6]
+            self.Echographie.append(echo[0])
+            fibr = res_h[7]
+            self.Fibroscopie.append(fibr[0])
+            ecg = res_h[8]
+            self.ECG.append(ecg[0])
         else:
-            sql_q = 'SELECT DISTINCT  health_worker.full_name FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, (self.service, self.month, self.year))
-            res = cur.fetchall()
+            self.Poumon.append(0)
+            self.OS.append(0)
+            self.Abdomen_simple.append(0)
+            self.UIV.append(0)
+            self.Cholecystographie.append(0)
+            self.Estomac.append(0)
+            self.Echographie.append(0)
+            self.Fibroscopie.append(0)
+            self.ECG.append(0)
 
-            sql_q = 'SELECT DISTINCT  count(*) FROM health_worker INNER JOIN guard ON health_worker.worker_id = guard.gardien_id where service=? and guard.m =? and guard.y =?'
-            cur.execute(sql_q, (self.service, self.month, self.year))
-            res2 = cur.fetchall()
+        if res_f:
+            po = res_f[0]
+            self.Poumon.append(po[0])
+            os = res_f[1]
+            self.OS.append(os[0])
+            abd = res_f[2]
+            self.Abdomen_simple.append(abd[0])
+            uiv = res_f[3]
+            self.UIV.append(uiv[0])
+            chol = res_f[4]
+            self.Cholecystographie.append(chol[0])
+            est = res_f[5]
+            self.Estomac.append(est[0])
+            echo = res_f[6]
+            self.Echographie.append(echo[0])
+            fibr = res_f[7]
+            self.Fibroscopie.append(fibr[0])
+            ecg = res_f[8]
+            self.ECG.append(ecg[0])
+        else:
+            self.Poumon.append(0)
+            self.OS.append(0)
+            self.Abdomen_simple.append(0)
+            self.UIV.append(0)
+            self.Cholecystographie.append(0)
+            self.Estomac.append(0)
+            self.Echographie.append(0)
+            self.Fibroscopie.append(0)
+            self.ECG.append(0)
+
+        if res_e:
+            po = res_e[0]
+            self.Poumon.append(po[0])
+            os = res_e[1]
+            self.OS.append(os[0])
+            abd = res_e[2]
+            self.Abdomen_simple.append(abd[0])
+            uiv = res_e[3]
+            self.UIV.append(uiv[0])
+            chol = res_e[4]
+            self.Cholecystographie.append(chol[0])
+            est = res_e[5]
+            self.Estomac.append(est[0])
+            echo = res_e[6]
+            self.Echographie.append(echo[0])
+            fibr = res_e[7]
+            self.Fibroscopie.append(fibr[0])
+            ecg = res_e[8]
+            self.ECG.append(ecg[0])
+        else:
+            self.Poumon.append(0)
+            self.OS.append(0)
+            self.Abdomen_simple.append(0)
+            self.UIV.append(0)
+            self.Cholecystographie.append(0)
+            self.Estomac.append(0)
+            self.Echographie.append(0)
+            self.Fibroscopie.append(0)
+            self.ECG.append(0)
+
+        prog =0
+        total = self.Poumon[0] +self.Poumon[1] + self.Poumon[2]
+        data_examen = ("Poumon", self.Poumon[0], self.Poumon[1], self.Poumon[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog =prog+1
 
 
-        count = res2[0]
-        row = 0
-        for agent in res:
-            prog = row * 100 / count[0]
-
-            if self.service == "urgence_surv_inf":
-                serv = get_workerService_by_name(agent[0])
-                serv = serv[0]
-                id_ag = get_workerId_by_name(agent[0], serv[0])
-                id_ag = id_ag[0]
-
-                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service in (?,?) and recap.agents_id =? and recap.m =? and recap.y =?'
-                cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_ag[0], self.month, self.year))
-
-            else:
-                id_agn = get_workerId_by_name(agent[0], self.service)
-                id_agn = id_agn[0]
-
-                sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-                cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
+        total = self.OS[0] + self.OS[1] + self.OS[2]
+        data_examen = ("OS", self.OS[0], self.OS[1], self.OS[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
 
 
-            results = cur.fetchall()
-            if results:
-                results = results[0]
+        total = self.Abdomen_simple[0] + self.Abdomen_simple[1] + self.Abdomen_simple[2]
+        data_examen = ("Abdomen simple", self.Abdomen_simple[0], self.Abdomen_simple[1], self.Abdomen_simple[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
 
-                jo = results[0]
-                jw = results[1]
-                jf = results[2]
-            else:
-                jo = 0
-                jw = 0
-                jf = 0
 
-            total = int(jo) + int(jw) + int(jf)
+        total = self.UIV[0] + self.UIV[1] + self.UIV[2]
+        data_examen = ("U.I.V", self.UIV[0], self.UIV[1], self.UIV[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
 
-            data_agent = (agent[0], jo, jw, jf, total)
 
-            self.data.append(data_agent)
+        total = self.Cholecystographie[0] + self.Cholecystographie[1] + self.Cholecystographie[2]
+        data_examen = ("Cholecystographie", self.Cholecystographie[0], self.Cholecystographie[1], self.Cholecystographie[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
 
-            time.sleep(0.3)
-            self._signal.emit(int(prog))
-            row = row + 1
+
+        total = self.Estomac[0] + self.Estomac[1] + self.Estomac[2]
+        data_examen = ("Estomac", self.Estomac[0], self.Estomac[1], self.Estomac[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
+
+
+        total = self.Echographie[0] + self.Echographie[1] + self.Echographie[2]
+        data_examen = ("Echographie", self.Echographie[0], self.Echographie[1], self.Echographie[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
+
+
+        total = self.Fibroscopie[0] + self.Fibroscopie[1] + self.Fibroscopie[2]
+        data_examen = ("Fibroscopie", self.Fibroscopie[0], self.Fibroscopie[1], self.Fibroscopie[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
+
+
+        total = self.ECG[0] + self.ECG[1] + self.ECG[2]
+        data_examen = ("E.C.G", self.ECG[0], self.ECG[1], self.ECG[2], total)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
+        prog = prog + 1
+
+        total1 = self.Poumon[0] + self.OS[0] + self.Abdomen_simple[0] + self.UIV[0] + self.Cholecystographie[0] + self.Estomac[0] + self.Echographie[0] + self.Fibroscopie[0] + self.ECG[0]
+        total2 = self.Poumon[1] + self.OS[1] + self.Abdomen_simple[1] + self.UIV[1] + self.Cholecystographie[1] + self.Estomac[1] + self.Echographie[1] + self.Fibroscopie[1] + self.ECG[1]
+        total3 = self.Poumon[2] + self.OS[2] + self.Abdomen_simple[2] + self.UIV[2] + self.Cholecystographie[2] + self.Estomac[2] + self.Echographie[2] + self.Fibroscopie[2] + self.ECG[2]
+        total4 = total1 + total2 + total3
+
+        data_examen = ("Total", total1, total2, total3, total4)
+        self.data.append(data_examen)
+        time.sleep(0.2)
+        self._signal.emit(int(prog))
 
         connection.close()
         print(self.data)

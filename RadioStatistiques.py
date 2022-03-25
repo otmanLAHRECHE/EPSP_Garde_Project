@@ -218,7 +218,6 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
             t1 = 0
             t2 = 0
             t3 = 0
-            t4 = 0
             for row in range(self.table.rowCount()):
                 self.table.setItem(row, 3, QTableWidgetItem(str(int(self.table.item(row, 0).text()) + int(self.table.item(row, 1).text()) + int(self.table.item(row, 2).text()))))
                 t1 = t1 + int(self.table.item(row, 0).text())
