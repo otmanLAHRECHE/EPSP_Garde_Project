@@ -2792,6 +2792,7 @@ class Thread_save_state(QThread):
         if res_h:
             sql_q = 'UPDATE state_homme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_homme.m=? and state_homme.y=?'
             cur.execute(sql_q, (self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0], self.Cholecystographie[0], self.Estomac[0], self.Echographie[0], self.Fibroscopie[0], self.ECG[0], self.month, self.year))
+            connection.commit()
         else:
             sql_q = 'INSERT INTO state_homme (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
             cur.execute(sql_q, (self.month, self.year, self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0],
@@ -2803,14 +2804,16 @@ class Thread_save_state(QThread):
         if res_f:
             sql_q = 'UPDATE state_famme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_famme.m=? and state_famme.y=?'
             cur.execute(sql_q, (self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],self.Echographie[1], self.Fibroscopie[1], self.ECG[1], self.month, self.year))
+            connection.commit()
         else:
             sql_q = 'INSERT INTO state_famme (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
             cur.execute(sql_q, (self.month, self.year,self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],self.Echographie[1], self.Fibroscopie[1], self.ECG[1]))
             connection.commit()
 
         if res_e:
-            sql_q = 'UPDATE state_famme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_enfant.m=? and state_enfant.y=?'
+            sql_q = 'UPDATE state_enfant set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_enfant.m=? and state_enfant.y=?'
             cur.execute(sql_q, (self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],self.Echographie[2], self.Fibroscopie[2], self.ECG[2], self.month, self.year))
+            connection.commit()
         else:
             sql_q = 'INSERT INTO state_enfant (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
             cur.execute(sql_q, (self.month, self.year,self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],self.Echographie[2], self.Fibroscopie[2], self.ECG[2]))
