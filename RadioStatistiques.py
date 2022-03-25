@@ -1,12 +1,13 @@
 import os
 
+import PyQt5
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
 import radiologie
 from dialogs import CustomDialog, Saving_progress_dialog
-from threads import Thread_state_load
+from threads import Thread_state_load, Thread_save_state
 
 basedir = os.path.dirname(__file__)
 
@@ -24,7 +25,6 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
 
         self.title = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
-        self.table.hideColumn(0)
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
         self.save.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'save.png')))
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton_2")
@@ -99,75 +99,75 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
 
             po = progress[0]
             self.table.setRowHeight(0, 50)
-            self.table.setItem(0, 1, QTableWidgetItem(str(po[0])))
-            self.table.setItem(0, 2, QTableWidgetItem(str(po[1])))
-            self.table.setItem(0, 3, QTableWidgetItem(str(po[2])))
+            self.table.setItem(0, 0, QTableWidgetItem(str(po[0])))
+            self.table.setItem(0, 1, QTableWidgetItem(str(po[1])))
+            self.table.setItem(0, 2, QTableWidgetItem(str(po[2])))
             total = int(po[0]) + int(po[1]) + int(po[2])
-            self.table.setItem(0, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(0, 3, QTableWidgetItem(str(total)))
 
             os = progress[1]
             self.table.setRowHeight(1, 50)
-            self.table.setItem(1, 1, QTableWidgetItem(str(os[0])))
-            self.table.setItem(1, 2, QTableWidgetItem(str(os[1])))
-            self.table.setItem(1, 3, QTableWidgetItem(str(os[2])))
+            self.table.setItem(1, 0, QTableWidgetItem(str(os[0])))
+            self.table.setItem(1, 1, QTableWidgetItem(str(os[1])))
+            self.table.setItem(1, 2, QTableWidgetItem(str(os[2])))
             total = int(os[0]) + int(os[1]) + int(os[2])
-            self.table.setItem(1, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(1, 3, QTableWidgetItem(str(total)))
 
             abd = progress[2]
             self.table.setRowHeight(2, 50)
-            self.table.setItem(2, 1, QTableWidgetItem(str(abd[0])))
-            self.table.setItem(2, 2, QTableWidgetItem(str(abd[1])))
-            self.table.setItem(2, 3, QTableWidgetItem(str(abd[2])))
+            self.table.setItem(2, 0, QTableWidgetItem(str(abd[0])))
+            self.table.setItem(2, 1, QTableWidgetItem(str(abd[1])))
+            self.table.setItem(2, 2, QTableWidgetItem(str(abd[2])))
             total = int(abd[0]) + int(abd[1]) + int(abd[2])
-            self.table.setItem(2, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(2, 3, QTableWidgetItem(str(total)))
 
             uiv = progress[3]
             self.table.setRowHeight(3, 50)
-            self.table.setItem(3, 1, QTableWidgetItem(str(uiv[0])))
-            self.table.setItem(3, 2, QTableWidgetItem(str(uiv[1])))
-            self.table.setItem(3, 3, QTableWidgetItem(str(uiv[2])))
+            self.table.setItem(3, 0, QTableWidgetItem(str(uiv[0])))
+            self.table.setItem(3, 1, QTableWidgetItem(str(uiv[1])))
+            self.table.setItem(3, 2, QTableWidgetItem(str(uiv[2])))
             total = int(uiv[0]) + int(uiv[1]) + int(uiv[2])
-            self.table.setItem(3, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(3, 3, QTableWidgetItem(str(total)))
 
             chol = progress[4]
             self.table.setRowHeight(4, 50)
-            self.table.setItem(4, 1, QTableWidgetItem(str(chol[0])))
-            self.table.setItem(4, 2, QTableWidgetItem(str(chol[1])))
-            self.table.setItem(4, 3, QTableWidgetItem(str(chol[2])))
+            self.table.setItem(4, 0, QTableWidgetItem(str(chol[0])))
+            self.table.setItem(4, 1, QTableWidgetItem(str(chol[1])))
+            self.table.setItem(4, 2, QTableWidgetItem(str(chol[2])))
             total = int(chol[0]) + int(chol[1]) + int(chol[2])
-            self.table.setItem(4, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(4, 3, QTableWidgetItem(str(total)))
 
             est = progress[5]
             self.table.setRowHeight(5, 50)
-            self.table.setItem(5, 1, QTableWidgetItem(str(est[0])))
-            self.table.setItem(5, 2, QTableWidgetItem(str(est[1])))
-            self.table.setItem(5, 3, QTableWidgetItem(str(est[2])))
+            self.table.setItem(5, 0, QTableWidgetItem(str(est[0])))
+            self.table.setItem(5, 1, QTableWidgetItem(str(est[1])))
+            self.table.setItem(5, 2, QTableWidgetItem(str(est[2])))
             total = int(est[0]) + int(est[1]) + int(est[2])
-            self.table.setItem(5, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(5, 3, QTableWidgetItem(str(total)))
 
             echo = progress[6]
             self.table.setRowHeight(6, 50)
-            self.table.setItem(6, 1, QTableWidgetItem(str(echo[0])))
-            self.table.setItem(6, 2, QTableWidgetItem(str(echo[1])))
-            self.table.setItem(6, 3, QTableWidgetItem(str(echo[2])))
+            self.table.setItem(6, 0, QTableWidgetItem(str(echo[0])))
+            self.table.setItem(6, 1, QTableWidgetItem(str(echo[1])))
+            self.table.setItem(6, 2, QTableWidgetItem(str(echo[2])))
             total = int(echo[0]) + int(echo[1]) + int(echo[2])
-            self.table.setItem(6, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(6, 3, QTableWidgetItem(str(total)))
 
             fibr = progress[7]
             self.table.setRowHeight(7, 50)
-            self.table.setItem(7, 1, QTableWidgetItem(str(fibr[0])))
-            self.table.setItem(7, 2, QTableWidgetItem(str(fibr[1])))
-            self.table.setItem(7, 3, QTableWidgetItem(str(fibr[2])))
+            self.table.setItem(7, 0, QTableWidgetItem(str(fibr[0])))
+            self.table.setItem(7, 1, QTableWidgetItem(str(fibr[1])))
+            self.table.setItem(7, 2, QTableWidgetItem(str(fibr[2])))
             total = int(fibr[0]) + int(fibr[1]) + int(fibr[2])
-            self.table.setItem(7, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(7, 3, QTableWidgetItem(str(total)))
 
             ecg = progress[8]
             self.table.setRowHeight(8, 50)
-            self.table.setItem(8, 1, QTableWidgetItem(str(ecg[0])))
-            self.table.setItem(8, 2, QTableWidgetItem(str(ecg[1])))
-            self.table.setItem(8, 3, QTableWidgetItem(str(ecg[2])))
+            self.table.setItem(8, 0, QTableWidgetItem(str(ecg[0])))
+            self.table.setItem(8, 1, QTableWidgetItem(str(ecg[1])))
+            self.table.setItem(8, 2, QTableWidgetItem(str(ecg[2])))
             total = int(ecg[0]) + int(ecg[1]) + int(ecg[2])
-            self.table.setItem(8, 4, QTableWidgetItem(str(total)))
+            self.table.setItem(8, 3, QTableWidgetItem(str(total)))
 
 
 
@@ -190,7 +190,7 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
             self.want_to_close = True
             self.dialog = Saving_progress_dialog()
             self.dialog.show()
-            self.thr = Thread_save_recap(self.month, self.year, self.table, self.service)
+            self.thr = Thread_save_state(self.month, self.year, self.table)
             self.thr._signal.connect(self.signal_accepted_save)
             self.thr._signal_status.connect(self.signal_accepted_save)
             self.thr.start()
@@ -198,7 +198,6 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
 
 
     def export_(self):
-
         self.want_to_close = True
         print(self.chef.currentText())
 
@@ -215,10 +214,22 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
-
+            t1 = 0
+            t2 = 0
+            t3 = 0
+            t4 = 0
             for row in range(self.table.rowCount()):
-                if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
-                    self.table.setItem(row, 5, QTableWidgetItem(str(int(self.table.item(row, 2).text()) + int(self.table.item(row, 3).text()) + int(self.table.item(row, 4).text()))))
+                self.table.setItem(row, 3, QTableWidgetItem(str(int(self.table.item(row, 0).text()) + int(self.table.item(row, 1).text()) + int(self.table.item(row, 2).text()))))
+                t1 = t1 + int(self.table.item(row, 0).text())
+                t2 = t2 + int(self.table.item(row, 1).text())
+                t3 = t3 + int(self.table.item(row, 2).text())
+
+                if row == 9:
+                    self.table.setItem(row, 0, QTableWidgetItem(str(t1)))
+                    self.table.setItem(row, 0, QTableWidgetItem(str(t2)))
+                    self.table.setItem(row, 0, QTableWidgetItem(str(t3)))
+                    self.table.setItem(row, 0, QTableWidgetItem(str(t1 + t2 + t3)))
+
 
             self.next_page = radiologie.RadiologieMainUi()
             self.next_page.show()

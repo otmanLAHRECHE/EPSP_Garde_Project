@@ -2722,12 +2722,20 @@ class Thread_save_state(QThread):
     _signal_status = pyqtSignal(int)
     _signal = pyqtSignal(bool)
 
-    def __init__(self, month, year, table, service):
-        super(Thread_save_recap, self).__init__()
+    def __init__(self, month, year, table):
+        super(Thread_save_state, self).__init__()
         self.month = month
         self.year = year
         self.table = table
-        self.service = service
+        self.Poumon = []
+        self.OS = []
+        self.Abdomen_simple = []
+        self.UIV = []
+        self.Cholecystographie = []
+        self.Estomac = []
+        self.Echographie = []
+        self.Fibroscopie = []
+        self.ECG = []
 
     def __del__(self):
         self.terminate()
@@ -2736,56 +2744,37 @@ class Thread_save_state(QThread):
     def run(self):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
-        for row in range(self.table.rowCount()):
-            prog = row * 100 / self.table.rowCount()
-            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
-                if self.service == "urgence_surv_inf":
-                    serv = get_workerService_by_name(self.table.item(row, 1).text())
-                    serv = serv[0]
-                    id_agn = get_workerId_by_name(self.table.item(row, 1).text(), serv[0])
-                    id_agn = id_agn[0]
-                    sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service in (?,?) and recap.agents_id =? and recap.m =? and recap.y =?'
-                    cur.execute(sql_q, ("urgence_inf", "urgence_surv", id_agn[0], self.month, self.year))
-                else:
-                    id_agn = get_workerId_by_name(self.table.item(row, 1).text(), self.service)
-                    id_agn = id_agn[0]
-                    sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
-                    cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
-
-                results = cur.fetchall()
 
 
-                jo2 = int(self.table.item(row, 2).text())
-                jw2 = int(self.table.item(row, 3).text())
-                jf2 = int(self.table.item(row, 4).text())
 
-                if results:
-                    results = results[0]
-                    jo1 = results[0]
-                    jw1 = results[1]
-                    jf1 = results[2]
 
-                    if jo1 == jo2 and jw1 == jw2 and jf1 == jf2:
-                        print("do nothing")
-                    else:
-                        if jo1 != jo2:
-                            sql_q = 'UPDATE recap SET jo =? where  recap.agents_id =? and recap.m =? and recap.y =?'
-                            cur.execute(sql_q, (jo2, id_agn[0], self.month, self.year))
-                        if jw1 != jw2:
-                            sql_q = 'UPDATE recap SET jw =? where  recap.agents_id =? and recap.m =? and recap.y =?'
-                            cur.execute(sql_q, (jw2, id_agn[0], self.month, self.year))
-                        if jf1 != jf2:
-                            sql_q = 'UPDATE recap SET jf =? where  recap.agents_id =? and recap.m =? and recap.y =?'
-                            cur.execute(sql_q, (jf2, id_agn[0], self.month, self.year))
+        for c in range(3):
+            self.Poumon.append(int(self.table.item(0, c).text()))
+            self.OS.append(int(self.table.item(1, c).text()))
+            self.Abdomen_simple.append(int(self.table.item(2, c).text()))
+            self.UIV.append(int(self.table.item(3, c).text()))
+            self.Cholecystographie.append(int(self.table.item(4, c).text()))
+            self.Estomac.append(int(self.table.item(5, c).text()))
+            self.Echographie.append(int(self.table.item(6, c).text()))
+            self.Fibroscopie.append(int(self.table.item(7, c).text()))
+            self.ECG.append(int(self.table.item(8, c).text()))
 
-                else:
-                    if jo2 == 0 and jw2 == 0 and jf2 == 0:
-                        print("do nothing")
-                    else:
-                        sql_q = 'INSERT INTO recap (jo,jw,jf,m,y,agents_id) VALUES (?,?,?,?,?,?)'
-                        cur.execute(sql_q, (jo2, jw2, jf2, self.month, self.year, id_agn[0]))
+        sql_q = 'INSERT INTO state_homme (Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?)'
+        cur.execute(sql_q, (self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0], self.Cholecystographie[0], self.Estomac[0], self.Echographie[0], self.Fibroscopie[0], self.ECG[0]))
 
-            connection.commit()
+        sql_q = 'INSERT INTO state_famme (Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?)'
+        cur.execute(sql_q, (
+        self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],
+        self.Echographie[1], self.Fibroscopie[1], self.ECG[1]))
+
+        sql_q = 'INSERT INTO state_enfant (Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?)'
+        cur.execute(sql_q, (
+        self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],
+        self.Echographie[2], self.Fibroscopie[2], self.ECG[2]))
+
+        connection.commit()
+
+        for prog in range(20):
             time.sleep(0.1)
             self._signal_status.emit(int(prog))
 
