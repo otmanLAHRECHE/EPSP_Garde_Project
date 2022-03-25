@@ -60,3 +60,27 @@ class Buttons_inf(QWidget):
         button_layout.addWidget(self.delete_garde)
 
         self.setLayout(button_layout)
+
+
+class Buttons_rad(QWidget):
+    def __init__(self):
+        super(Buttons_rad, self).__init__()
+
+        # add your buttons
+        button_layout = QtWidgets.QHBoxLayout()
+        self.edit_garde = QtWidgets.QPushButton()
+        self.edit_garde.setText("GARDE")
+        self.edit_state = QtWidgets.QPushButton()
+        self.edit_state.setText("STATISTIQUE")
+        self.delete_garde = QtWidgets.QPushButton()
+        self.delete_garde.setText("Delete")
+        self.print_garde = QtWidgets.QPushButton()
+        self.print_garde.setText("RECAP")
+
+        button_layout.addStretch(1)
+        button_layout.addWidget(self.print_garde)
+        button_layout.addWidget(self.edit_state)
+        button_layout.addWidget(self.edit_garde)
+        button_layout.addWidget(self.delete_garde)
+
+        self.setLayout(button_layout)
