@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
+import recap
 import urgence_inf_guard
 import urgence_surv_guard
 from dialogs import Add_new_inf, Saving_progress_dialog, Add_new_month, Update_worker_dialog
@@ -537,11 +538,11 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
 
         y = int(y)
 
-        """
-        self.next_page = recap.RecapUi(m, y, "urgence")
+
+        self.next_page = recap.RecapUi(m, y, "urgence_surv_inf")
         self.close()
         self.next_page.show()
-        """
+
 
 
 
