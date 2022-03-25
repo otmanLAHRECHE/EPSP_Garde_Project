@@ -1897,11 +1897,16 @@ class ThreadRecapExport(QThread):
 
 
             results = cur.fetchall()
-            results = results[0]
+            if results:
+                results = results[0]
 
-            jo = results[0]
-            jw = results[1]
-            jf = results[2]
+                jo = results[0]
+                jw = results[1]
+                jf = results[2]
+            else:
+                jo = 0
+                jw = 0
+                jf = 0
 
             total = int(jo) + int(jw) + int(jf)
 

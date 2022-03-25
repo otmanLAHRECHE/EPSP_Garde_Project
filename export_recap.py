@@ -10,6 +10,7 @@ import laboratoire
 import pharmacie
 import radiologie
 import urgence
+import urgence_inf
 from threads import ThreadRecapExport
 from tools import create_garde_page, create_recap_page
 
@@ -96,9 +97,11 @@ class ExportRecapUi(QtWidgets.QMainWindow):
             elif self.service == "pharm":
                 self.next_page = pharmacie.PharmacieMainUi()
             elif self.service == "urgence_surv":
-                self.next_page = dentiste.DentisteMainUi()
+                self.next_page = urgence_inf.UrgenceInfUi()
             elif self.service == "urgence_inf":
-                self.next_page = dentiste.DentisteMainUi()
+                self.next_page = urgence_inf.UrgenceInfUi()
+            elif self.service == "urgence_surv_inf":
+                self.next_page = urgence_inf.UrgenceInfUi()
 
             self.next_page.show()
             print(self.thr.isFinished())
