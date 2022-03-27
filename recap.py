@@ -96,9 +96,11 @@ class RecapUi(QtWidgets.QMainWindow):
                 elif self.service == "pharm":
                     self.next_page = pharmacie.PharmacieMainUi()
                 elif self.service == "urgence_surv":
-                    self.next_page = dentiste.DentisteMainUi()
+                    self.next_page = urgence_inf.UrgenceInfUi()
                 elif self.service == "urgence_inf":
-                    self.next_page = dentiste.DentisteMainUi()
+                    self.next_page = urgence_inf.UrgenceInfUi()
+                elif self.service == "urgence_surv_inf":
+                    self.next_page = urgence_inf.UrgenceInfUi()
 
                 self.next_page.show()
                 self.close()
