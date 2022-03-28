@@ -53,7 +53,7 @@ class ExportUrgenceSurv(QtWidgets.QMainWindow):
         elif self.month == 12:
             m = "décembre"
 
-        self.ttl.setText("Exporté le planing de garde d urgence (Infirmiers survients)" + m + "/" + str(self.year))
+        self.ttl.setText("Exporté le planing de garde d urgence (Infirmiers surveillant)" + m + "/" + str(self.year))
 
         self.thr = ThreadGuardSurv(self.num_days, self.month, self.year)
         self.thr._signal.connect(self.signal_accept)

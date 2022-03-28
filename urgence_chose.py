@@ -16,6 +16,7 @@ class UrgenceChoseUi(QtWidgets.QMainWindow):
         self.med = self.findChild(QtWidgets.QPushButton, "pushButton")
         self.infirmier = self.findChild(QtWidgets.QPushButton, "pushButton_3")
 
+
         self.med.clicked.connect(self.med_click)
         self.infirmier.clicked.connect(self.infirmier_click)
 

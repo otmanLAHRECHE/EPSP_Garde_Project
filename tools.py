@@ -261,7 +261,7 @@ def create_garde_inf_page(service, grd_cons, month, year, data, groupes, path):
                 pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size)
             else:
                 if(datum == " "):
-                    pdf.set_fill_color(160, 160, 160)
+                    pdf.set_fill_color(215, 215, 215)
                     pdf.set_font("Times", size=10)
                     pdf.multi_cell(col_width, line_height, datum, border=1, ln=3, max_line_height=pdf.font_size,
                                    fill=True)
