@@ -177,3 +177,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
         self.next_page = export_urgence_planing.ExportUrgencePlaningUi(self.month, self.year)
         self.close()
         self.next_page.show()
+
+
+
+

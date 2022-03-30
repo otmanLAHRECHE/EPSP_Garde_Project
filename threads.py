@@ -1711,7 +1711,6 @@ class Thread_recap_load(QThread):
 
             res1 = cur.fetchall()
 
-
             if res1:
                 res1 = res1[0]
                 jo = res1[0]
@@ -1798,7 +1797,6 @@ class Thread_save_recap(QThread):
 
                 results = cur.fetchall()
 
-
                 jo2 = int(self.table.item(row, 2).text())
                 jw2 = int(self.table.item(row, 3).text())
                 jf2 = int(self.table.item(row, 4).text())
@@ -1873,7 +1871,6 @@ class ThreadRecapExport(QThread):
             cur.execute(sql_q, (self.service, self.month, self.year))
             res2 = cur.fetchall()
 
-
         count = res2[0]
         row = 0
         for agent in res:
@@ -1894,7 +1891,6 @@ class ThreadRecapExport(QThread):
 
                 sql_q = 'SELECT recap.jo, recap.jw, recap.jf FROM recap INNER JOIN health_worker ON health_worker.worker_id = recap.agents_id where service=? and recap.agents_id =? and recap.m =? and recap.y =?'
                 cur.execute(sql_q, (self.service, id_agn[0], self.month, self.year))
-
 
             results = cur.fetchall()
             if results:
@@ -1937,7 +1933,6 @@ class ThreadAddGroupe(QThread):
         self.wait()
 
     def run(self):
-
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
         sql_q = "INSERT INTO health_worker (full_name,service) values (?,?)"
@@ -2325,7 +2320,7 @@ class ThreadGuardUrgenceInf(QThread):
             sql_q = 'SELECT health_worker.full_name FROM health_worker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
             cur.execute(sql_q, (groupe[0],))
             workers = cur.fetchall()
-            gr = "Groupe " + groupe[0] +": "
+            gr = "Groupe " + groupe[0] + ": "
 
             for worker in workers:
                 gr = gr + worker[0] + " / "
@@ -2438,7 +2433,6 @@ class Thread_create_urgence_inf_guard(QThread):
 
             # guard shift night :
 
-
             sql_q = 'SELECT guard_groupe.g FROM guard_groupe WHERE guard_groupe.periode =? and guard_groupe.d =? and guard_groupe.m =? and guard_groupe.y =?'
             cur.execute(sql_q, ('night', day, self.month, self.year))
             results_night = cur.fetchall()
@@ -2505,7 +2499,6 @@ class Thread_create_urgence_inf_guard(QThread):
                 sql_q = 'SELECT health_worker.worker_id FROM health_worker INNER JOIN groupe ON health_worker.worker_id = groupe.inf_id WHERE groupe.g =?'
                 cur.execute(sql_q, (med_name_2,))
                 res2 = cur.fetchall()
-
 
                 for id in res2:
                     id = id[0]
@@ -2582,13 +2575,11 @@ class Thread_state_load(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
-
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_homme where state_homme.m =? and state_homme.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_h = cur.fetchall()
         print("test")
         print(res_h)
-
 
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
         cur.execute(sql_q, (self.month, self.year))
@@ -2596,15 +2587,11 @@ class Thread_state_load(QThread):
 
         print(res_f)
 
-
-
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_enfant where state_enfant.m =? and state_enfant.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_e = cur.fetchall()
 
         print(res_e)
-
-
 
         self.Poumon = []
         self.OS = []
@@ -2708,8 +2695,6 @@ class Thread_state_load(QThread):
             self.Echographie.append(0)
             self.Fibroscopie.append(0)
             self.ECG.append(0)
-
-
 
         list = []
         list.append(self.Poumon)
@@ -2761,9 +2746,6 @@ class Thread_save_state(QThread):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
 
-
-
-
         for c in range(3):
             self.Poumon.append(int(self.table.item(0, c).text()))
             self.OS.append(int(self.table.item(1, c).text()))
@@ -2779,11 +2761,9 @@ class Thread_save_state(QThread):
         cur.execute(sql_q, (self.month, self.year))
         res_h = cur.fetchall()
 
-
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_f = cur.fetchall()
-
 
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_enfant where state_enfant.m =? and state_enfant.y =?'
         cur.execute(sql_q, (self.month, self.year))
@@ -2791,7 +2771,10 @@ class Thread_save_state(QThread):
 
         if res_h:
             sql_q = 'UPDATE state_homme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_homme.m=? and state_homme.y=?'
-            cur.execute(sql_q, (self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0], self.Cholecystographie[0], self.Estomac[0], self.Echographie[0], self.Fibroscopie[0], self.ECG[0], self.month, self.year))
+            cur.execute(sql_q, (
+                self.Poumon[0], self.OS[0], self.Abdomen_simple[0], self.UIV[0], self.Cholecystographie[0],
+                self.Estomac[0],
+                self.Echographie[0], self.Fibroscopie[0], self.ECG[0], self.month, self.year))
             connection.commit()
         else:
             sql_q = 'INSERT INTO state_homme (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
@@ -2800,23 +2783,32 @@ class Thread_save_state(QThread):
                                 self.ECG[0]))
             connection.commit()
 
-
         if res_f:
             sql_q = 'UPDATE state_famme set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_famme.m=? and state_famme.y=?'
-            cur.execute(sql_q, (self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],self.Echographie[1], self.Fibroscopie[1], self.ECG[1], self.month, self.year))
+            cur.execute(sql_q, (
+                self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1],
+                self.Estomac[1],
+                self.Echographie[1], self.Fibroscopie[1], self.ECG[1], self.month, self.year))
             connection.commit()
         else:
             sql_q = 'INSERT INTO state_famme (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
-            cur.execute(sql_q, (self.month, self.year,self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1], self.Cholecystographie[1], self.Estomac[1],self.Echographie[1], self.Fibroscopie[1], self.ECG[1]))
+            cur.execute(sql_q, (self.month, self.year, self.Poumon[1], self.OS[1], self.Abdomen_simple[1], self.UIV[1],
+                                self.Cholecystographie[1], self.Estomac[1], self.Echographie[1], self.Fibroscopie[1],
+                                self.ECG[1]))
             connection.commit()
 
         if res_e:
             sql_q = 'UPDATE state_enfant set Poumon =?,OS=?,Abdomen_simple=?,UIV=?,Cholecystographie=?,Estomac=?,Echographie=?,Fibroscopie=?,ECG=? where state_enfant.m=? and state_enfant.y=?'
-            cur.execute(sql_q, (self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],self.Echographie[2], self.Fibroscopie[2], self.ECG[2], self.month, self.year))
+            cur.execute(sql_q, (
+                self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2],
+                self.Estomac[2],
+                self.Echographie[2], self.Fibroscopie[2], self.ECG[2], self.month, self.year))
             connection.commit()
         else:
             sql_q = 'INSERT INTO state_enfant (m,y,Poumon,OS,Abdomen_simple,UIV,Cholecystographie,Estomac,Echographie,Fibroscopie,ECG) values (?,?,?,?,?,?,?,?,?,?,?)'
-            cur.execute(sql_q, (self.month, self.year,self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2], self.Cholecystographie[2], self.Estomac[2],self.Echographie[2], self.Fibroscopie[2], self.ECG[2]))
+            cur.execute(sql_q, (self.month, self.year, self.Poumon[2], self.OS[2], self.Abdomen_simple[2], self.UIV[2],
+                                self.Cholecystographie[2], self.Estomac[2], self.Echographie[2], self.Fibroscopie[2],
+                                self.ECG[2]))
             connection.commit()
 
         for prog in range(20):
@@ -2848,7 +2840,6 @@ class ThreadStateExport(QThread):
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_homme where state_homme.m =? and state_homme.y =?'
         cur.execute(sql_q, (self.month, self.year))
         res_h = cur.fetchall()
-
 
         sql_q = 'SELECT Poumon, OS, Abdomen_simple, UIV, Cholecystographie, Estomac, Echographie, Fibroscopie, ECG FROM state_famme where state_famme.m =? and state_famme.y =?'
         cur.execute(sql_q, (self.month, self.year))
@@ -2961,14 +2952,13 @@ class ThreadStateExport(QThread):
             self.Fibroscopie.append(0)
             self.ECG.append(0)
 
-        prog =0
-        total = self.Poumon[0] +self.Poumon[1] + self.Poumon[2]
+        prog = 0
+        total = self.Poumon[0] + self.Poumon[1] + self.Poumon[2]
         data_examen = ("Poumon", self.Poumon[0], self.Poumon[1], self.Poumon[2], total)
         self.data.append(data_examen)
         time.sleep(0.2)
         self._signal.emit(int(prog))
-        prog =prog+1
-
+        prog = prog + 1
 
         total = self.OS[0] + self.OS[1] + self.OS[2]
         data_examen = ("OS", self.OS[0], self.OS[1], self.OS[2], total)
@@ -2977,14 +2967,12 @@ class ThreadStateExport(QThread):
         self._signal.emit(int(prog))
         prog = prog + 1
 
-
         total = self.Abdomen_simple[0] + self.Abdomen_simple[1] + self.Abdomen_simple[2]
         data_examen = ("Abdomen simple", self.Abdomen_simple[0], self.Abdomen_simple[1], self.Abdomen_simple[2], total)
         self.data.append(data_examen)
         time.sleep(0.2)
         self._signal.emit(int(prog))
         prog = prog + 1
-
 
         total = self.UIV[0] + self.UIV[1] + self.UIV[2]
         data_examen = ("U.I.V", self.UIV[0], self.UIV[1], self.UIV[2], total)
@@ -2993,14 +2981,13 @@ class ThreadStateExport(QThread):
         self._signal.emit(int(prog))
         prog = prog + 1
 
-
         total = self.Cholecystographie[0] + self.Cholecystographie[1] + self.Cholecystographie[2]
-        data_examen = ("Cholecystographie", self.Cholecystographie[0], self.Cholecystographie[1], self.Cholecystographie[2], total)
+        data_examen = (
+            "Cholecystographie", self.Cholecystographie[0], self.Cholecystographie[1], self.Cholecystographie[2], total)
         self.data.append(data_examen)
         time.sleep(0.2)
         self._signal.emit(int(prog))
         prog = prog + 1
-
 
         total = self.Estomac[0] + self.Estomac[1] + self.Estomac[2]
         data_examen = ("Estomac", self.Estomac[0], self.Estomac[1], self.Estomac[2], total)
@@ -3009,14 +2996,12 @@ class ThreadStateExport(QThread):
         self._signal.emit(int(prog))
         prog = prog + 1
 
-
         total = self.Echographie[0] + self.Echographie[1] + self.Echographie[2]
         data_examen = ("Echographie", self.Echographie[0], self.Echographie[1], self.Echographie[2], total)
         self.data.append(data_examen)
         time.sleep(0.2)
         self._signal.emit(int(prog))
         prog = prog + 1
-
 
         total = self.Fibroscopie[0] + self.Fibroscopie[1] + self.Fibroscopie[2]
         data_examen = ("Fibroscopie", self.Fibroscopie[0], self.Fibroscopie[1], self.Fibroscopie[2], total)
@@ -3025,7 +3010,6 @@ class ThreadStateExport(QThread):
         self._signal.emit(int(prog))
         prog = prog + 1
 
-
         total = self.ECG[0] + self.ECG[1] + self.ECG[2]
         data_examen = ("E.C.G", self.ECG[0], self.ECG[1], self.ECG[2], total)
         self.data.append(data_examen)
@@ -3033,9 +3017,12 @@ class ThreadStateExport(QThread):
         self._signal.emit(int(prog))
         prog = prog + 1
 
-        total1 = self.Poumon[0] + self.OS[0] + self.Abdomen_simple[0] + self.UIV[0] + self.Cholecystographie[0] + self.Estomac[0] + self.Echographie[0] + self.Fibroscopie[0] + self.ECG[0]
-        total2 = self.Poumon[1] + self.OS[1] + self.Abdomen_simple[1] + self.UIV[1] + self.Cholecystographie[1] + self.Estomac[1] + self.Echographie[1] + self.Fibroscopie[1] + self.ECG[1]
-        total3 = self.Poumon[2] + self.OS[2] + self.Abdomen_simple[2] + self.UIV[2] + self.Cholecystographie[2] + self.Estomac[2] + self.Echographie[2] + self.Fibroscopie[2] + self.ECG[2]
+        total1 = self.Poumon[0] + self.OS[0] + self.Abdomen_simple[0] + self.UIV[0] + self.Cholecystographie[0] + \
+                 self.Estomac[0] + self.Echographie[0] + self.Fibroscopie[0] + self.ECG[0]
+        total2 = self.Poumon[1] + self.OS[1] + self.Abdomen_simple[1] + self.UIV[1] + self.Cholecystographie[1] + \
+                 self.Estomac[1] + self.Echographie[1] + self.Fibroscopie[1] + self.ECG[1]
+        total3 = self.Poumon[2] + self.OS[2] + self.Abdomen_simple[2] + self.UIV[2] + self.Cholecystographie[2] + \
+                 self.Estomac[2] + self.Echographie[2] + self.Fibroscopie[2] + self.ECG[2]
         total4 = total1 + total2 + total3
 
         data_examen = ("Total", total1, total2, total3, total4)
@@ -3047,6 +3034,50 @@ class ThreadStateExport(QThread):
         self._signal_result.emit(self.data)
 
 
+class ThreadVerifyMonth(QThread):
+    _signal = pyqtSignal(int)
+    _signal_result = pyqtSignal(bool)
+
+    def __init__(self, month, year, service):
+        super(ThreadVerifyMonth, self).__init__()
+        self.month = month
+        self.year = year
+        self.service = service
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+
+        sql_q = 'SELECT count(*) FROM guard_mounth where guard_mounth.m =? and guard_mounth.y =? and guard_mounth.service =? '
+        cur.execute(sql_q, (self.month, self.year, self.service))
+        res = cur.fetchall()
+
+        if res:
+            count = res[0]
+            if count[0] == 0:
+                can_add = True
+            else:
+                can_add = False
+
+        else:
+            can_add = True
+
+        if can_add:
+            sql_q = "INSERT INTO guard_mounth (m,y,service) values (?,?,?)"
+            guard = (self.month, self.year, self.service)
+            cur.execute(sql_q, guard)
+            connection.commit()
+            for i in range(100):
+                self._signal.emit(i)
+
+            connection.close()
+            self._signal_result.emit(True)
+        else:
+            self._signal_result.emit(False)
 
 
 
