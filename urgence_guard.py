@@ -192,15 +192,19 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
                 auto.append(medInd1)
             if medInd2 != 0:
                 auto.append(medInd2)
+
+        print("auto")
+        print(auto)
         if len(auto) == 0:
             message = "liste vide"
             self.alert_(message)
         else:
             self.dialog = Saving_progress_dialog()
             self.dialog.show()
-            self.thr3 = ThreadAutoGuard(self.num_days, self.month, self.year, "urgence", self.table)
+            self.thr3 = ThreadAutoGuard(self.num_days, self.month, self.year, "urgence", self.table, auto)
             self.thr3._signal.connect(self.signal_accepted_auto)
             self.thr3._signal_status.connect(self.signal_accepted_auto)
+            self.thr3._signal_result.connect(self.signal_accepted_auto)
             self.thr3.start()
 
 
