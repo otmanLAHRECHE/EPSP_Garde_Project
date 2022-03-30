@@ -1,6 +1,7 @@
 import os
 
 from PyQt5 import uic, QtWidgets
+from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 import sys
@@ -43,10 +44,25 @@ class MainUi(QtWidgets.QMainWindow):
 
         self.grid = self.findChild(QtWidgets.QGridLayout, "gridLayout")
         self.urgence = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.urgence.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'ambulance.png')))
+        self.urgence.setIconSize(QSize(40, 40))
+
         self.dentist = self.findChild(QtWidgets.QPushButton, "pushButton_3")
+        self.dentist.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'odontology.png')))
+        self.dentist.setIconSize(QSize(40, 40))
+
         self.radio = self.findChild(QtWidgets.QPushButton, "pushButton_2")
+        self.radio.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'ambulance.png')))
+        self.radio.setIconSize(QSize(40, 40))
+
         self.labo = self.findChild(QtWidgets.QPushButton, "pushButton_4")
+        self.labo.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'laboratory.png')))
+        self.labo.setIconSize(QSize(40, 40))
+
         self.pharm = self.findChild(QtWidgets.QPushButton, "pushButton_5")
+        self.pharm.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'xray.png')))
+        self.pharm.setIconSize(QSize(40, 40))
+
         self.resp = self.findChild(QtWidgets.QLabel, "label_3")
 
         self.grid.addWidget(self.urgence, 1, 1)
