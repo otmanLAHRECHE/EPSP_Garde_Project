@@ -3081,7 +3081,8 @@ class ThreadVerifyMonth(QThread):
 
 
 class ThreadAutoGuard(QThread):
-    _signal = pyqtSignal(int)
+    _signal = pyqtSignal(list)
+    _signal_status = pyqtSignal(int)
     _signal_result = pyqtSignal(bool)
 
     def __init__(self, num_days, month, year, service, table, auto):
