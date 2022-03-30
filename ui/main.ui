@@ -125,19 +125,19 @@
     <item>
      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0" columnstretch="0" rowminimumheight="0,0,0,0,0,0">
       <property name="leftMargin">
-       <number>40</number>
+       <number>5</number>
       </property>
       <property name="topMargin">
        <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>40</number>
+       <number>5</number>
       </property>
       <property name="bottomMargin">
        <number>40</number>
       </property>
       <property name="horizontalSpacing">
-       <number>20</number>
+       <number>10</number>
       </property>
       <property name="verticalSpacing">
        <number>50</number>
@@ -149,6 +149,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
         </property>
         <property name="maximumSize">
          <size>
@@ -168,6 +174,12 @@
       </item>
       <item row="4" column="0">
        <widget class="QPushButton" name="pushButton_4">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>250</width>
@@ -186,6 +198,12 @@
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="pushButton_2">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>250</width>
@@ -204,6 +222,12 @@
       </item>
       <item row="3" column="0">
        <widget class="QPushButton" name="pushButton_3">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>250</width>
@@ -222,6 +246,12 @@
       </item>
       <item row="5" column="0">
        <widget class="QPushButton" name="pushButton_5">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>250</width>

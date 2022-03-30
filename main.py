@@ -52,7 +52,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.dentist.setIconSize(QSize(40, 40))
 
         self.radio = self.findChild(QtWidgets.QPushButton, "pushButton_2")
-        self.radio.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'ambulance.png')))
+        self.radio.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'xray.png')))
         self.radio.setIconSize(QSize(40, 40))
 
         self.labo = self.findChild(QtWidgets.QPushButton, "pushButton_4")
@@ -60,7 +60,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.labo.setIconSize(QSize(40, 40))
 
         self.pharm = self.findChild(QtWidgets.QPushButton, "pushButton_5")
-        self.pharm.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'xray.png')))
+        self.pharm.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'pharmacy.png')))
         self.pharm.setIconSize(QSize(40, 40))
 
         self.resp = self.findChild(QtWidgets.QLabel, "label_3")
