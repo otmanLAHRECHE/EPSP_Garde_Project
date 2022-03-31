@@ -113,6 +113,8 @@ class PharmGuardUi(QtWidgets.QMainWindow):
             else:
                 a0.ignore()
         else:
+            self.next_page = pharmacie.PharmacieMainUi()
+            self.next_page.show()
             self.close()
 
     def signal_accepted(self, progress):
