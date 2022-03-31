@@ -3179,13 +3179,12 @@ class ThreadAutoGuard(QThread):
                 results_light = self.auto[index]
                 if index == index_max:
                     results_night = self.auto[0]
+                    index = 0
                 else:
                     results_night = self.auto[index + 1]
+                    index = index + 1
 
-            print(results_light)
-            print(results_night)
-            print("index")
-            print(str(index))
+
 
             if index == index_max:
                 index = 0

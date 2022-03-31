@@ -192,6 +192,8 @@ class UrgenceSurvGuardUi(QtWidgets.QMainWindow):
             if medInd2 != 0:
                 auto.append(medInd2)
 
+
+
         if len(auto) == 0:
             message = "liste vide"
             self.alert_(message)
