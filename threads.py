@@ -1113,7 +1113,7 @@ class ThreadGuardInfirmier(QThread):
         self.num_days = num_days
         self.month = month
         self.year = year
-        self.data = [("Jours", "Date", "De 08h:00 à 20h:00", "De 20h:00 à 08h:00")]
+        self.data = [("Jours", "Date", "De 08h:00 à 16h:00", "De 16h:00 à 08h:00")]
 
     def __del__(self):
         self.terminate()
