@@ -70,7 +70,7 @@ class ExportUrgenceSurv(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("URGENCE", "GARDE INFIRMIERS SURVIENTS", self.month, self.year, self.data, filePath)
+            create_garde_page("URGENCE", "GARDE INFIRMIERS SURVEILLANTS", self.month, self.year, self.data, filePath)
             self.next_page = urgence_inf.UrgenceInfUi()
             self.next_page.show()
             print(self.thr.isFinished())
