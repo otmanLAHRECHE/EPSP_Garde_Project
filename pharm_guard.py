@@ -187,14 +187,22 @@ class PharmGuardUi(QtWidgets.QMainWindow):
     def auto_(self):
         auto = []
         for i in range(16):
-            check1 = self.table.cellWidget(i, 2)
-            check2 = self.table.cellWidget(i, 3)
-            medInd1 = check1.chose.currentIndex()
-            medInd2 = check2.chose.currentIndex()
-            if medInd1 != 0:
-                auto.append(medInd1)
-            if medInd2 != 0:
-                auto.append(medInd2)
+            if self.table.item(i, 0).text() == "Dimanche" or self.table.item(i, 0).text() == "Lundi" or self.table.item(
+                    i, 0).text() == "Mardi" or self.table.item(i, 0).text() == "Mercredi" or self.table.item(i,
+                                                                                                             0).text() == "Jeudi":
+                check2 = self.table.cellWidget(i, 3)
+                medInd2 = check2.chose.currentIndex()
+                if medInd2 != 0:
+                    auto.append(medInd2)
+            else:
+                check1 = self.table.cellWidget(i, 2)
+                check2 = self.table.cellWidget(i, 3)
+                medInd1 = check1.chose.currentIndex()
+                medInd2 = check2.chose.currentIndex()
+                if medInd1 != 0:
+                    auto.append(medInd1)
+                if medInd2 != 0:
+                    auto.append(medInd2)
 
 
         if len(auto) == 0:

@@ -3120,7 +3120,7 @@ class ThreadAutoGuard(QThread):
                     index = index + 1
 
             elif x.strftime("%A") == "Sunday":
-                if self.service == "urgence" or self.service == "radio":
+                if self.service == "urgence" or self.service == "radio" or self.service == "urgence_surv" or self.service == "urgence_inf":
                     results_light = self.auto[index]
                     if index == index_max:
                         results_night = self.auto[0]
@@ -3132,7 +3132,7 @@ class ThreadAutoGuard(QThread):
                     results_night = self.auto[index]
 
             elif x.strftime("%A") == "Monday":
-                if self.service == "urgence" or self.service == "radio":
+                if self.service == "urgence" or self.service == "radio" or self.service == "urgence_surv" or self.service == "urgence_inf":
                     results_light = self.auto[index]
                     if index == index_max:
                         results_night = self.auto[0]
@@ -3143,7 +3143,7 @@ class ThreadAutoGuard(QThread):
                 else:
                     results_night = self.auto[index]
             elif x.strftime("%A") == "Tuesday":
-                if self.service == "urgence" or self.service == "radio":
+                if self.service == "urgence" or self.service == "radio" or self.service == "urgence_surv" or self.service == "urgence_inf":
                     results_light = self.auto[index]
                     if index == index_max:
                         results_night = self.auto[0]
@@ -3154,7 +3154,7 @@ class ThreadAutoGuard(QThread):
                 else:
                     results_night = self.auto[index]
             elif x.strftime("%A") == "Wednesday":
-                if self.service == "urgence" or self.service == "radio":
+                if self.service == "urgence" or self.service == "radio" or self.service == "urgence_surv" or self.service == "urgence_inf":
                     results_light = self.auto[index]
                     if index == index_max:
                         results_night = self.auto[0]
@@ -3165,7 +3165,7 @@ class ThreadAutoGuard(QThread):
                 else:
                     results_night = self.auto[index]
             elif x.strftime("%A") == "Thursday":
-                if self.service == "urgence" or self.service == "radio":
+                if self.service == "urgence" or self.service == "radio" or self.service == "urgence_surv" or self.service == "urgence_inf":
                     results_light = self.auto[index]
                     if index == index_max:
                         results_night = self.auto[0]
