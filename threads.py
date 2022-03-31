@@ -3208,6 +3208,52 @@ class ThreadAutoGuard(QThread):
         self._signal_result.emit(True)
 
 
+class ThreadVerifyMonthCons(QThread):
+    _signal = pyqtSignal(int)
+    _signal_result = pyqtSignal(bool)
+
+    def __init__(self, month, year, service):
+        super(ThreadVerifyMonthCons, self).__init__()
+        self.month = month
+        self.year = year
+        self.service = service
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        connection = sqlite3.connect("database/sqlite.db")
+        cur = connection.cursor()
+
+        sql_q = 'SELECT count(*) FROM consultaion_mounth where consultaion_mounth.m =? and consultaion_mounth.y =? and consultaion_mounth.service =? '
+        cur.execute(sql_q, (self.month, self.year, self.service))
+        res = cur.fetchall()
+
+        if res:
+            count = res[0]
+            if count[0] == 0:
+                can_add = True
+            else:
+                can_add = False
+
+        else:
+            can_add = True
+
+        if can_add:
+            sql_q = "INSERT INTO consultaion_mounth (m,y,service) values (?,?,?)"
+            guard = (self.month, self.year, self.service)
+            cur.execute(sql_q, guard)
+            connection.commit()
+            for i in range(100):
+                self._signal.emit(i)
+
+            connection.close()
+            self._signal_result.emit(True)
+        else:
+            self._signal_result.emit(False)
+
+
 
 
 

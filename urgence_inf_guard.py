@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 import export_urgence_inf
 import urgence_inf
 from dialogs import Saving_progress_dialog, CustomDialog
-from threads import Thread_load_guards_inf_urgences, Thread_create_urgence_inf_guard
+from threads import Thread_load_guards_inf_urgences, Thread_create_urgence_inf_guard, ThreadAutoGuard
 from widgets import Chose_worker
 
 basedir = os.path.dirname(__file__)
@@ -120,11 +120,7 @@ class UrgenceInfGuardUi(QtWidgets.QMainWindow):
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
-            print(progress)
             self.dialog.close()
-            self.next_page = urgence_inf.UrgenceInfUi()
-            self.next_page.show()
-            self.close()
 
     def signal_accepted_load(self, progress):
         if type(progress) == int:
@@ -200,7 +196,7 @@ class UrgenceInfGuardUi(QtWidgets.QMainWindow):
         else:
             self.dialog = Saving_progress_dialog()
             self.dialog.show()
-            self.thr3 = ThreadAutoGuard(self.num_days, self.month, self.year, "urgence", self.table, auto)
+            self.thr3 = ThreadAutoGuard(self.num_days, self.month, self.year, "urgence_inf", self.table, auto)
             self.thr3._signal.connect(self.signal_accepted_auto)
             self.thr3._signal_status.connect(self.signal_accepted_auto)
             self.thr3._signal_result.connect(self.signal_accepted_auto)

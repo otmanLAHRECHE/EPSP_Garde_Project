@@ -3,12 +3,13 @@ import sqlite3
 from calendar import monthrange
 
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 import export_radio_guard
 import radiologie
 from dialogs import Saving_progress_dialog, CustomDialog
-from threads import Thread_load_guards_radio, Thread_create_radio_guard
+from threads import Thread_load_guards_radio, Thread_create_radio_guard, ThreadAutoGuard
 from widgets import Chose_worker
 import os
 basedir = os.path.dirname(__file__)
@@ -23,7 +24,15 @@ class RadiologieGuardUi(QtWidgets.QMainWindow):
         self.ttl = self.findChild(QtWidgets.QLabel, "label")
         self.table = self.findChild(QtWidgets.QTableWidget, "tableWidget")
         self.save = self.findChild(QtWidgets.QPushButton, "pushButton")
+        self.save.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'save.png')))
+
         self.exportPd = self.findChild(QtWidgets.QPushButton, "pushButton_2")
+        self.exportPd.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'download.png')))
+
+        self.auto = self.findChild(QtWidgets.QPushButton, "pushButton_3")
+        self.auto.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'auto.png')))
+
+        self.table.setColumnWidth(2, 220)
         self.table.setColumnWidth(2, 220)
         self.table.setColumnWidth(3, 220)
 
@@ -63,6 +72,7 @@ class RadiologieGuardUi(QtWidgets.QMainWindow):
 
 
         self.save.clicked.connect(self.save_)
+        self.auto.clicked.connect(self.auto_)
 
     def load_guards(self):
         self.dialog = Saving_progress_dialog()
@@ -113,11 +123,7 @@ class RadiologieGuardUi(QtWidgets.QMainWindow):
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
-            print(progress)
             self.dialog.close()
-            self.next_page = radiologie.RadiologieMainUi()
-            self.next_page.show()
-            self.close()
 
     def signal_accepted_load(self, progress):
         if type(progress) == int:
@@ -174,3 +180,53 @@ class RadiologieGuardUi(QtWidgets.QMainWindow):
         self.next_page = export_radio_guard.ExportRadioGuard(self.month, self.year)
         self.close()
         self.next_page.show()
+
+
+    def auto_(self):
+        auto = []
+        for i in range(16):
+            check1 = self.table.cellWidget(i, 2)
+            check2 = self.table.cellWidget(i, 3)
+            medInd1 = check1.chose.currentIndex()
+            medInd2 = check2.chose.currentIndex()
+            if medInd1 != 0:
+                auto.append(medInd1)
+            if medInd2 != 0:
+                auto.append(medInd2)
+
+
+        if len(auto) == 0:
+            message = "liste vide"
+            self.alert_(message)
+        else:
+            self.dialog = Saving_progress_dialog()
+            self.dialog.show()
+            self.thr3 = ThreadAutoGuard(self.num_days, self.month, self.year, "radio", self.table, auto)
+            self.thr3._signal.connect(self.signal_accepted_auto)
+            self.thr3._signal_status.connect(self.signal_accepted_auto)
+            self.thr3._signal_result.connect(self.signal_accepted_auto)
+            self.thr3.start()
+
+
+    def alert_(self, message):
+        alert = QMessageBox()
+        alert.setWindowTitle("alert")
+        alert.setText(message)
+        alert.exec_()
+
+
+    def signal_accepted_auto(self, progress):
+        if type(progress) == int:
+            self.dialog.progress.setValue(progress)
+        elif type(progress) == list:
+            chose_light = Chose_worker(self.medcins)
+            chose_night = Chose_worker(self.medcins)
+
+            chose_light.chose.setCurrentIndex(progress[1])
+            chose_night.chose.setCurrentIndex(progress[2])
+            self.table.setCellWidget(progress[0], 2, chose_light)
+            self.table.setCellWidget(progress[0], 3, chose_night)
+        else:
+            self.dialog.progress.setValue(100)
+            self.dialog.label.setText("complete")
+            self.dialog.close()

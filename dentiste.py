@@ -1,16 +1,17 @@
 import os
 import sqlite3
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QLineEdit, QPushButton, QTableWidget, QMessageBox, QTableWidgetItem, qApp
 
 import recap
 from dentiste_consultation import DentisteConsultationUi
 from dentiste_guard import DentisteGuardUi
-from dialogs import Add_new_month, Update_worker_dialog
+from dialogs import Add_new_month, Update_worker_dialog, Saving_progress_dialog
 import export_dentiste_consultation
 import export_dentiste_guard
+from threads import ThreadVerifyMonth, ThreadVerifyMonthCons
 from tools import get_workers_count, get_guard_months_count, get_consultation_months_count
 
 from widgets import Buttons
@@ -119,9 +120,6 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                 message = "Maximum liste des garde, suprimrer des listes"
                 self.alert_(message)
             else:
-                connection = sqlite3.connect("database/sqlite.db")
-                cur = connection.cursor()
-                sql_q = "INSERT INTO guard_mounth (m,y,service) values (?,?,?)"
                 m = 0
                 if dialog.month.currentIndex() == 0:
                     m = 1
@@ -148,13 +146,16 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                 elif dialog.month.currentIndex() == 11:
                     m = 12
 
-                guard_m = (m, int(dialog.year.text()), 'dentiste')
-                print(guard_m)
+                self.dialog = Saving_progress_dialog()
+                self.dialog.label.setText("Verifying")
+                self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                self.dialog.show()
 
-                cur.execute(sql_q, guard_m)
-                connection.commit()
-                connection.close()
-                self.loadGuardMonths()
+                self.thr = ThreadVerifyMonth(m, int(dialog.year.text()), "dentiste")
+                self.thr._signal.connect(self.signal_accepted)
+                self.thr._signal_result.connect(self.signal_accepted)
+                self.thr.start()
+
 
     def deleteUser(self):
         row = self.table.currentRow()
@@ -377,9 +378,6 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                 message = "Maximum liste des consultations, suprimrer des listes"
                 self.alert_(message)
             else:
-                connection = sqlite3.connect("database/sqlite.db")
-                cur = connection.cursor()
-                sql_q = "INSERT INTO consultaion_mounth (m,y,service) values (?,?,?)"
                 m = 0
                 if dialog.month.currentIndex() == 0:
                     m = 1
@@ -406,12 +404,17 @@ class DentisteMainUi(QtWidgets.QMainWindow):
                 elif dialog.month.currentIndex() == 11:
                     m = 12
 
-                consultation_m = (m, int(dialog.year.text()), 'dentiste')
+                self.dialog = Saving_progress_dialog()
+                self.dialog.label.setText("Verifying")
+                self.dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+                self.dialog.show()
 
-                cur.execute(sql_q, consultation_m)
-                connection.commit()
-                connection.close()
-                self.loadConsultationMonths()
+                self.thr4 = ThreadVerifyMonthCons(m, int(dialog.year.text()), "dentiste")
+                self.thr4._signal.connect(self.signal_accepted_cons)
+                self.thr4._signal_result.connect(self.signal_accepted_cons)
+                self.thr4.start()
+
+
 
     def loadConsultationMonths(self):
         connection = sqlite3.connect("database/sqlite.db")
@@ -563,3 +566,34 @@ class DentisteMainUi(QtWidgets.QMainWindow):
         self.next_page.show()
         """
 
+    def signal_accepted(self, progress):
+        if type(progress) == int :
+            self.dialog.progress.setValue(progress)
+        else:
+            if progress == True :
+                self.dialog.progress.setValue(100)
+                self.dialog.label.setText("complete")
+                self.dialog.close()
+                self.loadGuardMonths()
+            else:
+                self.dialog.progress.setValue(100)
+                self.dialog.label.setText("complete")
+                self.dialog.close()
+                message = "le mois est déjà existant"
+                self.alert_(message)
+
+    def signal_accepted_cons(self, progress):
+        if type(progress) == int :
+            self.dialog.progress.setValue(progress)
+        else:
+            if progress == True :
+                self.dialog.progress.setValue(100)
+                self.dialog.label.setText("complete")
+                self.dialog.close()
+                self.loadConsultationMonths()
+            else:
+                self.dialog.progress.setValue(100)
+                self.dialog.label.setText("complete")
+                self.dialog.close()
+                message = "le mois est déjà existant"
+                self.alert_(message)
