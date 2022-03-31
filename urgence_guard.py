@@ -193,8 +193,7 @@ class UrgenceGuardUi(QtWidgets.QMainWindow):
             if medInd2 != 0:
                 auto.append(medInd2)
 
-        print("auto")
-        print(auto)
+
         if len(auto) == 0:
             message = "liste vide"
             self.alert_(message)
