@@ -232,10 +232,18 @@ class InfirmierGuardUi(QtWidgets.QMainWindow):
             chose_light = Chose_worker(self.medcins)
             chose_night = Chose_worker(self.medcins)
 
-            chose_light.chose.setCurrentIndex(progress[1])
-            chose_night.chose.setCurrentIndex(progress[2])
-            self.table.setCellWidget(progress[0], 2, chose_light)
-            self.table.setCellWidget(progress[0], 3, chose_night)
+            if self.table.item(progress[0], 0).text() == "Dimanche" or self.table.item(progress[0],
+                                                                                       0).text() == "Lundi" or self.table.item(
+                    progress[0], 0).text() == "Mardi" or self.table.item(progress[0],
+                                                                         0).text() == "Mercredi" or self.table.item(
+                    progress[0], 0).text() == "Jeudi":
+                chose_night.chose.setCurrentIndex(progress[2])
+                self.table.setCellWidget(progress[0], 3, chose_night)
+            else:
+                chose_light.chose.setCurrentIndex(progress[1])
+                chose_night.chose.setCurrentIndex(progress[2])
+                self.table.setCellWidget(progress[0], 2, chose_light)
+                self.table.setCellWidget(progress[0], 3, chose_night)
         else:
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")

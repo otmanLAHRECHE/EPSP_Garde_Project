@@ -135,7 +135,21 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
 
             day = row + 1
             x = datetime.datetime(self.year, self.month, day)
-
+            m = ""
+            if x.strftime("%A") == "Saturday":
+                m = "Samedi"
+            elif x.strftime("%A") == "Sunday":
+                m = "Dimanche"
+            elif x.strftime("%A") == "Monday":
+                m = "Lundi"
+            elif x.strftime("%A") == "Tuesday":
+                m = "Mardi"
+            elif x.strftime("%A") == "Wednesday":
+                m = "Mercredi"
+            elif x.strftime("%A") == "Thursday":
+                m = "Jeudi"
+            elif x.strftime("%A") == "Friday":
+                m = "Vendredi"
 
             self.table.setRowHeight(row, 50)
             self.table.setItem(row, 0, QTableWidgetItem(m))
@@ -216,11 +230,14 @@ class DentisteGuardUi(QtWidgets.QMainWindow):
         elif type(progress) == list:
             chose_light = Chose_worker(self.medcins)
             chose_night = Chose_worker(self.medcins)
-
-            chose_light.chose.setCurrentIndex(progress[1])
-            chose_night.chose.setCurrentIndex(progress[2])
-            self.table.setCellWidget(progress[0], 2, chose_light)
-            self.table.setCellWidget(progress[0], 3, chose_night)
+            if self.table.item(progress[0], 0).text() == "Dimanche" or self.table.item(progress[0], 0).text() == "Lundi" or self.table.item(progress[0], 0).text() == "Mardi" or self.table.item(progress[0], 0).text() == "Mercredi" or self.table.item(progress[0], 0).text() == "Jeudi" :
+                chose_night.chose.setCurrentIndex(progress[2])
+                self.table.setCellWidget(progress[0], 3, chose_night)
+            else:
+                chose_light.chose.setCurrentIndex(progress[1])
+                chose_night.chose.setCurrentIndex(progress[2])
+                self.table.setCellWidget(progress[0], 2, chose_light)
+                self.table.setCellWidget(progress[0], 3, chose_night)
         else:
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
