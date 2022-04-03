@@ -63,7 +63,7 @@
      <enum>Qt::StrongFocus</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <property name="sizePolicy">
@@ -603,11 +603,6 @@
       <column>
        <property name="text">
         <string>Service</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Groupe</string>
        </property>
       </column>
      </widget>

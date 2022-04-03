@@ -41,6 +41,7 @@ class RecapUi(QtWidgets.QMainWindow):
         self.save.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'save.png')))
         self.export = self.findChild(QtWidgets.QPushButton, "pushButton_2")
         self.export.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'download.png')))
+        self.export.setEnabled(False)
         if self.month == 1:
             m = "janvier"
         elif self.month == 2:
@@ -197,23 +198,5 @@ class RecapUi(QtWidgets.QMainWindow):
             for row in range(self.table.rowCount()):
                 if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
                     self.table.setItem(row, 5, QTableWidgetItem(str(int(self.table.item(row, 2).text()) + int(self.table.item(row, 3).text()) + int(self.table.item(row, 4).text()))))
-            if self.service == "urgence":
-                self.next_page = urgence.UrgenceMainUi()
-            elif self.service == "dentiste":
-                self.next_page = dentiste.DentisteMainUi()
-            elif self.service == "dentiste_inf":
-                self.next_page = infirmier.InfermierMainUi()
-            elif self.service == "labo":
-                self.next_page = laboratoire.LaboratoireMainUi()
-            elif self.service == "radio":
-                self.next_page = radiologie.RadiologieMainUi()
-            elif self.service == "pharm":
-                self.next_page = pharmacie.PharmacieMainUi()
-            elif self.service == "urgence_surv":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_surv_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            self.next_page.show()
-            self.close()
+
+            self.export.setEnabled(False)
