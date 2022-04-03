@@ -75,7 +75,7 @@ class ExportUrgencePlaningUi(QtWidgets.QMainWindow):
             message = "destination untrouvable"
             self.alert_(message)
         else:
-            create_garde_page("URGENCE", "GARDE URGENCE", self.month, self.year, self.data, filePath)
+            create_garde_page("URGENCE", "GARDE MEDECINS GENERALISTE", self.month, self.year, self.data, filePath)
             self.next_page = urgence.UrgenceMainUi()
             self.next_page.show()
             print(self.thr.isFinished())

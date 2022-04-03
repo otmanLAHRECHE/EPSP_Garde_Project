@@ -197,7 +197,7 @@ class InfermierMainUi(QtWidgets.QMainWindow):
     def loadGuardMonths(self):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
-        sql_q = 'SELECT * FROM guard_mounth where service=?'
+        sql_q = 'SELECT * FROM guard_mounth where service=? ORDER BY m ASC'
         tablerow = 0
         cur.execute(sql_q, ('dentiste_inf',))
         results = cur.fetchall()

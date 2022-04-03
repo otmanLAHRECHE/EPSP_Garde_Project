@@ -220,7 +220,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
         print("load guards")
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
-        sql_q = 'SELECT * FROM guard_mounth where service=?'
+        sql_q = 'SELECT * FROM guard_mounth where service=? ORDER BY m ASC'
         tablerow = 0
         cur.execute(sql_q, ('dentiste',))
         results = cur.fetchall()
@@ -419,7 +419,7 @@ class DentisteMainUi(QtWidgets.QMainWindow):
     def loadConsultationMonths(self):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
-        sql_q = 'SELECT * FROM consultaion_mounth where service=?'
+        sql_q = 'SELECT * FROM consultaion_mounth where service=? ORDER BY m ASC'
         tablerow = 0
         cur.execute(sql_q, ('dentiste',))
         results = cur.fetchall()

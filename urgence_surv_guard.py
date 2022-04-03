@@ -114,8 +114,6 @@ class UrgenceSurvGuardUi(QtWidgets.QMainWindow):
             else:
                 a0.ignore()
         else:
-            self.next_page = urgence_inf.UrgenceInfUi()
-            self.next_page.show()
             self.close()
 
     def signal_accepted(self, progress):
@@ -179,8 +177,8 @@ class UrgenceSurvGuardUi(QtWidgets.QMainWindow):
     def export(self):
         self.want_to_close = True
         self.next_page = export_urgence_surv.ExportUrgenceSurv(self.month, self.year)
-        self.close()
         self.next_page.show()
+        self.close()
 
     def auto_(self):
         auto = []

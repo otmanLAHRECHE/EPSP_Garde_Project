@@ -108,6 +108,26 @@ class RecapUi(QtWidgets.QMainWindow):
             else:
                 a0.ignore()
         else:
+            if self.service == "urgence":
+                self.next_page = urgence.UrgenceMainUi()
+            elif self.service == "dentiste":
+                self.next_page = dentiste.DentisteMainUi()
+            elif self.service == "dentiste_inf":
+                self.next_page = infirmier.InfermierMainUi()
+            elif self.service == "labo":
+                self.next_page = laboratoire.LaboratoireMainUi()
+            elif self.service == "radio":
+                self.next_page = radiologie.RadiologieMainUi()
+            elif self.service == "pharm":
+                self.next_page = pharmacie.PharmacieMainUi()
+            elif self.service == "urgence_surv":
+                self.next_page = urgence_inf.UrgenceInfUi()
+            elif self.service == "urgence_inf":
+                self.next_page = urgence_inf.UrgenceInfUi()
+            elif self.service == "urgence_surv_inf":
+                self.next_page = urgence_inf.UrgenceInfUi()
+
+            self.next_page.show()
             self.close()
 
     def load_recap(self):
@@ -142,24 +162,20 @@ class RecapUi(QtWidgets.QMainWindow):
             total = jo + jw + jf
             self.table.setItem(pr, 5, QTableWidgetItem(str(total)))
 
-
-
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
             self.dialog.label.setText("complete")
             self.dialog.close()
 
     def signal_accepted_load_users(self, progress):
-
         self.chef.addItem("")
-
         for worker in progress:
             self.chef.addItem(worker[0])
 
     def save_(self):
         alert = False
         for row in range(self.table.rowCount()):
-            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem :
+            if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
                 if not str(self.table.item(row, 2).text()).isnumeric() or not str(self.table.item(row, 3).text()).isnumeric() or not str(self.table.item(row, 4).text()).isnumeric():
                     alert = True
 
@@ -174,8 +190,6 @@ class RecapUi(QtWidgets.QMainWindow):
             self.thr._signal_status.connect(self.signal_accepted_save)
             self.thr.start()
 
-
-
     def export_(self):
 
         self.want_to_close = True
@@ -185,10 +199,8 @@ class RecapUi(QtWidgets.QMainWindow):
         self.next_page.show()
         self.close()
 
-
-
     def signal_accepted_save(self, progress):
-        if type(progress) == int :
+        if type(progress) == int:
             self.dialog.progress.setValue(progress)
         elif type(progress) == bool:
             self.dialog.progress.setValue(100)
@@ -197,6 +209,9 @@ class RecapUi(QtWidgets.QMainWindow):
 
             for row in range(self.table.rowCount()):
                 if type(self.table.item(row, 2)) == PyQt5.QtWidgets.QTableWidgetItem:
-                    self.table.setItem(row, 5, QTableWidgetItem(str(int(self.table.item(row, 2).text()) + int(self.table.item(row, 3).text()) + int(self.table.item(row, 4).text()))))
+                    self.table.setItem(row, 5, QTableWidgetItem(
+                        str(int(self.table.item(row, 2).text()) + int(self.table.item(row, 3).text()) + int(
+                            self.table.item(row, 4).text()))))
 
             self.export.setEnabled(False)
+            self.alert_("data saved")

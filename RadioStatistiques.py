@@ -242,6 +242,4 @@ class RadioStatistiquesUi(QtWidgets.QMainWindow):
                     self.table.setItem(row, 0, QTableWidgetItem(str(t1 + t2 + t3)))
 
 
-            self.next_page = radiologie.RadiologieMainUi()
-            self.next_page.show()
-            self.close()
+            self.alert_("data saved")

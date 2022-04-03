@@ -357,7 +357,7 @@ class UrgenceInfUi(QtWidgets.QMainWindow):
     def loadGuardMonths(self):
         connection = sqlite3.connect("database/sqlite.db")
         cur = connection.cursor()
-        sql_q = 'SELECT * FROM guard_mounth where service=?'
+        sql_q = 'SELECT * FROM guard_mounth where service=? ORDER BY m ASC'
         tablerow = 0
         cur.execute(sql_q, ('urgence_sur_inf',))
         results = cur.fetchall()
