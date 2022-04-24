@@ -82,7 +82,6 @@ class ExportDentisteGuardUi(QtWidgets.QMainWindow):
         elif type(progress) == list:
             self.progress.setValue(100)
             self.data = progress
-            print(self.data)
             self.status.setText("complete, click sur exporter")
             self.export.setEnabled(True)
 

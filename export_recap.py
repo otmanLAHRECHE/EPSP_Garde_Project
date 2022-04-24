@@ -72,7 +72,6 @@ class ExportRecapUi(QtWidgets.QMainWindow):
         self.thr.start()
 
     def export_pdf(self):
-        print(self.data)
 
         filePath, _ = QFileDialog.getSaveFileName(self, "Save garde", "",
                                                   "PDF(*.pdf);;All Files(*.*) ")
@@ -134,7 +133,6 @@ class ExportRecapUi(QtWidgets.QMainWindow):
                 self.next_page = urgence_inf.UrgenceInfUi()
 
             self.next_page.show()
-            print(self.thr.isFinished())
             self.close()
 
 
@@ -144,6 +142,5 @@ class ExportRecapUi(QtWidgets.QMainWindow):
         elif type(progress) == list:
             self.progress.setValue(100)
             self.data = progress
-            print(self.data)
             self.status.setText("complete, click sur exporter")
             self.export.setEnabled(True)

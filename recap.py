@@ -108,26 +108,6 @@ class RecapUi(QtWidgets.QMainWindow):
             else:
                 a0.ignore()
         else:
-            if self.service == "urgence":
-                self.next_page = urgence.UrgenceMainUi()
-            elif self.service == "dentiste":
-                self.next_page = dentiste.DentisteMainUi()
-            elif self.service == "dentiste_inf":
-                self.next_page = infirmier.InfermierMainUi()
-            elif self.service == "labo":
-                self.next_page = laboratoire.LaboratoireMainUi()
-            elif self.service == "radio":
-                self.next_page = radiologie.RadiologieMainUi()
-            elif self.service == "pharm":
-                self.next_page = pharmacie.PharmacieMainUi()
-            elif self.service == "urgence_surv":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
-            elif self.service == "urgence_surv_inf":
-                self.next_page = urgence_inf.UrgenceInfUi()
-
-            self.next_page.show()
             self.close()
 
     def load_recap(self):
@@ -213,5 +193,5 @@ class RecapUi(QtWidgets.QMainWindow):
                         str(int(self.table.item(row, 2).text()) + int(self.table.item(row, 3).text()) + int(
                             self.table.item(row, 4).text()))))
 
-            self.export.setEnabled(False)
+            self.export.setEnabled(True)
             self.alert_("data saved")
