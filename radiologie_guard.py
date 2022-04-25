@@ -115,8 +115,6 @@ class RadiologieGuardUi(QtWidgets.QMainWindow):
             else:
                 a0.ignore()
         else:
-            self.next_page = radiologie.RadiologieMainUi()
-            self.next_page.show()
             self.close()
 
     def signal_accepted(self, progress):
