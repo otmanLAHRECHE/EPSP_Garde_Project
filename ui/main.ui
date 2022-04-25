@@ -123,7 +123,7 @@
      </widget>
     </item>
     <item>
-     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0" columnstretch="0" rowminimumheight="0,0,0,0,0,0">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0" columnstretch="0">
       <property name="leftMargin">
        <number>5</number>
       </property>
@@ -142,6 +142,30 @@
       <property name="verticalSpacing">
        <number>50</number>
       </property>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Service de laboratoire</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QPushButton" name="pushButton">
         <property name="sizePolicy">
@@ -172,8 +196,8 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QPushButton" name="pushButton_4">
+      <item row="5" column="0">
+       <widget class="QPushButton" name="pushButton_5">
         <property name="minimumSize">
          <size>
           <width>250</width>
@@ -192,7 +216,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Service de laboratoire</string>
+         <string>Service de pharmacie</string>
         </property>
        </widget>
       </item>
@@ -244,27 +268,15 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QPushButton" name="pushButton_5">
-        <property name="minimumSize">
-         <size>
-          <width>250</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>250</width>
-          <height>50</height>
-         </size>
-        </property>
+      <item row="6" column="0">
+       <widget class="QPushButton" name="pushButton_6">
         <property name="font">
          <font>
           <pointsize>14</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Service de pharmacie</string>
+         <string>Administration</string>
         </property>
        </widget>
       </item>

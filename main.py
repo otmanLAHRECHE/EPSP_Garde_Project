@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import *
 import sys
 
 
-
 from dialogs import Login_dialog
 from dentiste_chose import DentisteChoseUi
 from radiologie import RadiologieMainUi
@@ -31,9 +30,6 @@ class MainUi(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainUi, self).__init__()
         uic.loadUi(os.path.join(basedir, 'ui', 'main.ui'), self)
-
-
-
 
         self.epsp = self.findChild(QtWidgets.QLabel, "label")
         self.choisir = self.findChild(QtWidgets.QLabel, "label_2")
@@ -63,6 +59,10 @@ class MainUi(QtWidgets.QMainWindow):
         self.pharm.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'pharmacy.png')))
         self.pharm.setIconSize(QSize(40, 40))
 
+        self.admin = self.findChild(QtWidgets.QPushButton, "pushButton_6")
+        self.admin.setIcon(QIcon(os.path.join(basedir, 'asstes', 'images', 'pharmacy.png')))
+        self.admin.setIconSize(QSize(40, 40))
+
         self.resp = self.findChild(QtWidgets.QLabel, "label_3")
 
         self.grid.addWidget(self.urgence, 1, 1)
@@ -70,6 +70,7 @@ class MainUi(QtWidgets.QMainWindow):
         self.grid.addWidget(self.radio, 1, 3)
         self.grid.addWidget(self.labo, 2, 1)
         self.grid.addWidget(self.pharm, 2, 2)
+        self.grid.addWidget(self.admin, 2, 3)
         self.resp.setText("")
 
         self.urgence.clicked.connect(self.urg)
